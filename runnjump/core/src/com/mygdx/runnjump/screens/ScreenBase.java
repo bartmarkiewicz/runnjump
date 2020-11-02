@@ -4,6 +4,8 @@ import com.mygdx.runnjump.Runnjump;
 
 abstract class ScreenBase {
 
+    public Runnjump.ScreenEn current;
+
     public Runnjump theGame;
 
     public ScreenBase(Runnjump theGameO) {

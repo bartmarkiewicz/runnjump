@@ -12,13 +12,10 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
-
-
         theGame.changeScreen(Runnjump.ScreenEn.MENU);
     }
 

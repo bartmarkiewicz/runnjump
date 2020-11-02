@@ -8,6 +8,7 @@ public class GameScreen extends ScreenBase implements Screen {
 
     public GameScreen(Runnjump theGameO) {
         super(theGameO);
+        current = Runnjump.ScreenEn.GAME;
     }
 
     @Override

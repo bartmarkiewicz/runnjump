@@ -24,6 +24,8 @@ public class Runnjump extends Game {
 		LEVEL,
 		HIGHSCORES,
 	}
+	public static ScreenEn currentScreen;
+
 
 	private MenuScreen menuScreen;
 	private LoadingScreen loadingScreen;
@@ -33,6 +35,7 @@ public class Runnjump extends Game {
 
 	@Override
 	public void create () {
+		currentScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 
@@ -50,24 +53,28 @@ public class Runnjump extends Game {
 				if (menuScreen == null){
 					menuScreen = new MenuScreen(this);
 					this.setScreen(menuScreen);
+					currentScreen = ScreenEn.MENU;
 				}
 				break;
 			case GAME:
 				if (gameScreen == null){
 					gameScreen = new GameScreen(this);
 					this.setScreen(gameScreen);
+					currentScreen = ScreenEn.GAME;
 				}
 				break;
 			case LEVEL:
 				if (levelScreen == null){
 					levelScreen = new LevelScreen(this);
 					this.setScreen(levelScreen);
+					currentScreen = ScreenEn.LEVEL;
 				}
 				break;
 			case HIGHSCORES:
 				if (highScoresScreen == null){
 					highScoresScreen = new HighScoresScreen(this);
 					this.setScreen(highScoresScreen);
+					currentScreen = ScreenEn.HIGHSCORES;
 				}
 				break;
 		}
@@ -75,6 +82,7 @@ public class Runnjump extends Game {
 
 	@Override
 	public void render () {
+		super.render();
 		//rendering happens here
 		/*Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
