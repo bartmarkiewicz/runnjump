@@ -9,6 +9,7 @@ public class HighScoresScreen extends ScreenBase implements Screen {
 
     public HighScoresScreen(Runnjump theGameO) {
         super(theGameO);
+        currentScreenId = Runnjump.ScreenEn.HIGHSCORES;
     }
 
 

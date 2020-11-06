@@ -12,6 +12,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     @Override
     public void show() {
+
     }
 
     @Override

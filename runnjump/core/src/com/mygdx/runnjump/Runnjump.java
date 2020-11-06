@@ -3,6 +3,10 @@ package com.mygdx.runnjump;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +29,7 @@ public class Runnjump extends Game {
 		HIGHSCORES,
 	}
 	public static ScreenEn currentScreen;
+	public static ScreenEn previousScreen;
 
 
 	private MenuScreen menuScreen;
@@ -36,6 +41,7 @@ public class Runnjump extends Game {
 	@Override
 	public void create () {
 		currentScreen = ScreenEn.LOADING;
+		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 
@@ -48,34 +54,40 @@ public class Runnjump extends Game {
     }
 
     public void changeScreen(ScreenEn screenId){
+		previousScreen = currentScreen;
+
 		switch (screenId){
 			case MENU:
-				if (menuScreen == null){
+				if (menuScreen == null) {
 					menuScreen = new MenuScreen(this);
-					this.setScreen(menuScreen);
-					currentScreen = ScreenEn.MENU;
 				}
+				this.setScreen(menuScreen);
+				currentScreen = ScreenEn.MENU;
+
+
 				break;
 			case GAME:
-				if (gameScreen == null){
+				if (gameScreen == null) {
 					gameScreen = new GameScreen(this);
-					this.setScreen(gameScreen);
-					currentScreen = ScreenEn.GAME;
 				}
+				this.setScreen(gameScreen);
+				currentScreen = ScreenEn.GAME;
+
 				break;
 			case LEVEL:
-				if (levelScreen == null){
+				if (levelScreen == null) {
 					levelScreen = new LevelScreen(this);
-					this.setScreen(levelScreen);
-					currentScreen = ScreenEn.LEVEL;
 				}
+				this.setScreen(levelScreen);
+				currentScreen = ScreenEn.LEVEL;
+
 				break;
 			case HIGHSCORES:
-				if (highScoresScreen == null){
+				if (highScoresScreen == null) {
 					highScoresScreen = new HighScoresScreen(this);
-					this.setScreen(highScoresScreen);
-					currentScreen = ScreenEn.HIGHSCORES;
 				}
+				this.setScreen(highScoresScreen);
+				currentScreen = ScreenEn.HIGHSCORES;
 				break;
 		}
 	}
