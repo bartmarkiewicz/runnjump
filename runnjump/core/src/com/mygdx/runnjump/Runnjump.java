@@ -1,15 +1,7 @@
 package com.mygdx.runnjump;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.screens.HighScoresScreen;
 import com.mygdx.runnjump.screens.LevelScreen;
@@ -45,7 +37,8 @@ public class Runnjump extends Game {
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 
-
+		//Gdx.input.setCatchKey(Input.Keys.BACK, true);
+		//Gdx.input.setInputProcessor(this);
 		/*batch = new SpriteBatch();
 		campaignBt = new Texture("campaign_bt.png");
         survivalBt = new Texture("survival_bt.png");
@@ -91,6 +84,8 @@ public class Runnjump extends Game {
 				break;
 		}
 	}
+
+
 
 	@Override
 	public void render () {

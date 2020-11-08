@@ -49,6 +49,7 @@ public class MenuScreen extends ScreenBase implements Screen {
 
     @Override
     public void show() {
+        super.show();
         TextButton campaignBt = new TextButton("Campaign", skin);
         TextButton survivalBt = new TextButton("Survival", skin);
         TextButton highScoresBt = new TextButton("High Scores", skin);

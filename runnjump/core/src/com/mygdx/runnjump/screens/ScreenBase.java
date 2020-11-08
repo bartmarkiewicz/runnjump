@@ -18,6 +18,7 @@ abstract class ScreenBase implements Screen, InputProcessor {
     Skin skin;
 
     public Runnjump.ScreenEn currentScreenId;
+    InputMultiplexer inputMultiplexer;
 
     public Runnjump theGame;
 
@@ -25,13 +26,19 @@ abstract class ScreenBase implements Screen, InputProcessor {
         this.theGame = theGameO;
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));
-
-        InputMultiplexer inputMultiplexer = new InputMultiplexer(stage, this);
+        inputMultiplexer = new InputMultiplexer(stage, this);
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-
         Gdx.input.setInputProcessor(inputMultiplexer);
 
+
         //Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
+    public void show() {
+        inputMultiplexer = new InputMultiplexer(stage, this);
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -46,19 +53,64 @@ abstract class ScreenBase implements Screen, InputProcessor {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
     }
 
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+    }
 
     @Override
     public boolean keyDown(int keycode) {
 
         if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK)) {
-            theGame.changeScreen(theGame.previousScreen);
+            if (Runnjump.previousScreen != null) {
+                theGame.changeScreen(Runnjump.previousScreen);
+            }
             return true;
         }
         return false;
     }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+
+
         //Gdx.app.exit();
 
-
+/*
 
 
     @Override
@@ -95,5 +147,7 @@ abstract class ScreenBase implements Screen, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
+ */
 }
 
