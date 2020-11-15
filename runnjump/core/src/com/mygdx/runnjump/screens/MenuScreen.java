@@ -14,15 +14,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.SoundHandler;
 
 import javax.xml.soap.Text;
 
 public class MenuScreen extends ScreenBase implements Screen {
-    private ImageButton soundBt;
+    //private ImageButton soundBt;
 
 
 
     public void initGui(){
+        currentScreenId = Runnjump.ScreenEn.MENU;
+
         TextButton campaignBt;
         TextButton survivalBt;
         TextButton highScoresBt;
@@ -31,16 +34,7 @@ public class MenuScreen extends ScreenBase implements Screen {
         Table leftTable;
         Table rightTable;
         Table topTable;
-        Drawable soundOnIcon;
-        Texture soundTexture;
-        Texture soundOff;
-        Drawable soundOffIcon;
-        currentScreenId = Runnjump.ScreenEn.MENU;
-        soundTexture = new Texture(Gdx.files.internal("sound.png"));
-        soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));
-        soundOff = new Texture(Gdx.files.internal("no-sound.png"));
-        soundOffIcon = new TextureRegionDrawable(new TextureRegionDrawable(soundOff));
-        soundBt = new ImageButton(soundOnIcon, soundOffIcon, soundOffIcon);
+
         campaignBt = new TextButton("Campaign", skin);
         survivalBt = new TextButton("Survival", skin);
         highScoresBt = new TextButton("High Scores", skin);
@@ -112,20 +106,6 @@ public class MenuScreen extends ScreenBase implements Screen {
         });
 
 
-        soundBt.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (!soundBt.isChecked()) {
-                    soundBt.setChecked(false);
-                    System.out.println("Checked false");
-                } else {
-                    soundBt.setChecked(true);
-                    System.out.println("Checked true");
-                }
-                //soundBt.reset();
-                soundBt.invalidate();
-            }
-        });
 
 
         stage.addActor(mainTable);

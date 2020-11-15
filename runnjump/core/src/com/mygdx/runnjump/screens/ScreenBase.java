@@ -7,12 +7,22 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.SoundHandler;
 
 abstract class ScreenBase implements Screen, InputProcessor {
+    ImageButton soundBt;
 
     public Stage stage;
     Skin skin;
@@ -29,16 +39,30 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        stage = new Stage(new ScreenViewport());
+        //game resolution here
+        OrthographicCamera camera = new OrthographicCamera(1280,720);
+        ExtendViewport gameVP = new ExtendViewport(1280,720, camera);
+        stage = new Stage(gameVP);
         inputMultiplexer = new InputMultiplexer(stage, this);
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
         Gdx.input.setInputProcessor(inputMultiplexer);
+        Drawable soundOnIcon;
+        Texture soundTexture;
+        Texture soundOff;
+        Drawable soundOffIcon;
+        soundTexture = new Texture(Gdx.files.internal("sound.png"));
+        soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));
+        soundOff = new Texture(Gdx.files.internal("no-sound.png"));
+        soundOffIcon = new TextureRegionDrawable(new TextureRegionDrawable(soundOff));
+        soundBt = new ImageButton(soundOnIcon, soundOffIcon, soundOffIcon);
+        soundBt.addListener(new SoundHandler(soundBt));
 
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width,height);
+        stage.getCamera().update();
+        stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
     }
 
     @Override

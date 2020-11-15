@@ -37,6 +37,7 @@ public class Runnjump extends Game {
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 
+
 		//Gdx.input.setCatchKey(Input.Keys.BACK, true);
 		//Gdx.input.setInputProcessor(this);
 		/*batch = new SpriteBatch();
@@ -47,6 +48,7 @@ public class Runnjump extends Game {
     }
 
     public void changeScreen(ScreenEn screenId){
+		//method used for changing game screens
 		previousScreen = currentScreen;
 
 		switch (screenId){
@@ -91,6 +93,9 @@ public class Runnjump extends Game {
 	public void render () {
 		super.render();
 		//rendering happens here
+
+
+
 		/*Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
