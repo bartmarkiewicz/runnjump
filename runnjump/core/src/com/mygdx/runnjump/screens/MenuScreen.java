@@ -3,57 +3,85 @@ package com.mygdx.runnjump.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.runnjump.Runnjump;
 
 import javax.xml.soap.Text;
 
 public class MenuScreen extends ScreenBase implements Screen {
+    private ImageButton soundBt;
 
-    //SpriteBatch batch;
-    //Stage stage;
 
-    public void initMenu(){
 
-    }
-
-    public MenuScreen(final Runnjump theGame) {
-        super(theGame);
+    public void initGui(){
+        TextButton campaignBt;
+        TextButton survivalBt;
+        TextButton highScoresBt;
+        TextButton questionBt;
+        Table mainTable;
+        Table leftTable;
+        Table rightTable;
+        Table topTable;
+        Drawable soundOnIcon;
+        Texture soundTexture;
+        Texture soundOff;
+        Drawable soundOffIcon;
         currentScreenId = Runnjump.ScreenEn.MENU;
-        //initMenu();
-        //batch = new SpriteBatch();
+        soundTexture = new Texture(Gdx.files.internal("sound.png"));
+        soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));
+        soundOff = new Texture(Gdx.files.internal("no-sound.png"));
+        soundOffIcon = new TextureRegionDrawable(new TextureRegionDrawable(soundOff));
+        soundBt = new ImageButton(soundOnIcon, soundOffIcon, soundOffIcon);
+        campaignBt = new TextButton("Campaign", skin);
+        survivalBt = new TextButton("Survival", skin);
+        highScoresBt = new TextButton("High Scores", skin);
+        questionBt = new TextButton("?", skin);
+        mainTable = new Table();
+        leftTable = new Table();
+        rightTable = new Table();
+        topTable = new Table();
+
+        mainTable.defaults().pad(10);
+        mainTable.setFillParent(true);
 
 
+        leftTable.left().bottom();
+        leftTable.setDebug(true);
+        leftTable.add(campaignBt).minHeight(120).minWidth(350).fillX().uniformX();
+        leftTable.row().pad(20,10,0,0);
+        leftTable.add(survivalBt).minHeight(120).minWidth(350).fillX().uniformX();
+        leftTable.row().pad(20,10,0,0);
+        leftTable.add(highScoresBt).minHeight(120).minWidth(350).fillX().uniformX();
+
+        rightTable.right().bottom();
+        rightTable.pad(0);
+        rightTable.add(questionBt).height(100).width(100).fill();
 
 
+        topTable.align(Align.topRight);
+        topTable.right().top();
+        topTable.pad(0);
+        topTable.add(soundBt).width(100).height(100).fill();
 
-    }
+        topTable.setDebug(true);
+        mainTable.add(topTable).colspan(2).expand().right().top();
+        mainTable.row();
+        mainTable.add(leftTable).expand().left().bottom().uniform();
+        mainTable.add(rightTable).expand().right().bottom().uniform();
+        campaignBt.getLabel().setFontScale(1.5f);
+        survivalBt.getLabel().setFontScale(1.5f);
+        highScoresBt.getLabel().setFontScale(1.5f);
+        questionBt.getLabel().setFontScale(2);
 
-
-    @Override
-    public void show() {
-        super.show();
-        TextButton campaignBt = new TextButton("Campaign", skin);
-        TextButton survivalBt = new TextButton("Survival", skin);
-        TextButton highScoresBt = new TextButton("High Scores", skin);
-        TextButton questionBt = new TextButton("?", skin);
 
         campaignBt.addListener(new ChangeListener() {
             @Override
@@ -83,50 +111,42 @@ public class MenuScreen extends ScreenBase implements Screen {
             }
         });
 
-        Texture soundTexture = new Texture(Gdx.files.internal("sound.png"));
-        Drawable soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));
-        ImageButton soundBt = new ImageButton(soundOnIcon);
 
+        soundBt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!soundBt.isChecked()) {
+                    soundBt.setChecked(false);
+                    System.out.println("Checked false");
+                } else {
+                    soundBt.setChecked(true);
+                    System.out.println("Checked true");
+                }
+                //soundBt.reset();
+                soundBt.invalidate();
+            }
+        });
 
-        Table mainTable = new Table();
-        mainTable.defaults().pad(10);
-        mainTable.setFillParent(true);
-
-
-        Table leftTable = new Table();
-        leftTable.left().bottom();
-        leftTable.setDebug(true);
-        leftTable.add(campaignBt).minHeight(120).minWidth(350).fillX().uniformX();
-        leftTable.row().pad(20,10,0,0);
-        leftTable.add(survivalBt).minHeight(120).minWidth(350).fillX().uniformX();
-        leftTable.row().pad(20,10,0,0);
-        leftTable.add(highScoresBt).minHeight(120).minWidth(350).fillX().uniformX();
-
-        Table rightTable = new Table();
-        rightTable.right().bottom();
-        rightTable.pad(0);
-        rightTable.add(questionBt).height(100).width(100).fill();
-
-
-        Table topTable = new Table();
-        topTable.align(Align.topRight);
-        topTable.right().top();
-        topTable.pad(0);
-        topTable.add(soundBt).width(100).height(100).fill();
-
-        topTable.setDebug(true);
-        mainTable.add(topTable).colspan(2).expand().right().top();
-        mainTable.row();
-        mainTable.add(leftTable).expand().left().bottom().uniform();
-        mainTable.add(rightTable).expand().right().bottom().uniform();
-        campaignBt.getLabel().setFontScale(1.5f);
-        survivalBt.getLabel().setFontScale(1.5f);
-        highScoresBt.getLabel().setFontScale(1.5f);
-        questionBt.getLabel().setFontScale(2);
 
         stage.addActor(mainTable);
         stage.setDebugAll(true);
         stage.getBatch().setColor(Color.WHITE);
+
+    }
+
+    public MenuScreen(final Runnjump theGame) {
+        super(theGame);
+        //initGui();
+
+        //initGui();
+    }
+
+
+    @Override
+    public void show() {
+        super.show();
+        initGui();
+
     }
 
     @Override
@@ -155,6 +175,6 @@ public class MenuScreen extends ScreenBase implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        super.dispose();
     }
 }

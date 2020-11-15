@@ -24,21 +24,16 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     public ScreenBase(Runnjump theGameO) {
         this.theGame = theGameO;
-        stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));
-        inputMultiplexer = new InputMultiplexer(stage, this);
-        Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-
-        //Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
         inputMultiplexer = new InputMultiplexer(stage, this);
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
         Gdx.input.setInputProcessor(inputMultiplexer);
+
     }
 
     @Override
@@ -63,7 +58,7 @@ abstract class ScreenBase implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
 
         if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK)) {
-            if (Runnjump.previousScreen != null) {
+            if (Runnjump.previousScreen != null){
                 theGame.changeScreen(Runnjump.previousScreen);
             }
             return true;
