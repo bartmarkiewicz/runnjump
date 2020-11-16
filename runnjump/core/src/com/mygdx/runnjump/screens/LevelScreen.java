@@ -3,15 +3,13 @@ package com.mygdx.runnjump.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.runnjump.Runnjump;
-import com.mygdx.runnjump.util.SoundHandler;
 
 public class LevelScreen extends ScreenBase implements Screen {
 
@@ -25,7 +23,7 @@ public class LevelScreen extends ScreenBase implements Screen {
     @Override
     public void show() {
         super.show();
-        
+
         Table mainTable = new Table();
 
         mainTable.setDebug(true);
@@ -38,9 +36,22 @@ public class LevelScreen extends ScreenBase implements Screen {
         TextButton levelThree = new TextButton("3", skin);
         TextButton start = new TextButton("Start", skin);
         TextButton backbt = new TextButton("Back", skin);
+
+        backbt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (Runnjump.previousScreen != null){
+                    theGame.changeScreen(Runnjump.ScreenEn.MENU);
+                }
+            }
+        });
+
+
+
+
         Label screenLabel = new Label("Campaign Level Selection", skin);
         screenLabel.setColor(Color.BLACK);
-        screenLabel.setFontScale(1.5f);
+        screenLabel.setFontScale(2F);
         levelOne.getLabel().setFontScale(2f);
         levelTwo.getLabel().setFontScale(2f);
         levelThree.getLabel().setFontScale(2f);
@@ -53,19 +64,22 @@ public class LevelScreen extends ScreenBase implements Screen {
         mainTable.top().left().pack();
         mainTable.setHeight(Gdx.graphics.getHeight());
         mainTable.setWidth(Gdx.graphics.getWidth());
-        mainTable.add(screenLabel).left().uniform().colspan(2).left().expand();
-        mainTable.add(soundBt).width(100).height(100).fill();
 
-        mainTable.row();
-        mainTable.add(levelOne).expand().center().minSize(200);
-        mainTable.add(levelTwo).expand().center().minSize(200);
-        mainTable.add(levelThree).expand().center().minSize(200);
+
+        mainTable.add(screenLabel).left().uniform().colspan(2).left().expand().fill();
+        mainTable.add(soundBt).width(100).height(100).fill().right().top().colspan(1);
+        mainTable.row().uniform().center().size(200);
+
+        mainTable.add(levelOne).expand().uniform().center().size(200);
+        mainTable.add(levelTwo).expand().uniform().center().size(200);
+        mainTable.add(levelThree).expand().uniform().center().size(200);
+
         mainTable.row();
         mainTable.add();
         mainTable.add(start).center().minHeight(130).minWidth(240);
         mainTable.row();
         mainTable.add(backbt).left().align(Align.left).minHeight(130).minWidth(180);
-        mainTable.setDebug(true);
+        //mainTable.setDebug(true);
 
 
         stage.addActor(mainTable);

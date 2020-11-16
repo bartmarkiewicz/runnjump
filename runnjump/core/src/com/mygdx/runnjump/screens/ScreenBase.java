@@ -61,8 +61,15 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
+        //works best with nothing in here for some reason
+
+
+
+        /*
         stage.getCamera().update();
         stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        stage.getBatch().setTransformMatrix(stage.getCamera().view);
+        stage.getBatch().setProjectionMatrix(stage.getCamera().projection);*/
     }
 
     @Override

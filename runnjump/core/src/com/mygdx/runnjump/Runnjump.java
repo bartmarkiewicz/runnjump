@@ -2,6 +2,7 @@ package com.mygdx.runnjump;
 
 import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.screens.HighScoresScreen;
 import com.mygdx.runnjump.screens.LevelScreen;
