@@ -3,10 +3,12 @@ package com.mygdx.runnjump.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
 
@@ -50,7 +52,10 @@ public class HighScoresScreen extends ScreenBase implements Screen {
         topTable.add(survival).uniform().fill().minHeight(100);
 
         Table bottomTable = new Table();
-        bottomTable.add(backBt).left().align(Align.left).minHeight(Gdx.graphics.getHeight()/6f).minWidth(Gdx.graphics.getWidth()/5f);
+        TextButton goToMyPos = new TextButton("Go to my position", skin);
+        bottomTable.add(goToMyPos).center().align(Align.center).minHeight(Gdx.graphics.getHeight()/5f).minWidth(Gdx.graphics.getWidth()/3f).colspan(1);
+        bottomTable.row().pad(10,5,0,0);//todo make padding and layout consistent everywhere
+        bottomTable.add(backBt).left().align(Align.left).minHeight(Gdx.graphics.getHeight()/5f).minWidth(Gdx.graphics.getWidth()/5f).colspan(1).expand();
 
         Table scrollpaneTable = new Table();
         ScrollPane highScoresWidget = new ScrollPane(scrollpaneTable,skin);
@@ -70,7 +75,14 @@ public class HighScoresScreen extends ScreenBase implements Screen {
         stage.addActor(mainTable);
         stage.setDebugAll(true);
 
-
+        backBt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (Runnjump.previousScreen != null){
+                    theGame.changeScreen(Runnjump.ScreenEn.MENU);
+                }
+            }
+        });
 
 
     }

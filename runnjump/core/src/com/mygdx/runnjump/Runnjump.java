@@ -24,7 +24,7 @@ public class Runnjump extends Game {
 		HIGHSCORES,
 	}
 	public static ScreenEn currentScreen;
-	public static ScreenEn previousScreen;
+	public static ScreenEn previousScreen;//todo change to a stack of screens?
 
 
 	private MenuScreen menuScreen;
@@ -44,7 +44,7 @@ public class Runnjump extends Game {
 		//bgMusic.play();
 
     }
-    
+
 
     public void changeScreen(ScreenEn screenId){
 		//method used for changing game screens
