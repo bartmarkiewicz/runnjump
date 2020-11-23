@@ -2,6 +2,8 @@ package com.mygdx.runnjump;
 
 import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.screens.HighScoresScreen;
@@ -12,7 +14,7 @@ import com.mygdx.runnjump.screens.MenuScreen;
 public class Runnjump extends Game {
 	//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
-
+	Music bgMusic;
 
 	public enum ScreenEn {
 		LOADING,
@@ -37,16 +39,12 @@ public class Runnjump extends Game {
 		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
+		//bgMusic = Gdx.audio.newMusic(//todo get a music file);
+		//bgMusic.setLooping(true);
+		//bgMusic.play();
 
-
-		//Gdx.input.setCatchKey(Input.Keys.BACK, true);
-		//Gdx.input.setInputProcessor(this);
-		/*batch = new SpriteBatch();
-		campaignBt = new Texture("campaign_bt.png");
-        survivalBt = new Texture("survival_bt.png");
-        highScoresBt = new Texture("high_scores_bt.png");
-		*/
     }
+    
 
     public void changeScreen(ScreenEn screenId){
 		//method used for changing game screens
@@ -94,23 +92,10 @@ public class Runnjump extends Game {
 	public void render () {
 		super.render();
 		//rendering happens here
-
-
-
-		/*Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(campaignBt, 0, 0);
-		batch.draw(survivalBt, 0, 100);
-		batch.draw(highScoresBt, 0, 200);
-		batch.end();*/
 	}
 	
 	@Override
 	public void dispose () {
-		/*batch.dispose();
-		campaignBt.dispose();
-		survivalBt.dispose();
-		highScoresBt.dispose(); */
+		super.dispose();
 	}
 }
