@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
-import com.mygdx.runnjump.util.SoundHandler;
 
 import javax.xml.soap.Text;
 
@@ -50,11 +49,11 @@ public class MenuScreen extends ScreenBase implements Screen {
 
         leftTable.left().bottom();
         leftTable.setDebug(true);
-        leftTable.add(campaignBt).minHeight(120).minWidth(350).fillX().uniformX();
+        leftTable.add(campaignBt).height(120).width(350).fillX().uniformX();
         leftTable.row().pad(20,10,0,0);
-        leftTable.add(survivalBt).minHeight(120).minWidth(350).fillX().uniformX();
+        leftTable.add(survivalBt).height(120).width(350).fillX().uniformX();
         leftTable.row().pad(20,10,0,0);
-        leftTable.add(highScoresBt).minHeight(120).minWidth(350).fillX().uniformX();
+        leftTable.add(highScoresBt).height(120).width(350).fillX().uniformX();
 
         rightTable.right().bottom();
         rightTable.pad(0);
@@ -64,7 +63,7 @@ public class MenuScreen extends ScreenBase implements Screen {
         topTable.align(Align.topRight);
         topTable.right().top();
         topTable.pad(0);
-        topTable.add(soundBt).width(100).height(100).fill();
+        topTable.add(theGame.soundBt).width(100).height(100).fill();
 
         topTable.setDebug(true);
         mainTable.add(topTable).colspan(2).expand().right().top();
@@ -80,6 +79,7 @@ public class MenuScreen extends ScreenBase implements Screen {
         campaignBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                theGame.soundManager.playRandom("menu_button_click");
                 theGame.changeScreen(Runnjump.ScreenEn.LEVEL);
             }
         });
@@ -87,6 +87,8 @@ public class MenuScreen extends ScreenBase implements Screen {
         survivalBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                theGame.soundManager.playRandom("menu_button_click");
+
                 theGame.changeScreen(Runnjump.ScreenEn.GAME);
             }
         });
@@ -94,6 +96,7 @@ public class MenuScreen extends ScreenBase implements Screen {
         highScoresBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                theGame.soundManager.playRandom("menu_button_click");
                 theGame.changeScreen(Runnjump.ScreenEn.HIGHSCORES);
             }
         });
@@ -101,6 +104,8 @@ public class MenuScreen extends ScreenBase implements Screen {
         questionBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                theGame.soundManager.playRandom("menu_button_click");
+
                 //todo help popup
             }
         });

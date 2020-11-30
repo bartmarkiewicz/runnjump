@@ -26,7 +26,6 @@ public class HighScoresScreen extends ScreenBase implements Screen {
     public void show() {
         super.show();
 
-        Table topTable = new Table();
         //2 elems at top table,1st level High scores label, music
         //then 4 buttons next row
         Label screenLabel = new Label("High Scores", skin);
@@ -43,42 +42,54 @@ public class HighScoresScreen extends ScreenBase implements Screen {
         level3.getLabel().setFontScale(2f);
         survival.getLabel().setFontScale(2f);
 
-        topTable.add(screenLabel).colspan(3).expand();
-        topTable.add(soundBt).width(100).height(100).fill().right().top().colspan(1).expand();
-        topTable.row();
-        topTable.add(level1).uniform().fill().minHeight(100);
-        topTable.add(level2).uniform().fill().minHeight(100);
-        topTable.add(level3).uniform().fill().minHeight(100);
-        topTable.add(survival).uniform().fill().minHeight(100);
-
-        Table bottomTable = new Table();
         TextButton goToMyPos = new TextButton("Go to my position", skin);
-        bottomTable.add(goToMyPos).center().align(Align.center).minHeight(Gdx.graphics.getHeight()/5f).minWidth(Gdx.graphics.getWidth()/3f).colspan(1);
-        bottomTable.row().pad(10,5,0,0);//todo make padding and layout consistent everywhere
-        bottomTable.add(backBt).left().align(Align.left).minHeight(Gdx.graphics.getHeight()/5f).minWidth(Gdx.graphics.getWidth()/5f).colspan(1).expand();
 
+        Table topTable = new Table();
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.defaults().pad(10);
+
+
+        topTable.add(screenLabel).align(Align.center).uniform().colspan(3);
+        topTable.add(theGame.soundBt).width(100).height(100).right().top().colspan(1);
+        topTable.row();
+        topTable.add(level1).fill().uniform().center();
+        topTable.add(level2).fill().uniform().center();
+        topTable.add(level3).fill().uniform().center();
+        topTable.add(survival).fill().uniform().center();
         Table scrollpaneTable = new Table();
         ScrollPane highScoresWidget = new ScrollPane(scrollpaneTable,skin);
 
-        topTable.defaults().pad(10);
-        Table mainTable = new Table();
-        mainTable.defaults().pad(10);
 
-        System.out.println(Gdx.graphics.getHeight() + " width: " + Gdx.graphics.getWidth());
-        mainTable.add(topTable).top().fillX().minHeight(Gdx.graphics.getHeight()/4f).expand().colspan(1);
+        mainTable.add(topTable).top().uniform().expand();
         mainTable.row();
-        mainTable.add(highScoresWidget).fill().expand().minHeight(Gdx.graphics.getHeight()/1.2f).colspan(1);
+        mainTable.add(highScoresWidget).expand().fill();
         mainTable.row();
-        mainTable.add(bottomTable).fill().expand().left().bottom();
-        mainTable.pack();
-        mainTable.setFillParent(true);
+
+        Table bottomTable = new Table();
+        bottomTable.add().colspan(1).expandX();
+        bottomTable.add(goToMyPos).center().align(Align.center).uniform().colspan(2).expandX().height(120);
+        bottomTable.add().colspan(1).expandX();
+        bottomTable.row();
+        bottomTable.add(backBt).width(180).height(120).left().align(Align.left).colspan(1).uniform().fill();
+
+        mainTable.add(bottomTable).bottom().uniform().expand().fillX();//.top().uniform().fill().colspan(4);
+
+        topTable.pad(0);
+        mainTable.setDebug(true);
+
+        bottomTable.setDebug(true);
+
+
         stage.addActor(mainTable);
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
 
         backBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (Runnjump.previousScreen != null){
+                    theGame.soundManager.playRandom("menu_button_click");
                     theGame.changeScreen(Runnjump.ScreenEn.MENU);
                 }
             }

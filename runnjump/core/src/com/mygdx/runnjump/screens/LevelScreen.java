@@ -41,6 +41,8 @@ public class LevelScreen extends ScreenBase implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (Runnjump.previousScreen != null){
+                    theGame.soundManager.playRandom("menu_button_click");
+
                     theGame.changeScreen(Runnjump.ScreenEn.MENU);
                 }
             }
@@ -67,7 +69,7 @@ public class LevelScreen extends ScreenBase implements Screen {
 
 
         mainTable.add(screenLabel).left().uniform().colspan(2).left().expand().fill();
-        mainTable.add(soundBt).width(100).height(100).fill().right().top().colspan(1);
+        mainTable.add(theGame.soundBt).width(100).height(100).fill().right().top().colspan(1);
         mainTable.row().uniform().center().size(200);
 
         mainTable.add(levelOne).expand().uniform().center().size(200);
@@ -78,7 +80,7 @@ public class LevelScreen extends ScreenBase implements Screen {
         mainTable.add();
         mainTable.add(start).center().minHeight(130).minWidth(240);
         mainTable.row();
-        mainTable.add(backbt).left().align(Align.left).minHeight(130).minWidth(180);
+        mainTable.add(backbt).left().align(Align.left).height(130).width(180);
         //mainTable.setDebug(true);
 
 

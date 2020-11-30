@@ -14,7 +14,7 @@ public class MusicManager {
 
     }
     public void addMusic(String name, String path){
-        musicMap.put(name, Gdx.audio.newMusic(new FileHandle(path)));
+        musicMap.put(name, Gdx.audio.newMusic(Gdx.files.internal("sound" + "/"+path)));
     }
 
 
