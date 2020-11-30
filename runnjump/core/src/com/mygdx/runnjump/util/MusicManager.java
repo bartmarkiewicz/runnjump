@@ -65,7 +65,15 @@ public class MusicManager {
             }
         });
     }
+    public void muteMusic(){
+        if (volume == 1){
+            volume=0;
+        } else {
+            volume =1;
+        }
+        currentlyPlaying.setVolume(volume);
 
+    }
 
     public void stopMusic(String name){
         musicMap.get(name).stop();

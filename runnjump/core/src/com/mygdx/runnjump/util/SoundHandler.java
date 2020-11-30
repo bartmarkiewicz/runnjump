@@ -29,6 +29,7 @@ public class SoundHandler extends ChangeListener{
             System.out.println("Checked true");
         }
         theGame.soundManager.muteSound();
+        theGame.musicManager.muteMusic();
 
         soundBt.invalidate();
     }
