@@ -130,6 +130,7 @@ public class MenuScreen extends ScreenBase implements Screen {
     @Override
     public void show() {
         super.show();
+        theGame.musicManager.playMusic("bg_1");
         initGui();
 
     }

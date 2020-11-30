@@ -18,7 +18,7 @@ public class GameScreen extends ScreenBase implements Screen {
 
     @Override
     public void render(float delta) {
-
+        super.render(delta);
     }
 
     @Override

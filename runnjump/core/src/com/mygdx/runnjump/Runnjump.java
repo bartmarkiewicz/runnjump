@@ -23,6 +23,7 @@ public class Runnjump extends Game {
 	//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
 	public SoundManager soundManager;
+	public MusicManager musicManager;
 
 	public enum ScreenEn {
 		LOADING,
@@ -31,6 +32,7 @@ public class Runnjump extends Game {
 		LEVEL,
 		HIGHSCORES,
 	}
+
 	public static ScreenEn currentScreen;
 	public static ScreenEn previousScreen;//todo change to a stack of screens?
 
@@ -47,6 +49,7 @@ public class Runnjump extends Game {
 		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
 		soundManager = new SoundManager();
+		musicManager = new MusicManager();
 		setScreen(loadingScreen);
 		Drawable soundOnIcon;
 		Texture soundTexture;

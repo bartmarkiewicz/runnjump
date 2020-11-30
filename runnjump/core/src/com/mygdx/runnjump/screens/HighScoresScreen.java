@@ -76,14 +76,14 @@ public class HighScoresScreen extends ScreenBase implements Screen {
 
         mainTable.add(bottomTable).bottom().uniform().expand().fillX();//.top().uniform().fill().colspan(4);
 
-        topTable.pad(0);
-        mainTable.setDebug(true);
+        //topTable.pad(0,0,0,10);
+        //mainTable.setDebug(true);
 
-        bottomTable.setDebug(true);
+        //bottomTable.setDebug(true);
 
 
         stage.addActor(mainTable);
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
         backBt.addListener(new ChangeListener() {
             @Override

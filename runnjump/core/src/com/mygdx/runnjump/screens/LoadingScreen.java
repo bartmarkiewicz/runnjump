@@ -19,10 +19,15 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.soundManager.addSoundSet("menu_button_click", buttonClickFx);
     }
 
+    private void loadMusic(){
+        theGame.musicManager.addMusic("bg_1","music_calm_tree_of_life.wav");
+    }
+
     @Override
     public void show() {
         //load the music
         loadSoundFX();
+        loadMusic();
     }
 
     @Override
