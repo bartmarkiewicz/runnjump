@@ -89,7 +89,13 @@ public class Runnjump extends Game {
 				break;
 			case GAME:
 				if (gameScreen == null) {
-					gameScreen = new GameScreen(this);
+					if (previousScreen == ScreenEn.LEVEL) {
+						//campaign mode
+						gameScreen = new GameScreen(this, levelScreen.getLevelSelected());
+					} else {
+						//survival mode
+						gameScreen = new GameScreen(this);
+					}
 				}
 				this.setScreen(gameScreen);
 				currentScreen = ScreenEn.GAME;

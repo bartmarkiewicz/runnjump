@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
 
 public class LevelScreen extends ScreenBase implements Screen {
+    int levelSelected;
+    Label levelSelectIndicator;
+    final String lvlSlctStr = "Level Selected: ";
 
     public LevelScreen(Runnjump theGame) {
         super(theGame);
@@ -20,23 +23,72 @@ public class LevelScreen extends ScreenBase implements Screen {
 
     }
 
+    public int getLevelSelected(){
+        return levelSelected;
+    }
+
+
+    private void updateLevelSelectIndicator(){
+        if (levelSelected <1){
+            levelSelectIndicator.setText(lvlSlctStr + "None");
+        } else{
+            levelSelectIndicator.setText(lvlSlctStr + levelSelected);
+        }
+    }
     @Override
     public void show() {
         super.show();
-
+        levelSelected = -1;
         Table mainTable = new Table();
 
         mainTable.setDebug(true);
         mainTable.setFillParent(true);
         mainTable.center();
+        levelSelectIndicator = new Label(lvlSlctStr,skin);
+        levelSelectIndicator.setColor(Color.BLACK);
 
 
         TextButton levelOne = new TextButton("1", skin);
+        levelOne.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                levelSelected = 1;
+                theGame.soundManager.playRandom("menu_button_click");
+                updateLevelSelectIndicator();
+            }
+        });
         TextButton levelTwo = new TextButton("2", skin);
-        TextButton levelThree = new TextButton("3", skin);
-        TextButton start = new TextButton("Start", skin);
-        TextButton backbt = new TextButton("Back", skin);
+        levelTwo.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                levelSelected = 2;
+                theGame.soundManager.playRandom("menu_button_click");
 
+                updateLevelSelectIndicator();
+            }
+        });
+        TextButton levelThree = new TextButton("3", skin);
+        levelThree.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                levelSelected = 3;
+                theGame.soundManager.playRandom("menu_button_click");
+
+                updateLevelSelectIndicator();
+            }
+        });
+        TextButton start = new TextButton("Start", skin);
+        start.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                theGame.changeScreen(Runnjump.ScreenEn.GAME);
+
+            }
+        });
+
+
+
+        TextButton backbt = new TextButton("Back", skin);
         backbt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -81,13 +133,13 @@ public class LevelScreen extends ScreenBase implements Screen {
         mainTable.add(start).center().minHeight(130).minWidth(240);
         mainTable.row();
         mainTable.add(backbt).left().align(Align.left).height(130).width(180);
+        mainTable.add(levelSelectIndicator).left().align(Align.center).height(130).width(180).colspan(2);
+
         //mainTable.setDebug(true);
 
 
         stage.addActor(mainTable);
-
-
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
     }
 
     @Override
