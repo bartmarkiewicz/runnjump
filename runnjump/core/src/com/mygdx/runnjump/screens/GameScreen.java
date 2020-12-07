@@ -7,10 +7,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.runnjump.Runnjump;
 
 public class GameScreen extends ScreenBase implements Screen, InputProcessor {
@@ -44,6 +48,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         orthographicCamera.setToOrtho(false,w,h);
         orthographicCamera.update();
         stage.getViewport().setCamera(orthographicCamera);
+        background = new TextureRegion(new Texture("levels\\background.png"));
+        orthographicCamera.position.set(320,7400,0);
+        orthographicCamera.zoom += 0.45f;
+
     }
 
     @Override
@@ -54,8 +62,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         orthographicCamera.update();
         mapRenderer.setView(orthographicCamera);
+        batch.begin();
+        batch.draw(background,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
         mapRenderer.render();
-
     }
 
     @Override
@@ -66,13 +76,13 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.LEFT)
-            orthographicCamera.translate(-32,0);
+            orthographicCamera.translate(-92,0);
         if(keycode == Input.Keys.RIGHT)
-            orthographicCamera.translate(32,0);
+            orthographicCamera.translate(92,0);
         if(keycode == Input.Keys.UP)
-            orthographicCamera.translate(0,-32);
+            orthographicCamera.translate(0,-92);
         if(keycode == Input.Keys.DOWN)
-            orthographicCamera.translate(0,32);
+            orthographicCamera.translate(0,92);
         if(keycode == Input.Keys.NUM_1)
             tileMap.getLayers().get(0).setVisible(!tileMap.getLayers().get(0).isVisible());
         if(keycode == Input.Keys.NUM_2)

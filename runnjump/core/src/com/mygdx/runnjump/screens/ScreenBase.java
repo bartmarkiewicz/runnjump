@@ -9,16 +9,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.runnjump.Runnjump;
 
 abstract class ScreenBase implements Screen, InputProcessor {
-
+    public TextureRegion background;
     public Stage stage;
     Skin skin;
-
+    SpriteBatch batch;
     public Runnjump.ScreenEn currentScreenId;
     InputMultiplexer inputMultiplexer;
 
@@ -27,11 +30,14 @@ abstract class ScreenBase implements Screen, InputProcessor {
     public ScreenBase(Runnjump theGameO) {
         this.theGame = theGameO;
         skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));
+        background = new TextureRegion(new Texture("menubg.png"), 0,0,1334, 750);
+        batch = new SpriteBatch();
+
     }
 
     @Override
     public void show() {
-        //game resolution here
+        //game resolution = 1280x720
         OrthographicCamera camera = new OrthographicCamera(1280,720);
         ExtendViewport gameVP = new ExtendViewport(1280,720, camera);
         stage = new Stage(gameVP);
@@ -54,6 +60,11 @@ abstract class ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        if (currentScreenId != Runnjump.ScreenEn.GAME){
+            batch.begin();
+            batch.draw(background,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.end();
+        }
     }
 
     @Override
