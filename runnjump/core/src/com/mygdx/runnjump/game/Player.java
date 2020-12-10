@@ -5,9 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -39,21 +36,21 @@ public class Player extends Sprite implements InputProcessor {
         super.draw(batch);
     }
 
-    public boolean collidesRight() {
+    public boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
             if(isCellBlocked(getX() + sizeX, getY() + i))
                 return true;
         return false;
     }
 
-    public boolean collidesLeft() {
+    public boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
             if(isCellBlocked(getX(), getY() + i))
                 return true;
         return false;
     }
 
-    public boolean collidesTop() {
+    public boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
             if(isCellBlocked(getX() + i, getY() + sizeY))
                 return true;
@@ -61,7 +58,7 @@ public class Player extends Sprite implements InputProcessor {
 
     }
 
-    public boolean collidesBottom() {
+    public boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
             if(isCellBlocked(getX() + i, getY()))
                 return true;
@@ -86,9 +83,9 @@ public class Player extends Sprite implements InputProcessor {
 
 
         if (velocity.x < 0) // going left
-            collisionX = collidesLeft();
+            collisionX = collidesWest();
         else if (velocity.x > 0) // going right
-            collisionX = collidesRight();
+            collisionX = collidesEast();
 
         // x collision handling
         if (collisionX) {
@@ -100,9 +97,9 @@ public class Player extends Sprite implements InputProcessor {
         setY(getY() + velocity.y * delta * 5f);
 
         if (velocity.y < 0)
-            canJump = collisionY = collidesBottom();
+            canJump = collisionY = collidesSouth();
         else if (velocity.y > 0)
-            collisionY = collidesTop();
+            collisionY = collidesNorth();
 
         // y collision handling
         if (collisionY) {

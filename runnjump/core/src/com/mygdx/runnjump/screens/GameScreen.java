@@ -70,7 +70,6 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         orthographicCamera.update();
         stage.getViewport().setCamera(orthographicCamera);
         background = new TextureRegion(new Texture("levels\\background.png"));
-        //orthographicCamera.position.set(120,3000,0);
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         player = new Player(new Sprite(new Texture("player\\Idle_000.png")),layer);
