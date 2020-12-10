@@ -1,6 +1,8 @@
 package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,21 +11,26 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends Sprite{
+public class Player extends Sprite implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
-    private float speed = 120;
-    private float gravity = 60*1.8f;
+    private float speed = 220;
+    private float gravity = 65*1.8f;
     private TiledMapTileLayer collisionLayer;
-    int tileSize;
-    float increment;
+    boolean canJump;
+    float sizeX,sizeY;
+
+    public void setLogicalSize(float width, float height){
+        sizeX = width;
+        sizeY = height;
+    }
 
     public Player(Sprite sprite, TiledMapTileLayer collisionLayer){
         super(sprite);
         this.collisionLayer = collisionLayer;
-        setSize(32*4,32*4);//2 by 4 tiles size
-        tileSize = collisionLayer.getTileWidth();
+        setSize(32*2,32*3);//2 by 3 tiles size
+        setLogicalSize(32*2,32*3);
     }
 
     @Override
@@ -33,77 +40,140 @@ public class Player extends Sprite{
     }
 
     public boolean collidesRight() {
-        for(float step = 0; step <= getHeight(); step += increment)
-            if(isCellBlocked(getX() + getWidth(), getY() + step))
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
+            if(isCellBlocked(getX() + sizeX, getY() + i))
                 return true;
         return false;
     }
 
     public boolean collidesLeft() {
-        for(float step = 0; step <= getHeight(); step += increment)
-            if(isCellBlocked(getX(), getY() + step))
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
+            if(isCellBlocked(getX(), getY() + i))
                 return true;
         return false;
     }
 
     public boolean collidesTop() {
-        for(float step = 0; step <= getWidth(); step += increment)
-            if(isCellBlocked(getX() + step, getY() + getHeight()))
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
+            if(isCellBlocked(getX() + i, getY() + sizeY))
                 return true;
         return false;
 
     }
 
     public boolean collidesBottom() {
-        for(float step = 0; step <= getWidth(); step += increment)
-            if(isCellBlocked(getX() + step, getY()))
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
+            if(isCellBlocked(getX() + i, getY()))
                 return true;
         return false;
     }
 
-    //calc new position based on velocity
-    public void update(float delta){
-        velocity.y -= gravity*delta;//gravity effect
-        if(velocity.y > speed){//gravity cannot go over speed
-            velocity.y =speed;
-        } if(velocity.y < speed){
+    public void update(float delta) {
+        velocity.y -= gravity * delta;
+
+        // sets max velocity
+        if (velocity.y > speed)
+            velocity.y = speed;
+        else if (velocity.y < -speed)
             velocity.y = -speed;
-        }
 
-        float oldX = getX();
-        float oldY = getY();
-        boolean xCollision = false;
-        boolean yCollision = false;
+        // saves previous position
+        float oldX = getX(), oldY = getY();
+        boolean collisionX = false, collisionY = false;
 
-
-        // move on x
+        // move horizontally
         setX(getX() + velocity.x * delta);
 
-        // calculate the increment for step in #collidesLeft() and #collidesRight()
-        increment = collisionLayer.getTileWidth();
-        increment = getWidth() < increment ? getWidth() / 2 : increment / 2;
 
-        increment = collisionLayer.getTileHeight();
-        increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
-        boolean canJump = true;
-        if(velocity.y < 0) // going down
-            canJump = yCollision = collidesBottom();
-        else if(velocity.y > 0) // going up
-            yCollision = collidesTop();
+        if (velocity.x < 0) // going left
+            collisionX = collidesLeft();
+        else if (velocity.x > 0) // going right
+            collisionX = collidesRight();
 
-        // react to y collision
-        if(yCollision) {
+        // x collision handling
+        if (collisionX) {
+            setX(oldX);
+            velocity.x = 0;
+        }
+
+        // move on y
+        setY(getY() + velocity.y * delta * 5f);
+
+        if (velocity.y < 0)
+            canJump = collisionY = collidesBottom();
+        else if (velocity.y > 0)
+            collisionY = collidesTop();
+
+        // y collision handling
+        if (collisionY) {
             setY(oldY);
             velocity.y = 0;
         }
-
-
-        setX(getX()+ velocity.x*delta);
-        setY(getY()+ velocity.y*delta);
     }
 
-    private boolean isCellBlocked(float x, float y){
+        private boolean isCellBlocked(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && cell.getTile().getProperties().containsKey("blocked");
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        switch(keycode) {
+            case Input.Keys.W:
+                if(canJump) {
+                    velocity.y = speed / 1.8f;
+                    canJump = false;
+                }
+                break;
+            case Input.Keys.D:
+                velocity.x = speed;
+                break;
+            case Input.Keys.A:
+                velocity.x = -speed;
+                break;
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch(keycode) {
+            case Input.Keys.D:
+                velocity.x = 0;
+            case Input.Keys.A:
+                velocity.x = 0;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
