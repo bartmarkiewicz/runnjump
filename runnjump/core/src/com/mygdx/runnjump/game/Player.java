@@ -109,7 +109,12 @@ public class Player extends Sprite implements InputProcessor {
         }
     }
 
-        private boolean isCellBlocked(float x, float y){
+    private boolean isCellCollectible(float x, float y){
+        TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") || cell.getTile().getProperties().containsKey("gold_key") || cell.getTile().getProperties().containsKey("heart"));
+    }
+
+    private boolean isCellBlocked(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && cell.getTile().getProperties().containsKey("blocked");
     }
