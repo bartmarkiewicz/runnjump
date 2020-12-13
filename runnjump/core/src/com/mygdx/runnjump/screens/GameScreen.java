@@ -71,7 +71,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         background = new TextureRegion(new Texture("levels\\background.png"));
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
-        player = new Player(new Sprite(new Texture("player\\Idle_000.png")),layer);
+        TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
+
+        player = new Player(new Sprite(new Texture("player\\Idle_000.png")),layer,visualLayer);
 
         layer.getHeight();
         player.setPosition(5*32,79*32);//start position

@@ -16,6 +16,9 @@ public class Player extends Sprite implements InputProcessor {
     private float speedY = 200;
     private float gravity = 98f;
     private TiledMapTileLayer collisionLayer;
+    private TiledMapTileLayer visualLayer;
+    private int score, hearts;
+    private boolean goldKeyAcquired;
     boolean canJump;
     float sizeX,sizeY;
 
@@ -24,11 +27,15 @@ public class Player extends Sprite implements InputProcessor {
         sizeY = height;
     }
 
-    public Player(Sprite sprite, TiledMapTileLayer collisionLayer){
+    public Player(Sprite sprite, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         super(sprite);
         this.collisionLayer = collisionLayer;
+        this.visualLayer = visualLayer;
         setSize(30*2,30*3);//2 by 3 tiles size
         setLogicalSize(30*2,30*3);
+        this.score = 0;
+        this.hearts =3;
+        this.goldKeyAcquired = false;
     }
 
     @Override
@@ -38,31 +45,97 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean collidesEast() {
-        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
-            if(isCellBlocked(getX() + sizeX, getY() + i))
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
+            if (isCellCollectible(getX() + sizeX, getY() + i)) {
+                handleCollectible(getX() + sizeX, getY() + i);
+            }
+            if (isCellBlocked(getX() + sizeX, getY() + i))
                 return true;
+        }
         return false;
     }
 
     public boolean collidesWest() {
-        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight())
-            if(isCellBlocked(getX(), getY() + i))
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
+            if (isCellCollectible(getX(), getY()+i)) {
+                handleCollectible(getX(), getY()+i);
+            }
+            if (isCellBlocked(getX(), getY() + i))
                 return true;
+        }
         return false;
     }
 
     public boolean collidesNorth() {
-        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
-            if(isCellBlocked(getX() + i, getY() + sizeY))
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+            if (isCellCollectible(getX() + i, getY()+sizeY)) {
+                handleCollectible(getX() + i, getY()+sizeY);
+            }
+            if (isCellBlocked(getX() + i, getY() + sizeY))
                 return true;
+        }
         return false;
+    }
+    public void removeCollectibe(int tileX, int tileY){
+        visualLayer.setCell(tileX, tileY, new TiledMapTileLayer.Cell());
+        collisionLayer.setCell(tileX,tileY, new TiledMapTileLayer.Cell()); // gets rid of collectible cells
+    }
 
+    public void handleCollectible(float x, float y){
+        TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        TiledMapTileLayer.Cell cellVisualLayer = visualLayer.getCell((int)x/visualLayer.getTileWidth(), (int)y/visualLayer.getTileHeight());
+
+        //removes collectible
+        removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); // gets rid of collectible cells
+        if (cellColLayer.getTile().getProperties().containsKey("coin")){
+            score += 1;
+        }
+        if (cellColLayer.getTile().getProperties().containsKey("heart")){
+            hearts += 1;
+        }
+
+        if (cellColLayer.getTile().getProperties().containsKey("gold_key")){
+            goldKeyAcquired = true;
+        }
+
+        if (isCellCollectible((int)x+33, (int)y)){
+            removeCollectibe((int)(x+33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); //checks cell to the right
+        }
+        if(isCellCollectible((int)x-33, (int)y)){
+           removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        }; //checks cell to the left
+
+        if (isCellCollectible((int)x, (int)y+33)){
+            removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());// checks cell above
+        }
+        if(isCellCollectible(x, (int)y-33)){
+            removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight());
+        };//checks cell below
+        if(isCellCollectible(x-33, y)){
+            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        }; // checks cell to the left and below
+        if(isCellCollectible(x-33, y+33)){
+            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());
+        };//checks cell to the left and above
+        if(isCellCollectible(x+33, y-33)){
+            removeCollectibe((int)(x+33)/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight());// checks cell to the left and below
+        }
+        if (isCellCollectible(x+33, y+33)){
+            removeCollectibe((int)(x+32)/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());//checks cell above and to the right
+        }
+        if (isCellCollectible(x-33, y-33)){
+            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight()); // checks cell to the left and below
+        }
     }
 
     public boolean collidesSouth() {
-        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth())
-            if(isCellBlocked(getX() + i, getY()))
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+            if (isCellCollectible(getX() + i, getY())) {
+                handleCollectible(getX() + i, getY());
+            }
+            if (isCellBlocked(getX() + i, getY()))
                 return true;
+        }
         return false;
     }
 
@@ -111,7 +184,9 @@ public class Player extends Sprite implements InputProcessor {
 
     private boolean isCellCollectible(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
-        return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") || cell.getTile().getProperties().containsKey("gold_key") || cell.getTile().getProperties().containsKey("heart"));
+        return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") ||
+                cell.getTile().getProperties().containsKey("gold_key") ||
+                cell.getTile().getProperties().containsKey("heart"));
     }
 
     private boolean isCellBlocked(float x, float y){
