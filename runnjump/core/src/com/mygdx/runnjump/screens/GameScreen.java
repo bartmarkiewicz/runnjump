@@ -15,7 +15,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -76,7 +75,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
         layer.getHeight();
         player.setPosition(5*32,79*32);//start position
-        zoom = 5f;
+        zoom = 0f;
         orthographicCamera.zoom += zoom;
         hud = new Hud(new SpriteBatch(), theGame);
 
@@ -113,9 +112,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         /*super.resize(width,height);*/
-        orthographicCamera.viewportWidth = width/2.5f;
+        /*orthographicCamera.viewportWidth = width/2.5f;
         orthographicCamera.viewportHeight = height/2.5f;
-        orthographicCamera.update();
+        orthographicCamera.update();*/
     }
 
     @Override

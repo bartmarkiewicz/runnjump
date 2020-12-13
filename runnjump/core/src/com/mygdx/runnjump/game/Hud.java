@@ -1,5 +1,6 @@
 package com.mygdx.runnjump.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +26,13 @@ public class Hud implements Disposable {
         mainTable.align(Align.topRight);
         mainTable.right().top();
         mainTable.pad(5);
-        mainTable.add(theGame.soundBt).width(100/2f).height(100/2f).expand().fill().right().top();
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
+            mainTable.add(theGame.soundBt).width(100).height(100).expand().fill().right().top();
+            mainTable.pad(10);
+        }
+        else {
+            mainTable.add(theGame.soundBt).width(100/2f).height(100/2f).expand().fill().right().top();
+        }
         mainTable.setFillParent(true);
         mainTable.top().right();
         //theGame.soundBt.addListener(new SoundHandler(theGame));

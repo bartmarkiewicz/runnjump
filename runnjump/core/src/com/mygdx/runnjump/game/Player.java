@@ -12,8 +12,9 @@ public class Player extends Sprite implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
-    private float speed = 220;
-    private float gravity = 65*1.8f;
+    private float speedX = 530;
+    private float speedY = 200;
+    private float gravity = 98f;
     private TiledMapTileLayer collisionLayer;
     boolean canJump;
     float sizeX,sizeY;
@@ -26,8 +27,8 @@ public class Player extends Sprite implements InputProcessor {
     public Player(Sprite sprite, TiledMapTileLayer collisionLayer){
         super(sprite);
         this.collisionLayer = collisionLayer;
-        setSize(32*2,32*3);//2 by 3 tiles size
-        setLogicalSize(32*2,32*3);
+        setSize(30*2,30*3);//2 by 3 tiles size
+        setLogicalSize(30*2,30*3);
     }
 
     @Override
@@ -69,10 +70,10 @@ public class Player extends Sprite implements InputProcessor {
         velocity.y -= gravity * delta;
 
         // sets max velocity
-        if (velocity.y > speed)
-            velocity.y = speed;
-        else if (velocity.y < -speed)
-            velocity.y = -speed;
+        if (velocity.y > speedY)
+            velocity.y = speedY;
+        else if (velocity.y < -speedY)
+            velocity.y = -speedY;
 
         // saves previous position
         float oldX = getX(), oldY = getY();
@@ -96,9 +97,9 @@ public class Player extends Sprite implements InputProcessor {
         // move on y
         setY(getY() + velocity.y * delta * 5f);
 
-        if (velocity.y < 0)
+        if (velocity.y < 2.5f)
             canJump = collisionY = collidesSouth();
-        else if (velocity.y > 0)
+        else if (velocity.y > 2.5f)
             collisionY = collidesNorth();
 
         // y collision handling
@@ -118,15 +119,15 @@ public class Player extends Sprite implements InputProcessor {
         switch(keycode) {
             case Input.Keys.W:
                 if(canJump) {
-                    velocity.y = speed / 1.8f;
+                    velocity.y = speedY / 1.8f;
                     canJump = false;
                 }
                 break;
             case Input.Keys.D:
-                velocity.x = speed;
+                velocity.x = speedX;
                 break;
             case Input.Keys.A:
-                velocity.x = -speed;
+                velocity.x = -speedX;
                 break;
 
         }
