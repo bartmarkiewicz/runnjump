@@ -21,13 +21,22 @@ public class Player extends Sprite implements InputProcessor {
     private boolean goldKeyAcquired;
     boolean canJump;
     float sizeX,sizeY;
+    Hud hud;
 
     public void setLogicalSize(float width, float height){
         sizeX = width;
         sizeY = height;
     }
 
-    public Player(Sprite sprite, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
+    public int getHearts(){
+        return hearts;
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public Player(Sprite sprite, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         super(sprite);
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
@@ -36,6 +45,7 @@ public class Player extends Sprite implements InputProcessor {
         this.score = 0;
         this.hearts =3;
         this.goldKeyAcquired = false;
+        this.hud = hud;
     }
 
     @Override
@@ -89,9 +99,11 @@ public class Player extends Sprite implements InputProcessor {
         removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); // gets rid of collectible cells
         if (cellColLayer.getTile().getProperties().containsKey("coin")){
             score += 1;
+            hud.setScore(score);
         }
         if (cellColLayer.getTile().getProperties().containsKey("heart")){
             hearts += 1;
+            hud.setLives(hearts);
         }
 
         if (cellColLayer.getTile().getProperties().containsKey("gold_key")){

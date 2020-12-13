@@ -72,14 +72,14 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
+        hud = new Hud(new SpriteBatch(), theGame, skin);
 
-        player = new Player(new Sprite(new Texture("player\\Idle_000.png")),layer,visualLayer);
+        player = new Player(new Sprite(new Texture("player\\Idle_000.png")),hud,layer,visualLayer);
 
         layer.getHeight();
         player.setPosition(5*32,79*32);//start position
         zoom = 0f;
         orthographicCamera.zoom += zoom;
-        hud = new Hud(new SpriteBatch(), theGame);
 
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(player);
@@ -100,7 +100,6 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         mapRenderer.setView(orthographicCamera);
         mapRenderer.render();
         mapRenderer.getBatch().begin();
-
 
         player.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
