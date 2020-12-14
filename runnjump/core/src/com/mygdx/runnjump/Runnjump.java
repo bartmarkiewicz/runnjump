@@ -48,6 +48,11 @@ public class Runnjump extends Game {
 	private GameScreen gameScreen;
 	private LevelScreen levelScreen;
 	private HighScoresScreen highScoresScreen;
+	private int levelSelected;
+
+	public void setLevelSelected(int level){
+		levelSelected = level;
+	}
 
 	@Override
 	public void create () {
@@ -63,6 +68,7 @@ public class Runnjump extends Game {
 		Texture soundTexture;
 		Texture soundOff;
 		Drawable soundOffIcon;
+		levelSelected = -1;
 
 		soundTexture = new Texture(Gdx.files.internal("sound.png"));
 		soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));

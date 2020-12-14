@@ -16,6 +16,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
         //idle
         theGame.textureManager.addPlayerFrameSet("idle","player\\Idle_",12);
         theGame.textureManager.addPlayerFrameSet("running","player\\Running_",12);
+        theGame.textureManager.addPlayerFrameSet("jump","player\\Jump Start_",6);
+
     }
     private void loadGraphics(){
         //TextureAtlas playerRunning = new TextureAtlas(Gdx.files.internal("player\\runningCharSet.atlas"));

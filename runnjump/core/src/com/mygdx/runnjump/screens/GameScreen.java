@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
@@ -67,8 +68,12 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     public void show() {
         super.show();
         currentScreenId = Runnjump.ScreenEn.GAME;
-
-        tileMap = new TmxMapLoader().load("levels\\level1.tmx");
+        try {
+            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
+        }catch (SerializationException e){
+            //lvl not implemented so it will load lvl 1 by default
+            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
+        }
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
         orthographicCamera = new OrthographicCamera();
         float w = 1280;//Gdx.graphics.getWidth();
@@ -87,7 +92,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
         hud = new Hud(new SpriteBatch(), theGame, skin);
 
-        player = new Player(hud,layer,visualLayer);
+        player = new Player(theGame,hud,layer,visualLayer);
 
         layer.getHeight();
         player.getPlayerSprite().setPosition(5*32,79*32);//start position
@@ -100,14 +105,8 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         tileMapHeight = properties.get("height", Integer.class);
         tileMapWidth = properties.get("width", Integer.class);
 
-        playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
-        playerRunning = theGame.textureManager.getPlayerFrameSet("running");
-        /*TextureAtlas playerRun = Runnjump.textureAtlasMap.get("player_running");
-        runningFrames = playerRun.findRegions("running");
-        runningAnimation = new Animation(0.05f,runningFrames, Animation.PlayMode.LOOP);
-        TextureRegion first = runningFrames.first();
-        centerX = (Gdx.graphics.getWidth()-first.getRegionWidth());
-        centerY = (Gdx.graphics.getHeight()-first.getRegionHeight());*/
+
+
 
     }
 
@@ -123,37 +122,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         mapRenderer.setView(orthographicCamera);
         mapRenderer.render();
         mapRenderer.getBatch().begin();
-        time += delta;
-        if (player.isIdle() && time > 0.2f) {
-            player.setFrame(playerIdle.get(playerIdleLastFrame));
-            if (playerIdleLastFrame == playerIdle.size() - 1){
-                backWardsIdle=true;
-            }
-            if (playerIdleLastFrame==0){
-                backWardsIdle=false;
-            }
-            if (backWardsIdle){
-                playerIdleLastFrame--;
-            } else {
-                playerIdleLastFrame++;
-            }
-            time=0;
-        }
-        if (!player.isIdle() && time > 0.13f){
-            player.setFrame(playerRunning.get(playerRunLastFrame));
-            if (playerRunLastFrame==0){
-                backWardsRunning=false;
-            }
-            if (playerRunLastFrame == playerRunning.size()-1){//if at last element
-                backWardsRunning=true;
-            }
-            if (backWardsRunning){
-                playerRunLastFrame--;
-            } else {
-                playerRunLastFrame++;
-            }
-            time=0;
-        }
+
         player.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 

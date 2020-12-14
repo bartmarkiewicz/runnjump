@@ -32,8 +32,16 @@ public class Player implements InputProcessor {
     float sizeX,sizeY;
     Sprite playerSprite;
     boolean facingRight = true;
+    boolean alive;
+    float time =0f;
 
-    Hud hud;
+    Texture frame;
+    int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
+    boolean backWardsIdle = false, backWardsRunning = false;
+
+    ArrayList<Texture> playerIdle, playerRunning, playerJump;
+
+    private Hud hud;
 
     public void setLogicalSize(float width, float height){
         sizeX = width;
@@ -48,7 +56,7 @@ public class Player implements InputProcessor {
         return score;
     }
 
-    public Player( Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
+    public Player(Runnjump theGame, Hud hud,TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         this.playerSprite = new Sprite(new Texture("player\\Idle_000.png"));
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
@@ -58,25 +66,27 @@ public class Player implements InputProcessor {
         this.hearts =3;
         this.goldKeyAcquired = false;
         this.hud = hud;
+        this.alive = true;
+        playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
+        playerRunning = theGame.textureManager.getPlayerFrameSet("running");
+        playerJump = theGame.textureManager.getPlayerFrameSet("jump");
     }
-
 
     public void setFrame(Texture texture){
         playerSprite.setTexture(texture);
     }
-    public void draw(Batch batch){
-        update(Gdx.graphics.getDeltaTime());
-        playerSprite.draw(batch);
-    }
 
-    public void draw(Batch batch,Texture frame) {
+    public void draw(Batch batch) {
         update(Gdx.graphics.getDeltaTime());//updates before drawingl) {
-        playerSprite.setTexture(frame);
+        //playerSprite.setTexture(frame);
         playerSprite.draw(batch);
     }
 
     public boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
+            if(cellKillsPlayer(playerSprite.getX() + sizeX, playerSprite.getY() + i)){
+                die();
+            }
             if (isCellCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i)) {
                 handleCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i);
             }
@@ -88,6 +98,9 @@ public class Player implements InputProcessor {
 
     public boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
+            if(cellKillsPlayer(playerSprite.getX(), playerSprite.getY()+i)){
+                die();
+            }
             if (isCellCollectible(playerSprite.getX(), playerSprite.getY()+i)) {
                 handleCollectible(playerSprite.getX(), playerSprite.getY()+i);
             }
@@ -99,6 +112,10 @@ public class Player implements InputProcessor {
 
     public boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+
+            if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY()+sizeY)){
+                die();
+            }
             if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY)) {
                 handleCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY);
             }
@@ -163,6 +180,9 @@ public class Player implements InputProcessor {
 
     public boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+            if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY())){
+                die();
+            }
             if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY())) {
                 handleCollectible(playerSprite.getX() + i, playerSprite.getY());
             }
@@ -174,6 +194,10 @@ public class Player implements InputProcessor {
 
     public void update(float delta) {
         velocity.y -= gravity * delta;
+
+        time += delta;
+
+
 
         // sets max velocity
         if (velocity.y > speedY)
@@ -208,10 +232,51 @@ public class Player implements InputProcessor {
         else if (velocity.y > 2.5f)
             collisionY = collidesNorth();
 
-        // y collision handling
         if (collisionY) {
             playerSprite.setY(oldY);
             velocity.y = 0;
+        }
+        if (this.isIdle() && time > 0.2f) {
+            playerJumpLastFrame=0;
+
+            this.setFrame(playerIdle.get(playerIdleLastFrame));
+            if (playerIdleLastFrame == playerIdle.size() - 1){
+                backWardsIdle=true;
+            }
+            if (playerIdleLastFrame==0){
+                backWardsIdle=false;
+            }
+            if (backWardsIdle){
+                playerIdleLastFrame--;
+            } else {
+                playerIdleLastFrame++;
+            }
+            time=0;
+        }else if (isRunning() && time > 0.15f){
+            playerJumpLastFrame=0;
+
+            this.setFrame(playerRunning.get(playerRunLastFrame));
+            if (playerRunLastFrame==0){
+                backWardsRunning=false;
+            }
+            if (playerRunLastFrame == playerRunning.size()-1){//if at last element
+                backWardsRunning=true;
+            }
+            if (backWardsRunning){
+                playerRunLastFrame--;
+            } else {
+                playerRunLastFrame++;
+            }
+            time=0;
+        } else if (inAir() && time > 0.06f){
+            this.setFrame(playerJump.get(playerJumpLastFrame));
+            if (playerJumpLastFrame== playerJump.size()-1){
+            } else {
+                playerJumpLastFrame++;
+            }
+            time =0;
+        } else if(playerJumpLastFrame==playerJump.size()-1 && !inAir()&&!isRunning() && collisionY){
+            this.setFrame(playerIdle.get(playerIdleLastFrame));
         }
     }
 
@@ -221,6 +286,13 @@ public class Player implements InputProcessor {
                 cell.getTile().getProperties().containsKey("gold_key") ||
                 cell.getTile().getProperties().containsKey("heart"));
     }
+
+    private boolean cellKillsPlayer(float x, float y){
+        TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        return cell != null && cell.getTile()!=null &&
+                cell.getTile().getProperties().containsKey("spikes");
+    }
+
 
     private boolean isCellBlocked(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
@@ -300,11 +372,27 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    public boolean isDead(){
+        return !alive;
+    }
+
+    public void die(){
+        if(alive) {
+            hearts--;
+            hud.setLives(hearts);
+            alive = false;
+        }
+    }
+
     public boolean isRunning() {
-        if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 0.25f&&velocity.y>-0.25)){
+        if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 3f && velocity.y>-3f)){
             return true;
         }
         return false;
+    }
+
+    public boolean inAir(){
+        return (velocity.y > 3f || velocity.y<-3f);
     }
 
     public boolean isIdle() {

@@ -33,6 +33,7 @@ public class LevelScreen extends ScreenBase implements Screen {
             levelSelectIndicator.setText(lvlSlctStr + "None");
         } else{
             levelSelectIndicator.setText(lvlSlctStr + levelSelected);
+            theGame.setLevelSelected(levelSelected);
         }
     }
     @Override

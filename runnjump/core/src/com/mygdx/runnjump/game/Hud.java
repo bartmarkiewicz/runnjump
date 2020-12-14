@@ -23,9 +23,11 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
     private Label scoreL, livesL;
+    public final Runnjump theGame;
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport,batch);
+        this.theGame = theGame;
         Table container = new Table();
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
