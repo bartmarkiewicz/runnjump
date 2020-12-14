@@ -7,8 +7,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
@@ -35,7 +38,11 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     OrthographicCamera orthographicCamera;
     Player player;
     float zoom;
-
+    Array<TextureAtlas.AtlasRegion> runningFrames;
+    Animation runningAnimation;
+    float time = 0f;
+    TextureRegion playerCurrentFrame;
+    float centerX, centerY;
 
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
@@ -77,7 +84,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         player = new Player(new Sprite(new Texture("player\\Idle_000.png")),hud,layer,visualLayer);
 
         layer.getHeight();
-        player.setPosition(5*32,79*32);//start position
+        player.getPlayerSprite().setPosition(5*32,79*32);//start position
         zoom = 0f;
         orthographicCamera.zoom += zoom;
 
@@ -86,6 +93,15 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         MapProperties properties = tileMap.getProperties();
         tileMapHeight = properties.get("height", Integer.class);
         tileMapWidth = properties.get("width", Integer.class);
+
+
+        TextureAtlas playerRun = Runnjump.textureAtlasMap.get("player_running");
+        runningFrames = playerRun.findRegions("running");
+        runningAnimation = new Animation(0.05f,runningFrames, Animation.PlayMode.LOOP);
+        TextureRegion first = runningFrames.first();
+        centerX = (Gdx.graphics.getWidth()-first.getRegionWidth());
+        centerY = (Gdx.graphics.getHeight()-first.getRegionHeight());
+
     }
 
     @Override
@@ -94,7 +110,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        orthographicCamera.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
+        orthographicCamera.position.set(player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2, player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2, 0);
 
         orthographicCamera.update();
         mapRenderer.setView(orthographicCamera);
@@ -153,7 +169,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     @Override
     public void dispose() {
         super.dispose();
-        player.getTexture().dispose();
+        player.getPlayerSprite().getTexture().dispose();
         gameWorld.dispose();
         mapRenderer.dispose();
         hud.dispose();

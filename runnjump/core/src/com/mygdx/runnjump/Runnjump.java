@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -19,11 +20,14 @@ import com.mygdx.runnjump.util.MusicManager;
 import com.mygdx.runnjump.util.SoundHandler;
 import com.mygdx.runnjump.util.SoundManager;
 
+import java.util.TreeMap;
+
 public class Runnjump extends Game {
 	//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
 	public SoundManager soundManager;
 	public MusicManager musicManager;
+	public static TreeMap<String, TextureAtlas> textureAtlasMap;
 
 	public enum ScreenEn {
 		LOADING,
@@ -50,6 +54,7 @@ public class Runnjump extends Game {
 		loadingScreen = new LoadingScreen(this);
 		soundManager = new SoundManager();
 		musicManager = new MusicManager();
+		textureAtlasMap = new TreeMap<>();
 		setScreen(loadingScreen);
 		Drawable soundOnIcon;
 		Texture soundTexture;

@@ -3,12 +3,17 @@ package com.mygdx.runnjump.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.runnjump.Runnjump;
 
-public class Player extends Sprite implements InputProcessor {
+public class Player implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
@@ -21,6 +26,9 @@ public class Player extends Sprite implements InputProcessor {
     private boolean goldKeyAcquired;
     boolean canJump;
     float sizeX,sizeY;
+    Sprite playerSprite;
+
+
     Hud hud;
 
     public void setLogicalSize(float width, float height){
@@ -37,29 +45,30 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public Player(Sprite sprite, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
-        super(sprite);
+        this.playerSprite = sprite;
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
-        setSize(30*2,30*3);//2 by 3 tiles size
+        playerSprite.setSize(30*2,30*3);//2 by 3 tiles size
         setLogicalSize(30*2,30*3);
         this.score = 0;
         this.hearts =3;
         this.goldKeyAcquired = false;
         this.hud = hud;
+
+
     }
 
-    @Override
     public void draw(Batch batch) {
-        update(Gdx.graphics.getDeltaTime());//updates before drawing
-        super.draw(batch);
+        update(Gdx.graphics.getDeltaTime());//updates before drawingl) {
+        playerSprite.draw(batch);
     }
 
     public boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
-            if (isCellCollectible(getX() + sizeX, getY() + i)) {
-                handleCollectible(getX() + sizeX, getY() + i);
+            if (isCellCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i)) {
+                handleCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i);
             }
-            if (isCellBlocked(getX() + sizeX, getY() + i))
+            if (isCellBlocked(playerSprite.getX() + sizeX, playerSprite.getY() + i))
                 return true;
         }
         return false;
@@ -67,10 +76,10 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
-            if (isCellCollectible(getX(), getY()+i)) {
-                handleCollectible(getX(), getY()+i);
+            if (isCellCollectible(playerSprite.getX(), playerSprite.getY()+i)) {
+                handleCollectible(playerSprite.getX(), playerSprite.getY()+i);
             }
-            if (isCellBlocked(getX(), getY() + i))
+            if (isCellBlocked(playerSprite.getX(), playerSprite.getY() + i))
                 return true;
         }
         return false;
@@ -78,10 +87,10 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if (isCellCollectible(getX() + i, getY()+sizeY)) {
-                handleCollectible(getX() + i, getY()+sizeY);
+            if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY)) {
+                handleCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY);
             }
-            if (isCellBlocked(getX() + i, getY() + sizeY))
+            if (isCellBlocked(playerSprite.getX() + i, playerSprite.getY() + sizeY))
                 return true;
         }
         return false;
@@ -142,10 +151,10 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if (isCellCollectible(getX() + i, getY())) {
-                handleCollectible(getX() + i, getY());
+            if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY())) {
+                handleCollectible(playerSprite.getX() + i, playerSprite.getY());
             }
-            if (isCellBlocked(getX() + i, getY()))
+            if (isCellBlocked(playerSprite.getX() + i, playerSprite.getY()))
                 return true;
         }
         return false;
@@ -161,11 +170,11 @@ public class Player extends Sprite implements InputProcessor {
             velocity.y = -speedY;
 
         // saves previous position
-        float oldX = getX(), oldY = getY();
+        float oldX = playerSprite.getX(), oldY = playerSprite.getY();
         boolean collisionX = false, collisionY = false;
 
         // move horizontally
-        setX(getX() + velocity.x * delta);
+        playerSprite.setX(playerSprite.getX() + velocity.x * delta);
 
 
         if (velocity.x < 0) // going left
@@ -175,12 +184,12 @@ public class Player extends Sprite implements InputProcessor {
 
         // x collision handling
         if (collisionX) {
-            setX(oldX);
+            playerSprite.setX(oldX);
             velocity.x = 0;
         }
 
         // move on y
-        setY(getY() + velocity.y * delta * 5f);
+        playerSprite.setY(playerSprite.getY() + velocity.y * delta * 5f);
 
         if (velocity.y < 2.5f)
             canJump = collisionY = collidesSouth();
@@ -189,7 +198,7 @@ public class Player extends Sprite implements InputProcessor {
 
         // y collision handling
         if (collisionY) {
-            setY(oldY);
+            playerSprite.setY(oldY);
             velocity.y = 0;
         }
     }
@@ -224,6 +233,10 @@ public class Player extends Sprite implements InputProcessor {
 
         }
         return true;
+    }
+
+    public Sprite getPlayerSprite(){
+        return playerSprite;
     }
 
     @Override
@@ -264,6 +277,13 @@ public class Player extends Sprite implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
+        return false;
+    }
+
+    public boolean isRunning() {
+        if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 0.25f&&velocity.y>-0.25)){
+            return true;
+        }
         return false;
     }
 }

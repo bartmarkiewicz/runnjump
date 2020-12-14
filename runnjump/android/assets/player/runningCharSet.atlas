@@ -1,0 +1,95 @@
+runningsheet.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+running
+    rotate: false
+    xy: 0,0
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 0
+running
+    rotate: false
+    xy: 333,0
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 1
+running
+    rotate: false
+    xy: 666,0
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 2
+running
+    rotate: false
+    xy: 0,261
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 3
+running
+    rotate: false
+    xy: 333, 261
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 4
+running
+    rotate: false
+    xy: 666, 261
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 5
+running
+    rotate: false
+    xy: 0, 522
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 6
+running
+    rotate: false
+    xy: 333, 522
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 7
+running
+    rotate: false
+    xy: 666, 522
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 8
+running
+    rotate: false
+    xy: 0, 783
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 9
+running
+    rotate: false
+    xy: 333, 783
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 10
+running
+    rotate: false
+    xy: 666, 783
+    size: 333, 261
+    orig: 333, 261
+    offset: 0, 0
+    index: 11
+
+
+
+
+
+
+
