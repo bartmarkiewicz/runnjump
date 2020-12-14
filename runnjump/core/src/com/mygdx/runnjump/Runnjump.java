@@ -19,6 +19,7 @@ import com.mygdx.runnjump.screens.MenuScreen;
 import com.mygdx.runnjump.util.MusicManager;
 import com.mygdx.runnjump.util.SoundHandler;
 import com.mygdx.runnjump.util.SoundManager;
+import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.TreeMap;
 
@@ -27,6 +28,7 @@ public class Runnjump extends Game {
 	//Texture campaignBt,survivalBt, highScoresBt;
 	public SoundManager soundManager;
 	public MusicManager musicManager;
+	public TextureManager textureManager;
 	public static TreeMap<String, TextureAtlas> textureAtlasMap;
 
 	public enum ScreenEn {
@@ -54,6 +56,7 @@ public class Runnjump extends Game {
 		loadingScreen = new LoadingScreen(this);
 		soundManager = new SoundManager();
 		musicManager = new MusicManager();
+		textureManager = new TextureManager();
 		textureAtlasMap = new TreeMap<>();
 		setScreen(loadingScreen);
 		Drawable soundOnIcon;

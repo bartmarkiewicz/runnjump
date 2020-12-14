@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Disposable;
 
 import java.util.Random;
 import java.util.TreeMap;
 
 import sun.reflect.generics.tree.Tree;
 
-public class MusicManager {
+public class MusicManager implements Disposable {
     private TreeMap<String, Music> musicMap;
     private TreeMap<String, Music[]> musicSet;
     private float volume;
@@ -92,7 +93,7 @@ public class MusicManager {
         currentlyPlaying = null;
     }
 
-
+    @Override
     public void dispose() {
         //disposes of all the sounds
         for (Music music : musicMap.values()) {

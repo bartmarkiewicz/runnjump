@@ -3,6 +3,7 @@ package com.mygdx.runnjump.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,12 +14,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.runnjump.Runnjump;
 
+import java.util.ArrayList;
+import java.util.TreeMap;
+
 public class Player implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
     private float speedX = 530;
-    private float speedY = 200;
+    private float speedY = 230;
     private float gravity = 98f;
     private TiledMapTileLayer collisionLayer;
     private TiledMapTileLayer visualLayer;
@@ -27,7 +31,7 @@ public class Player implements InputProcessor {
     boolean canJump;
     float sizeX,sizeY;
     Sprite playerSprite;
-
+    boolean facingRight = true;
 
     Hud hud;
 
@@ -44,8 +48,8 @@ public class Player implements InputProcessor {
         return score;
     }
 
-    public Player(Sprite sprite, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
-        this.playerSprite = sprite;
+    public Player( Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
+        this.playerSprite = new Sprite(new Texture("player\\Idle_000.png"));
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
         playerSprite.setSize(30*2,30*3);//2 by 3 tiles size
@@ -54,12 +58,20 @@ public class Player implements InputProcessor {
         this.hearts =3;
         this.goldKeyAcquired = false;
         this.hud = hud;
-
-
     }
 
-    public void draw(Batch batch) {
+
+    public void setFrame(Texture texture){
+        playerSprite.setTexture(texture);
+    }
+    public void draw(Batch batch){
+        update(Gdx.graphics.getDeltaTime());
+        playerSprite.draw(batch);
+    }
+
+    public void draw(Batch batch,Texture frame) {
         update(Gdx.graphics.getDeltaTime());//updates before drawingl) {
+        playerSprite.setTexture(frame);
         playerSprite.draw(batch);
     }
 
@@ -226,9 +238,17 @@ public class Player implements InputProcessor {
                 break;
             case Input.Keys.D:
                 velocity.x = speedX;
+                if (!facingRight) {
+                    playerSprite.flip(true, false);
+                    facingRight=true;
+                }
                 break;
             case Input.Keys.A:
                 velocity.x = -speedX;
+                if(facingRight){
+                    playerSprite.flip(true, false);
+                    facingRight=false;
+                }
                 break;
 
         }
@@ -282,6 +302,13 @@ public class Player implements InputProcessor {
 
     public boolean isRunning() {
         if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 0.25f&&velocity.y>-0.25)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isIdle() {
+        if (!isRunning()){
             return true;
         }
         return false;

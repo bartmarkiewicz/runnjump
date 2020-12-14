@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class SoundManager {
+public class SoundManager implements Disposable {
     //This class should be a singleton
     //Pass reference of this class to every screen.
     private TreeMap<String,Sound> soundMap;
@@ -55,7 +56,7 @@ public class SoundManager {
         Sound[] sounds = soundSet.get(name);
         sounds[random.nextInt(sounds.length)].play(volume);
     }
-
+    @Override
     public void dispose(){
         //disposes of all the sounds
         for (Sound sound: soundMap.values()) {

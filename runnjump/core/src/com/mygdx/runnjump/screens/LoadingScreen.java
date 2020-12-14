@@ -4,16 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.TextureManager;
 
 public class LoadingScreen extends ScreenBase implements Screen {
 
     public LoadingScreen(Runnjump theGameO) {
         super(theGameO);
     }
-    private void loadGraphics(){
-        TextureAtlas playerRunning = new TextureAtlas(Gdx.files.internal("player\\runningCharSet.atlas"));
 
-        Runnjump.textureAtlasMap.put("player_running", playerRunning);
+    private void loadPlayer(){
+        //idle
+        theGame.textureManager.addPlayerFrameSet("idle","player\\Idle_",12);
+        theGame.textureManager.addPlayerFrameSet("running","player\\Running_",12);
+    }
+    private void loadGraphics(){
+        //TextureAtlas playerRunning = new TextureAtlas(Gdx.files.internal("player\\runningCharSet.atlas"));
+
+        //Runnjump.textureAtlasMap.put("player_running", playerRunning);
+        loadPlayer();
     }
 
     private void loadSoundFX(){
@@ -23,6 +31,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
         buttonClickFx[2] = "ui_button_simple_click_03.wav";
         buttonClickFx[3] = "ui_button_simple_click_04.wav";
         theGame.soundManager.addSoundSet("menu_button_click", buttonClickFx);
+
 
 
     }
