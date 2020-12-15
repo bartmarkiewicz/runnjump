@@ -44,6 +44,8 @@ public class Player implements InputProcessor {
     boolean alive;
     float time =0f;
     private SoundManager soundManager;
+    boolean gameWon;
+
 
     private int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
     private boolean backWardsIdle = false, backWardsRunning = false;
@@ -51,6 +53,7 @@ public class Player implements InputProcessor {
     ArrayList<Texture> playerIdle, playerRunning, playerJump;
 
     private Hud hud;
+    private float timeWon;
 
     public void setLogicalSize(float width, float height){
         sizeX = width;
@@ -82,6 +85,7 @@ public class Player implements InputProcessor {
         playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
         playerRunning = theGame.textureManager.getPlayerFrameSet("running");
         playerJump = theGame.textureManager.getPlayerFrameSet("jump");
+        gameWon = false;
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Touchpad joystick = hud.getMovementJoystick();
             joystick.addListener(new ChangeListener() {
@@ -129,6 +133,23 @@ public class Player implements InputProcessor {
         playerSprite.draw(batch);
     }
 
+    public boolean collidesSouth() {
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+            if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY())){
+                die();
+            }
+            if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY())) {
+                handleCollectible(playerSprite.getX() + i, playerSprite.getY());
+            }
+            if(isCellMisc(playerSprite.getX() + i, playerSprite.getY())){
+                handleMisc(playerSprite.getX() + i, playerSprite.getY());
+            }
+            if (isCellBlocked(playerSprite.getX() + i, playerSprite.getY()))
+                return true;
+        }
+        return false;
+    }
+
     public boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
             if(cellKillsPlayer(playerSprite.getX() + sizeX, playerSprite.getY() + i)){
@@ -136,6 +157,9 @@ public class Player implements InputProcessor {
             }
             if (isCellCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i)) {
                 handleCollectible(playerSprite.getX() + sizeX, playerSprite.getY() + i);
+            }
+            if(isCellMisc(playerSprite.getX() + sizeX, playerSprite.getY() + i)){
+                handleMisc(playerSprite.getX() + sizeX, playerSprite.getY() + i);
             }
             if (isCellBlocked(playerSprite.getX() + sizeX, playerSprite.getY() + i))
                 return true;
@@ -151,6 +175,9 @@ public class Player implements InputProcessor {
             if (isCellCollectible(playerSprite.getX(), playerSprite.getY()+i)) {
                 handleCollectible(playerSprite.getX(), playerSprite.getY()+i);
             }
+            if (isCellMisc(playerSprite.getX(), playerSprite.getY()+i)){
+                handleMisc(playerSprite.getX(), playerSprite.getY()+i);
+            }
             if (isCellBlocked(playerSprite.getX(), playerSprite.getY() + i))
                 return true;
         }
@@ -165,11 +192,29 @@ public class Player implements InputProcessor {
             if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY)) {
                 handleCollectible(playerSprite.getX() + i, playerSprite.getY()+sizeY);
             }
+            if (isCellMisc(playerSprite.getX() + i, playerSprite.getY()+sizeY)){
+                handleMisc(playerSprite.getX() + i, playerSprite.getY()+sizeY);
+            }
+
             if (isCellBlocked(playerSprite.getX() + i, playerSprite.getY() + sizeY))
                 return true;
         }
         return false;
     }
+
+    private void handleMisc(float x, float y) {
+        TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+
+        if(cellColLayer.getTile().getProperties().containsKey("win_flag")){
+            //player wins!
+            gameWon = true;
+            timeWon = Gdx.graphics.getDeltaTime();
+            velocity.x = 0;
+            velocity.y = 0;
+
+        }
+    }
+
     public void removeCollectibe(int tileX, int tileY){
         visualLayer.setCell(tileX, tileY, new TiledMapTileLayer.Cell());
         collisionLayer.setCell(tileX,tileY, new TiledMapTileLayer.Cell()); // gets rid of collectible cells
@@ -177,10 +222,15 @@ public class Player implements InputProcessor {
 
     public void handleCollectible(float x, float y){
         TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
-        TiledMapTileLayer.Cell cellVisualLayer = visualLayer.getCell((int)x/visualLayer.getTileWidth(), (int)y/visualLayer.getTileHeight());
 
         //removes collectible
         removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); // gets rid of collectible cells
+
+        if (cellColLayer.getTile().getProperties().containsKey("star")) {
+            score+=10;
+            hud.setScore(score);
+            soundManager.playRandom("coin_collect");
+        }
         if (cellColLayer.getTile().getProperties().containsKey("coin")){
             score += 1;
             hud.setScore(score);
@@ -227,19 +277,7 @@ public class Player implements InputProcessor {
         }
     }
 
-    public boolean collidesSouth() {
-        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY())){
-                die();
-            }
-            if (isCellCollectible(playerSprite.getX() + i, playerSprite.getY())) {
-                handleCollectible(playerSprite.getX() + i, playerSprite.getY());
-            }
-            if (isCellBlocked(playerSprite.getX() + i, playerSprite.getY()))
-                return true;
-        }
-        return false;
-    }
+
 
     public void update(float delta) {
         velocity.y -= gravity * delta;
@@ -329,11 +367,19 @@ public class Player implements InputProcessor {
         }
     }
 
+    private boolean isCellMisc(float x, float y){
+        TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
+        return cell != null && cell.getTile()!=null &&
+                (cell.getTile().getProperties().containsKey("checkpoint_flag") ||
+                        cell.getTile().getProperties().containsKey("win_flag"));
+    }
+
     private boolean isCellCollectible(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") ||
                 cell.getTile().getProperties().containsKey("gold_key") ||
-                cell.getTile().getProperties().containsKey("heart"));
+                cell.getTile().getProperties().containsKey("heart") ||
+                cell.getTile().getProperties().containsKey("star"));
     }
 
     private boolean cellKillsPlayer(float x, float y){
@@ -477,5 +523,13 @@ public class Player implements InputProcessor {
         hud.setLives(STARTING_HEARTS);
         score = 0;
         hud.setScore(0);
+    }
+
+    public boolean isGameWon(){
+        return gameWon;
+    }
+
+    public float getTimeWon() {
+        return timeWon;
     }
 }

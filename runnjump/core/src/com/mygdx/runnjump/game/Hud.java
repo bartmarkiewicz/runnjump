@@ -135,4 +135,20 @@ public class Hud implements Disposable {
         }
         stage.getBatch().end();
     }
+
+    public void gameWon(int score, int level) {
+        stage.getBatch().begin();
+
+        gameoverFont.draw(stage.getBatch(),"You win! You had completed level" + level, Gdx.graphics.getWidth()/3-150,Gdx.graphics.getHeight()/2+100);
+        gameoverFont.draw(stage.getBatch(),"You had acquired "+score +" score points!", (Gdx.graphics.getWidth()/3)-150,(Gdx.graphics.getHeight()/2)+50);
+
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
+            gameoverFont.draw(stage.getBatch(), "Tap the screen to return to main menu!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2f-50);
+        } else {
+            gameoverFont.draw(stage.getBatch(), "Press any key to return to the main menu!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2f-100);
+        }
+        stage.getBatch().end();
+
+
+    }
 }

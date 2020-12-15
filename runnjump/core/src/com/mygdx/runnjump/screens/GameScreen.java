@@ -35,6 +35,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
     float spawnPointX, spawnPointY;
     boolean gameOver;
+    private float timeSinceWin =0f;
 
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
@@ -134,6 +135,8 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float cameraPosToSetX;
         float cameraPosToSetY;
+
+
         if (!gameOver) {
             if (player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2 < width/2) {
                 cameraPosToSetX = width/2;
@@ -164,9 +167,14 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
             player.draw(mapRenderer.getBatch());
             mapRenderer.getBatch().end();
-        } else {
+        } else if(gameOver) {
             hud.gameOver(player.getScore());
         }
+        if (player.isGameWon()){
+            timeSinceWin+=delta;
+            hud.gameWon(player.getScore(), level);
+        }
+
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
@@ -185,6 +193,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
             //restart on pressing a button/tapping
             startGame(level);
         }
+        if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 20){
+            theGame.changeScreen(Runnjump.ScreenEn.MENU);
+        }
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -194,6 +205,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
             //restart on pressing a button/tapping
             startGame(level);
             return true;
+        }
+
+        if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){//waits 3 seconds to allow the user to read the screen before pressing keys
+            theGame.changeScreen(Runnjump.ScreenEn.MENU);
         }
         return false;
     }
