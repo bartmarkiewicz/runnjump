@@ -21,7 +21,7 @@ public class Player implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
-    private float speedX = 530;
+    private float speedX = 900;
     private float speedY = 230;
     private float gravity = 98f;
     private TiledMapTileLayer collisionLayer;

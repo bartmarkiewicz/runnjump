@@ -42,15 +42,8 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     OrthographicCamera orthographicCamera;
     Player player;
     float zoom;
-    float time =0f;
-    /*Array<TextureAtlas.AtlasRegion> runningFrames;
-    Animation runningAnimation;
-    float time = 0f;
-    TextureRegion playerCurrentFrame;
-    float centerX, centerY;*/
-    int playerIdleLastFrame=0,playerRunLastFrame=0;
-    boolean backWardsIdle = false, backWardsRunning = false;
-    ArrayList<Texture> playerIdle, playerRunning;
+    MapProperties mapProperties;
+
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
@@ -101,10 +94,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(player);
-        MapProperties properties = tileMap.getProperties();
-        tileMapHeight = properties.get("height", Integer.class);
-        tileMapWidth = properties.get("width", Integer.class);
-
+        mapProperties= tileMap.getProperties();
+        tileMapHeight = mapProperties.get("height", Integer.class);
+        tileMapWidth = mapProperties.get("width", Integer.class);
 
 
 
@@ -116,7 +108,26 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        orthographicCamera.position.set(player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2, player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2, 0);
+        float cameraPosToSetX;
+        float cameraPosToSetY;
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+        if(player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2 < width){
+            cameraPosToSetX = width;
+        } else if((tileMapWidth*32)-width < player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2) {
+            cameraPosToSetX = (tileMapWidth * 32) - width;
+        }else {
+            cameraPosToSetX = player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2;
+        }
+
+        if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2<height){
+            cameraPosToSetY = height;
+        } else if((tileMapHeight*32)-height < player.getPlayerSprite().getY()+player.getPlayerSprite().getHeight()/2){
+            cameraPosToSetY = (tileMapHeight * 32) - height;
+        } else {
+            cameraPosToSetY = player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2;
+        }
+        orthographicCamera.position.set(cameraPosToSetX, cameraPosToSetY, 0);
 
         orthographicCamera.update();
         mapRenderer.setView(orthographicCamera);
@@ -134,10 +145,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        /*super.resize(width,height);*/
-        /*orthographicCamera.viewportWidth = width/2.5f;
-        orthographicCamera.viewportHeight = height/2.5f;
-        orthographicCamera.update();*/
+
     }
 
     @Override
