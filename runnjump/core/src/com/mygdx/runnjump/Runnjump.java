@@ -144,5 +144,15 @@ public class Runnjump extends Game {
 	@Override
 	public void dispose () {
 		super.dispose();
+		highScoresScreen.dispose();
+		soundManager.dispose();
+		textureManager.dispose();
+		musicManager.dispose();
+
+		loadingScreen.dispose();
+		highScoresScreen.dispose();
+		levelScreen.dispose();
+		gameScreen.dispose();
+		menuScreen.dispose();
 	}
 }

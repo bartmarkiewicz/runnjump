@@ -29,6 +29,7 @@ public class Player implements InputProcessor {
     private TiledMapTileLayer visualLayer;
     private int score, hearts;
     private boolean goldKeyAcquired;
+    private final int STARTING_HEARTS = 0;
     boolean canJump;
     float sizeX,sizeY;
     Sprite playerSprite;
@@ -37,9 +38,8 @@ public class Player implements InputProcessor {
     float time =0f;
     private SoundManager soundManager;
 
-    Texture frame;
-    int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
-    boolean backWardsIdle = false, backWardsRunning = false;
+    private int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
+    private boolean backWardsIdle = false, backWardsRunning = false;
 
     ArrayList<Texture> playerIdle, playerRunning, playerJump;
 
@@ -65,9 +65,11 @@ public class Player implements InputProcessor {
         playerSprite.setSize(30*2,30*3);//2 by 3 tiles size
         setLogicalSize(30*2,30*3);
         this.score = 0;
-        this.hearts =3;
+        this.hearts =STARTING_HEARTS;
         this.goldKeyAcquired = false;
         this.hud = hud;
+        hud.setScore(score);
+        hud.setLives(hearts);
         this.alive = true;
         this.soundManager = theGame.soundManager;
         playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
@@ -80,8 +82,7 @@ public class Player implements InputProcessor {
     }
 
     public void draw(Batch batch) {
-        update(Gdx.graphics.getDeltaTime());//updates before drawingl) {
-        //playerSprite.setTexture(frame);
+        update(Gdx.graphics.getDeltaTime());//updates before drawing
         playerSprite.draw(batch);
     }
 
@@ -115,7 +116,6 @@ public class Player implements InputProcessor {
 
     public boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-
             if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY()+sizeY)){
                 die();
             }
@@ -385,7 +385,13 @@ public class Player implements InputProcessor {
     public void die(){
         if(alive) {
             hearts--;
-            hud.setLives(hearts);
+            if (hearts >= 0) {
+                hud.setLives(hearts);
+            } else {
+                hud.setLives(0);
+            }
+            velocity.y = 0;
+            velocity.x = 0;
             alive = false;
         }
     }
@@ -406,5 +412,26 @@ public class Player implements InputProcessor {
             return true;
         }
         return false;
+    }
+
+    public boolean respawn() {
+        //returns true if the player can respawn ie has lives left
+        if (hearts >= 0) {
+            alive = true;
+            return true;
+        }
+        return false;
+    }
+
+    public void setLayers(TiledMapTileLayer visualLayer, TiledMapTileLayer collisionLayer) {
+        this.visualLayer = visualLayer;
+        this.collisionLayer = collisionLayer;
+    }
+
+    public void restart() {
+        hearts = STARTING_HEARTS;
+        hud.setLives(STARTING_HEARTS);
+        score = 0;
+        hud.setScore(0);
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,17 +27,20 @@ public class Hud implements Disposable {
     private Viewport viewport;
     private Label scoreL, livesL;
     public final Runnjump theGame;
+    BitmapFont gameoverFont;
+
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport,batch);
         this.theGame = theGame;
+        gameoverFont = skin.get(Label.LabelStyle.class).font;
         Table container = new Table();
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
         mainTable.right().top();
         mainTable.pad(5);
         scoreL = new Label("Score: 0",skin);
-        livesL = new Label("Lives: 3", skin);
+        livesL = new Label("Lives: 0", skin);
         scoreL.setFontScale(1.25f);
         livesL.setFontScale(1.25f);
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -86,5 +90,19 @@ public class Hud implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
+        gameoverFont.dispose();
+    }
+
+    public void gameOver() {
+
+        stage.getBatch().begin();
+
+        gameoverFont.draw(stage.getBatch(),"GAME OVER!", Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/2);
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
+            gameoverFont.draw(stage.getBatch(), "Tap the screen to play again!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2.5f);
+        } else {
+            gameoverFont.draw(stage.getBatch(), "Press any key to play again!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2.5f);
+        }
+        stage.getBatch().end();
     }
 }

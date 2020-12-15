@@ -7,27 +7,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
-import com.mygdx.runnjump.util.TextureManager;
-
-import java.util.ArrayList;
 
 public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     //this is the screen where gameplay occurs
@@ -42,6 +32,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     float zoom;
     MapProperties mapProperties;
     float width, height;//Gdx.graphics.getWidth();
+
+    float spawnPointX, spawnPointY;
+    boolean gameOver;
+
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
@@ -55,10 +49,53 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         batch = new SpriteBatch();
     }
 
+    public void respawnPlayer(){
+        spawnPointX = 5*32;
+        spawnPointY = 79*32;
+        if (player.respawn()) {
+            player.getPlayerSprite().setPosition(spawnPointX, spawnPointY);//start position
+        } else {// no more lives left GAME OVER
+            gameOver = true;
+            hud.gameOver();
+        }
+    }
+
+    public void startGame(int level){
+        try {
+            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
+        }catch (SerializationException e){
+            //lvl not implemented so it will load lvl 1 by default
+            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
+        }
+        mapRenderer.dispose();
+        mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
+
+        orthographicCamera.update();
+        stage.getViewport().setCamera(orthographicCamera);
+
+        TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
+        TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
+
+        player.setLayers(visualLayer,layer);
+        player.restart();
+        gameOver = false;
+        respawnPlayer();
+        zoom = 0f;
+        orthographicCamera.zoom += zoom;
+        //inputMultiplexer.addProcessor(hud.stage);
+        //inputMultiplexer.addProcessor(player);
+        mapProperties= tileMap.getProperties();
+        tileMapHeight = mapProperties.get("height", Integer.class);
+        tileMapWidth = mapProperties.get("width", Integer.class);
+    }
+
+
     @Override
     public void show() {
-        super.show();
+        super.show(); //renders the map
         currentScreenId = Runnjump.ScreenEn.GAME;
+        width = 1280;
+        height = 720;//Gdx.graphics.getHeight();
         try {
             tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
         }catch (SerializationException e){
@@ -68,9 +105,6 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
         orthographicCamera = new OrthographicCamera();
 
-        width = 1280;
-        height = 720;//Gdx.graphics.getHeight();
-
         orthographicCamera.setToOrtho(false,width,height);
         orthographicCamera.update();
         stage.getViewport().setCamera(orthographicCamera);
@@ -78,23 +112,19 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
+
         hud = new Hud(new SpriteBatch(), theGame, skin);
-
         player = new Player(theGame,hud,layer,visualLayer);
-
-        layer.getHeight();
-        player.getPlayerSprite().setPosition(5*32,79*32);//start position
+        gameOver = false;
+        respawnPlayer();
         zoom = 0f;
         orthographicCamera.zoom += zoom;
-
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(player);
+        inputMultiplexer.addProcessor(this);
         mapProperties= tileMap.getProperties();
         tileMapHeight = mapProperties.get("height", Integer.class);
         tileMapWidth = mapProperties.get("width", Integer.class);
-
-
-
     }
 
     @Override
@@ -105,37 +135,42 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float cameraPosToSetX;
         float cameraPosToSetY;
-        //float width = Gdx.graphics.getWidth();
-        //float height = Gdx.graphics.getHeight();
-        if(player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2 < width){
-            cameraPosToSetX = width;
-        } else if((tileMapWidth*32)-width < player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2) {
-            cameraPosToSetX = (tileMapWidth * 32) - width;
-        }else {
-            cameraPosToSetX = player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2;
-        }
+        if (!gameOver) {
+            if (player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2 < width) {
+                cameraPosToSetX = width;
+            } else if ((tileMapWidth * 32) - width < player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2) {
+                cameraPosToSetX = (tileMapWidth * 32) - width;
+            } else {
+                cameraPosToSetX = player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2;
+            }
 
-        if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2<height){
-            cameraPosToSetY = height;
-        } else if((tileMapHeight*32)-height < player.getPlayerSprite().getY()+player.getPlayerSprite().getHeight()/2){
-            cameraPosToSetY = (tileMapHeight * 32) - height;
+            if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2 < height) {
+                cameraPosToSetY = height;
+            } else if ((tileMapHeight * 32) - height < player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2) {
+                cameraPosToSetY = (tileMapHeight * 32) - height;
+            } else {
+                cameraPosToSetY = player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2;
+            }
+            if (player.isDead()) {
+                respawnPlayer();
+            }
+
+            orthographicCamera.position.set(cameraPosToSetX, cameraPosToSetY, 0);
+
+            orthographicCamera.update();
+
+            mapRenderer.setView(orthographicCamera);
+            mapRenderer.render();
+            mapRenderer.getBatch().begin();
+
+            player.draw(mapRenderer.getBatch());
+            mapRenderer.getBatch().end();
         } else {
-            cameraPosToSetY = player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2;
+            hud.gameOver();
         }
-        orthographicCamera.position.set(cameraPosToSetX, cameraPosToSetY, 0);
-
-        orthographicCamera.update();
-        mapRenderer.setView(orthographicCamera);
-        mapRenderer.render();
-        mapRenderer.getBatch().begin();
-
-        player.draw(mapRenderer.getBatch());
-        mapRenderer.getBatch().end();
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
-
     }
 
     @Override
@@ -147,18 +182,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        /*if(keycode == Input.Keys.LEFT)
-            orthographicCamera.translate(-92,0);
-        if(keycode == Input.Keys.RIGHT)
-            orthographicCamera.translate(92,0);
-        if(keycode == Input.Keys.UP)
-            orthographicCamera.translate(0,-92);
-        if(keycode == Input.Keys.DOWN)
-            orthographicCamera.translate(0,92);
-        if(keycode == Input.Keys.NUM_1)
-            tileMap.getLayers().get(0).setVisible(!tileMap.getLayers().get(0).isVisible());
-        if(keycode == Input.Keys.NUM_2)
-            tileMap.getLayers().get(1).setVisible(!tileMap.getLayers().get(1).isVisible());*/
+        if (gameOver){
+            //restart on pressing a button/tapping
+            startGame(level);
+        }
         return false;
     }
 
@@ -183,5 +210,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         player.getPlayerSprite().getTexture().dispose();
         mapRenderer.dispose();
         hud.dispose();
+        tileMap.dispose();
+
     }
 }

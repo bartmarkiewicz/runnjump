@@ -71,6 +71,8 @@ abstract class ScreenBase implements Screen, InputProcessor {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        batch.dispose();
+        background.getTexture().dispose();
     }
 
     @Override
