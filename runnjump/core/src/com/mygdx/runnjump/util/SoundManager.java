@@ -31,8 +31,6 @@ public class SoundManager implements Disposable {
         }
     }
 
-
-
     public void addSoundSet(String name, String[] paths){
         //this adds a group of sounds under a single name
         Sound[] sounds = new Sound[paths.length];

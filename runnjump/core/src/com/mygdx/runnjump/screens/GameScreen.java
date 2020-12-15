@@ -30,12 +30,10 @@ import com.mygdx.runnjump.util.TextureManager;
 import java.util.ArrayList;
 
 public class GameScreen extends ScreenBase implements Screen, InputProcessor {
-    //this will be the level screen.
+    //this is the screen where gameplay occurs
     int level;
     OrthogonalTiledMapRenderer mapRenderer;
     TiledMap tileMap;
-    World gameWorld;
-    Box2DDebugRenderer box2DRenderer;
     Hud hud;
     int tileMapWidth;
     int tileMapHeight;
@@ -43,7 +41,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     Player player;
     float zoom;
     MapProperties mapProperties;
-
+    float width, height;//Gdx.graphics.getWidth();
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
@@ -69,14 +67,11 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         }
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
         orthographicCamera = new OrthographicCamera();
-        float w = 1280;//Gdx.graphics.getWidth();
-        float h = 720;//Gdx.graphics.getHeight();
-        Vector2 gravityVector = new Vector2(0,-10);
-        gameWorld = new World(gravityVector,true);
-        box2DRenderer = new Box2DDebugRenderer();
 
+        width = 1280;
+        height = 720;//Gdx.graphics.getHeight();
 
-        orthographicCamera.setToOrtho(false,w,h);
+        orthographicCamera.setToOrtho(false,width,height);
         orthographicCamera.update();
         stage.getViewport().setCamera(orthographicCamera);
         background = new TextureRegion(new Texture("levels\\background.png"));
@@ -110,8 +105,8 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float cameraPosToSetX;
         float cameraPosToSetY;
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        //float width = Gdx.graphics.getWidth();
+        //float height = Gdx.graphics.getHeight();
         if(player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2 < width){
             cameraPosToSetX = width;
         } else if((tileMapWidth*32)-width < player.getPlayerSprite().getX()+player.getPlayerSprite().getWidth()/2) {
@@ -145,12 +140,14 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        //show();
+        this.width = width;
+        this.height= height;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.LEFT)
+        /*if(keycode == Input.Keys.LEFT)
             orthographicCamera.translate(-92,0);
         if(keycode == Input.Keys.RIGHT)
             orthographicCamera.translate(92,0);
@@ -161,7 +158,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         if(keycode == Input.Keys.NUM_1)
             tileMap.getLayers().get(0).setVisible(!tileMap.getLayers().get(0).isVisible());
         if(keycode == Input.Keys.NUM_2)
-            tileMap.getLayers().get(1).setVisible(!tileMap.getLayers().get(1).isVisible());
+            tileMap.getLayers().get(1).setVisible(!tileMap.getLayers().get(1).isVisible());*/
         return false;
     }
 
@@ -184,7 +181,6 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     public void dispose() {
         super.dispose();
         player.getPlayerSprite().getTexture().dispose();
-        gameWorld.dispose();
         mapRenderer.dispose();
         hud.dispose();
     }

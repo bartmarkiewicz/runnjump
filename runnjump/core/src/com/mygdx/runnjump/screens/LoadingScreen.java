@@ -34,8 +34,15 @@ public class LoadingScreen extends ScreenBase implements Screen {
         buttonClickFx[3] = "ui_button_simple_click_04.wav";
         theGame.soundManager.addSoundSet("menu_button_click", buttonClickFx);
 
-
-
+        String[] coinCollectedFx = new String[5];
+        coinCollectedFx[0] = "collect_coin_01.wav";
+        coinCollectedFx[1] = "collect_coin_02.wav";
+        coinCollectedFx[2] = "collect_coin_03.wav";
+        coinCollectedFx[3] = "collect_coin_04.wav";
+        coinCollectedFx[4] = "collect_coin_05.wav";
+        theGame.soundManager.addSoundSet("coin_collect", coinCollectedFx);
+        theGame.soundManager.addSound("heart_collect", "happy_collect_item_01.wav");
+        theGame.soundManager.addSound("collect_item", "collect_item_02.wav");
     }
 
     private void loadMusic(){

@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -34,6 +35,7 @@ public class Player implements InputProcessor {
     boolean facingRight = true;
     boolean alive;
     float time =0f;
+    private SoundManager soundManager;
 
     Texture frame;
     int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
@@ -67,6 +69,7 @@ public class Player implements InputProcessor {
         this.goldKeyAcquired = false;
         this.hud = hud;
         this.alive = true;
+        this.soundManager = theGame.soundManager;
         playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
         playerRunning = theGame.textureManager.getPlayerFrameSet("running");
         playerJump = theGame.textureManager.getPlayerFrameSet("jump");
@@ -138,15 +141,18 @@ public class Player implements InputProcessor {
         if (cellColLayer.getTile().getProperties().containsKey("coin")){
             score += 1;
             hud.setScore(score);
+            soundManager.playRandom("coin_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("heart")){
             hearts += 1;
             hud.setLives(hearts);
+            soundManager.playSound("heart_collect");
         }
-
         if (cellColLayer.getTile().getProperties().containsKey("gold_key")){
             goldKeyAcquired = true;
+            soundManager.playSound("collect_item");
         }
+
 
         if (isCellCollectible((int)x+33, (int)y)){
             removeCollectibe((int)(x+33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); //checks cell to the right
