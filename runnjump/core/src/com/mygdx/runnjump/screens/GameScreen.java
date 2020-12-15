@@ -56,7 +56,6 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
             player.getPlayerSprite().setPosition(spawnPointX, spawnPointY);//start position
         } else {// no more lives left GAME OVER
             gameOver = true;
-            hud.gameOver();
         }
     }
 
@@ -136,18 +135,18 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         float cameraPosToSetX;
         float cameraPosToSetY;
         if (!gameOver) {
-            if (player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2 < width) {
-                cameraPosToSetX = width;
-            } else if ((tileMapWidth * 32) - width < player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2) {
-                cameraPosToSetX = (tileMapWidth * 32) - width;
+            if (player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2 < width/2) {
+                cameraPosToSetX = width/2;
+            } else if ((tileMapWidth * 32) - width/2 < player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2) {
+                cameraPosToSetX = (tileMapWidth * 32) - width/2;
             } else {
                 cameraPosToSetX = player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2;
             }
 
-            if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2 < height) {
-                cameraPosToSetY = height;
-            } else if ((tileMapHeight * 32) - height < player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2) {
-                cameraPosToSetY = (tileMapHeight * 32) - height;
+            if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2 < height/2) {
+                cameraPosToSetY = height/2;
+            } else if ((tileMapHeight * 32) - height/2 < player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2) {
+                cameraPosToSetY = (tileMapHeight * 32) - height/2;
             } else {
                 cameraPosToSetY = player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2;
             }
@@ -166,7 +165,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
             player.draw(mapRenderer.getBatch());
             mapRenderer.getBatch().end();
         } else {
-            hud.gameOver();
+            hud.gameOver(player.getScore());
         }
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -176,8 +175,17 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         //show();
-        this.width = width;
-        this.height= height;
+        //this.width = width;
+        //this.height= height;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (gameOver){
+            //restart on pressing a button/tapping
+            startGame(level);
+        }
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
@@ -185,6 +193,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         if (gameOver){
             //restart on pressing a button/tapping
             startGame(level);
+            return true;
         }
         return false;
     }

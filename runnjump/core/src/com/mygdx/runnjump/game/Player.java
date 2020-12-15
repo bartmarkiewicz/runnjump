@@ -1,5 +1,6 @@
 package com.mygdx.runnjump.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -11,7 +12,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.TouchableAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.SoundManager;
 
@@ -58,7 +65,7 @@ public class Player implements InputProcessor {
         return score;
     }
 
-    public Player(Runnjump theGame, Hud hud,TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
+    public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         this.playerSprite = new Sprite(new Texture("player\\Idle_000.png"));
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
@@ -75,6 +82,42 @@ public class Player implements InputProcessor {
         playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
         playerRunning = theGame.textureManager.getPlayerFrameSet("running");
         playerJump = theGame.textureManager.getPlayerFrameSet("jump");
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
+            Touchpad joystick = hud.getMovementJoystick();
+            joystick.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if(((Touchpad)actor).getKnobPercentX() >0){ // right
+                        velocity.x = speedX;
+                        if (!facingRight) {
+                            playerSprite.flip(true, false);
+                            facingRight = true;
+                        }
+                    } else if (((Touchpad)actor).getKnobPercentX() < 0){ // left
+                        velocity.x = -speedX;
+                        if(facingRight){
+                            playerSprite.flip(true, false);
+                            facingRight=false;
+                        }
+                    }
+                    if(((Touchpad)actor).getKnobPercentX()==0.0){
+                        velocity.x = 0;
+                    }
+                }
+            });
+            Button jumpBt = hud.getJumpBt();
+            jumpBt.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if(canJump) {
+                        velocity.y = speedY / 1.8f;
+                        canJump = false;
+                    }
+                }
+            });
+        }
+
+
     }
 
     public void setFrame(Texture texture){
@@ -355,6 +398,7 @@ public class Player implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
         return false;
     }
 

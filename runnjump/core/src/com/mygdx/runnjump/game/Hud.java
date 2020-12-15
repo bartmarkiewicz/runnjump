@@ -2,6 +2,7 @@ package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,6 +29,9 @@ public class Hud implements Disposable {
     private Label scoreL, livesL;
     public final Runnjump theGame;
     BitmapFont gameoverFont;
+    Touchpad movementJoystick;
+    Button jumpBt;
+
 
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -55,12 +59,15 @@ public class Hud implements Disposable {
         mainTable.row();
         mainTable.add(livesL).left().top().fill().height(100/2f).align(Align.top);
         container.top();
-        container.add(mainTable).top().expandX().fill();
+        container.add(mainTable).top().expandX().fill().colspan(2);
         mainTable.top().right();
         Table bottomTable = new Table();
         bottomTable.bottom().left();
         container.row();
         container.add(bottomTable).bottom().left().fill().expand();
+        Table bottomRightTable = new Table();
+        bottomRightTable.bottom().right();
+        container.add(bottomRightTable).bottom().right().fill().expand();
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Skin touchpadSkin = new Skin();
             touchpadSkin.add("touchBg", new Texture("skin\\touchbg.png"));
@@ -68,8 +75,16 @@ public class Hud implements Disposable {
             Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
             touchpadStyle.background = touchpadSkin.getDrawable("touchBg");
             touchpadStyle.knob = touchpadSkin.getDrawable("touchKnob");
-            Touchpad movementJoystick = new Touchpad(0, touchpadStyle);
+            touchpadStyle.background.setMinWidth(200);
+            touchpadStyle.background.setMinHeight(200);
+            touchpadStyle.knob.setMinWidth(100);
+            touchpadStyle.knob.setMinHeight(100);
+            movementJoystick = new Touchpad(30, touchpadStyle);
+            movementJoystick.setResetOnTouchUp(true);
             bottomTable.add(movementJoystick).width(stage.getWidth()/3).height(stage.getHeight()/3).left().bottom();
+            jumpBt = new Button(skin);
+
+            bottomRightTable.add(jumpBt).width(stage.getWidth()/3).height(stage.getHeight()/5).right().bottom().pad(40);
         }
 
 
@@ -78,6 +93,7 @@ public class Hud implements Disposable {
         stage.setDebugAll(true);
         stage.getBatch().setColor(Color.WHITE);
     }
+
     public void setScore(int score){
         scoreL.setText("Score: " + score);
     }
@@ -93,11 +109,25 @@ public class Hud implements Disposable {
         gameoverFont.dispose();
     }
 
-    public void gameOver() {
+
+
+
+
+    public Touchpad getMovementJoystick(){
+        return movementJoystick;
+    }
+
+    public Button getJumpBt(){
+        return jumpBt;
+    }
+
+    public void gameOver(int score) {
 
         stage.getBatch().begin();
 
         gameoverFont.draw(stage.getBatch(),"GAME OVER!", Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/2);
+        gameoverFont.draw(stage.getBatch(),"You had acquired "+score +" score points!", (Gdx.graphics.getWidth()/3)-150,(Gdx.graphics.getHeight()/2)+50);
+
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             gameoverFont.draw(stage.getBatch(), "Tap the screen to play again!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2.5f);
         } else {
