@@ -5,26 +5,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.TouchableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Logger;
+
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
+/**
+ * This class represents the player character on the game map.
+ */
 public class Player implements InputProcessor {
 
     //movement velocity
@@ -57,19 +54,40 @@ public class Player implements InputProcessor {
     private Hud hud;
     private float timeWon;
 
+    /**
+     *  largely redundant method for changing the logical size of the player, ignoring his sprite’s size, for collision detection. Only useful for debugging purposes.
+     * @param width
+     * @param height
+     */
     private void setLogicalSize(float width, float height){
         sizeX = width;
         sizeY = height;
     }
 
+    /**
+     * getter for lives left
+     * @return
+     */
     public int getHearts(){
         return hearts;
     }
 
+    /**
+     * getter for score
+     * @return
+     */
     public int getScore(){
         return score;
     }
 
+    /**
+     * The constructor initialises the player, and his initial values for score, lives remaining and gets its textures from the textureManager. It also sets up the platform-specific touch detection listeners for Android touchpad and jump buttons.
+     * It gets the layers for the purpose of collision detection.
+     * @param theGame
+     * @param hud
+     * @param collisionLayer
+     * @param visualLayer
+     */
     public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         this.playerSprite = new Sprite(new Texture("player\\Idle_000.png"));
         this.collisionLayer = collisionLayer;
@@ -128,15 +146,27 @@ public class Player implements InputProcessor {
 
     }
 
+    /**
+     * this sets the frame(for the purposes of animation) of the sprite which will be displayed upon drawing.
+     * @param texture
+     */
     public void setFrame(Texture texture){
         playerSprite.setTexture(texture);
     }
 
+    /**
+     *  this draws the sprite after updating.
+     * @param batch
+     */
     public void draw(Batch batch) {
         update(Gdx.graphics.getDeltaTime());//updates before drawing
         playerSprite.draw(batch);
     }
 
+    /**
+     * methods methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
+     * @return
+     */
     private boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
             if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY())){
@@ -154,6 +184,10 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
+     * @return
+     */
     private boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
             if(cellKillsPlayer(playerSprite.getX() + sizeX, playerSprite.getY() + i)){
@@ -171,6 +205,10 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
+     * @return
+     */
     private boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
             if(cellKillsPlayer(playerSprite.getX(), playerSprite.getY()+i)){
@@ -188,6 +226,10 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
+     * @return
+     */
     private boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
             if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY()+sizeY)){
@@ -206,6 +248,11 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * used for handling a detected collision with miscellaneous items, currently only the victory point, ie the win flag is handled here. Float x and y are the positions on the tile map where the tile the player collided with is located.
+     * @param x the x position of the tile
+     * @param y the y position of the tile
+     */
     private void handleMisc(float x, float y) {
         TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
 
@@ -219,15 +266,26 @@ public class Player implements InputProcessor {
         }
     }
 
+
     private void gravityPowerup(){
         gravityPowerUp = true;
     }
 
+    /**
+     * removes the collectible from the specified position
+     * @param tileX
+     * @param tileY
+     */
     private void removeCollectibe(int tileX, int tileY){
         visualLayer.setCell(tileX, tileY, new TiledMapTileLayer.Cell());
         collisionLayer.setCell(tileX,tileY, new TiledMapTileLayer.Cell()); // gets rid of collectible cells
     }
 
+    /**
+     * Same as handleMisc but for collectibles such as power-ups, coins, hearts and stars.
+     * @param x the x position of the tile
+     * @param y the y position of the tile
+     */
     private void handleCollectible(float x, float y){
         TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
 
@@ -292,7 +350,10 @@ public class Player implements InputProcessor {
     }
 
 
-
+    /**
+     * Updates the position of the player, checks all the collisions and determines the frame of animation to be drawn. Additionally checks if a power up was used and grants the player the power up’s effects.
+     * @param delta the time since last rendering occured.
+     */
     private void update(float delta) {
         time += delta;
 
@@ -386,6 +447,12 @@ public class Player implements InputProcessor {
         }
     }
 
+    /**
+     * Similar to its sister methods, checks if the cell specified by the x and y coordinates is miscellaneous.
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean isCellMisc(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null &&
@@ -393,6 +460,12 @@ public class Player implements InputProcessor {
                         cell.getTile().getProperties().containsKey("win_flag"));
     }
 
+    /**
+     * Similar to its sister methods, checks if the cell specified by the x and y coordinates is a collectible..
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean isCellCollectible(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") ||
@@ -402,18 +475,34 @@ public class Player implements InputProcessor {
                 cell.getTile().getProperties().containsKey("gravity_powerup"));
     }
 
+    /**
+     * Similar to its sister methods, checks if the cell specified by the x and y coordinates kills the player.
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean cellKillsPlayer(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null &&
                 cell.getTile().getProperties().containsKey("spikes");
     }
 
-
+    /**
+     * Similar to its sister methods, checks if the cell specified by the x and y coordinates blocks the player's movement.
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean isCellBlocked(float x, float y){
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && cell.getTile().getProperties().containsKey("blocked");
     }
 
+    /**
+     * This method allows for keyboard input for controlling the player character on windows desktop.
+     * @param keycode
+     * @return
+     */
     @Override
     public boolean keyDown(int keycode) {
         switch(keycode) {
@@ -442,10 +531,19 @@ public class Player implements InputProcessor {
         return true;
     }
 
+    /**
+     * Getter for player sprite.
+     * @return
+     */
     public Sprite getPlayerSprite(){
         return playerSprite;
     }
 
+    /**
+     * this method stops the movement of the player character when A or D keys stop being held down by the player, on windows.
+     * @param keycode
+     * @return
+     */
     @Override
     public boolean keyUp(int keycode) {
         switch(keycode) {
@@ -488,10 +586,17 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * Checks if player is still alive
+     * @return
+     */
     public boolean isDead(){
         return !alive;
     }
 
+    /**
+     * this method removes a life from the player and sets him as dead.
+     */
     private void die(){
         if(alive) {
             hearts--;
@@ -506,6 +611,10 @@ public class Player implements InputProcessor {
         }
     }
 
+    /**
+     * Checks if the player is currently moving on the x axis.
+     * @return
+     */
     private boolean isRunning() {
         if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 3f && velocity.y>-3f)){
             return true;
@@ -513,10 +622,18 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * Checks if the player is currently in the air.
+     * @return
+     */
     private boolean inAir(){
         return (velocity.y > 3f || velocity.y<-3f);
     }
 
+    /**
+     * checks if the player is currently idle
+     * @return
+     */
     private boolean isIdle() {
         if (!isRunning()){
             return true;
@@ -524,6 +641,10 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * THis method is called when the player is respawning, if no lives left false is returned.
+     * @return
+     */
     public boolean respawn() {
         //returns true if the player can respawn ie has lives left
         if (hearts >= 0) {
@@ -533,11 +654,19 @@ public class Player implements InputProcessor {
         return false;
     }
 
+    /**
+     * this method is used for setting the layers of the tile map which need to be checked for collisions for the player.
+     * @param visualLayer
+     * @param collisionLayer
+     */
     public void setLayers(TiledMapTileLayer visualLayer, TiledMapTileLayer collisionLayer) {
         this.visualLayer = visualLayer;
         this.collisionLayer = collisionLayer;
     }
 
+    /**
+     * This method is used for restarting the player character to its default state, is called when the level is restarted.
+     */
     public void restart() {
         hearts = STARTING_HEARTS;
         hud.setLives(STARTING_HEARTS);
@@ -545,10 +674,18 @@ public class Player implements InputProcessor {
         hud.setScore(0);
     }
 
+    /**
+     * Checks if the game has been won.
+     * @return
+     */
     public boolean isGameWon(){
         return gameWon;
     }
 
+    /**
+     * Returns the time the game had been won at.
+     * @return
+     */
     public float getTimeWon() {
         return timeWon;
     }

@@ -2,7 +2,6 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -17,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.runnjump.Runnjump;
 
+/**
+ * This class is the parent of all the screens in the package, it does all the necessary processing required by all the screens. The constructor initialises the skin used by the whole application, the background for the menu system and the batch used for drawing.
+ */
 abstract class ScreenBase implements Screen, InputProcessor {
     public TextureRegion background;
     public Stage stage;
@@ -35,6 +37,9 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     }
 
+    /**
+     * this method is called every time the screen changes, it sets up a new stage for every screen and a camera. Additionally it sets up the input processing multiplexer which processes all the inputs from the different stages.
+     */
     @Override
     public void show() {
         //game resolution = 1280x720
@@ -48,6 +53,11 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     }
 
+    /**
+     * this is called upon resizing of the game window
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         //works best with nothing in here for some reason
@@ -55,6 +65,10 @@ abstract class ScreenBase implements Screen, InputProcessor {
 
     }
 
+    /**
+     * This is the method which actually draws everything onto the display.
+     * @param delta is the time in seconds since the last render call.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -67,6 +81,9 @@ abstract class ScreenBase implements Screen, InputProcessor {
         }
     }
 
+    /**
+     *  this method disposes of all the resources, to prevent memory leaks.
+     */
     @Override
     public void dispose() {
         stage.dispose();
@@ -75,6 +92,11 @@ abstract class ScreenBase implements Screen, InputProcessor {
         background.getTexture().dispose();
     }
 
+    /**
+     *  this method implements the ‘back’ key functionality on android and windows. (by pressing the ESCAPE key). Switches the screen to the previous screen.
+     * @param keycode
+     * @return
+     */
     @Override
     public boolean keyDown(int keycode) {
 

@@ -9,6 +9,9 @@ import com.mygdx.runnjump.Runnjump;
 
 import javax.swing.event.ChangeEvent;
 
+/**
+ * This class is used for handling the input for the sound button. It mutes and unmutes sounds as the sound button is checked or unchecked.
+ */
 public class SoundHandler extends ChangeListener{
     //class for handling the input for the sound button
     ImageButton soundBt;

@@ -6,12 +6,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.TextureManager;
 
+/**
+ * This class represents the loading screen which is shown when the game begins, currently it has no look of its own but this class does all the loading of assets necessary for the rest of the game.
+ */
 public class LoadingScreen extends ScreenBase implements Screen {
 
     public LoadingScreen(Runnjump theGameO) {
         super(theGameO);
     }
 
+    /**
+     *  This loads all the player assets and all the frames of animation.
+     */
     private void loadPlayer(){
         //idle
         theGame.textureManager.addPlayerFrameSet("idle","player\\Idle_",12);
@@ -19,6 +25,10 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.textureManager.addPlayerFrameSet("jump","player\\Jump Start_",6);
 
     }
+
+    /**
+     * this loads all the graphical elements of the game aside from the skin, the tilemap and its map elements themselves.
+     */
     private void loadGraphics(){
         //TextureAtlas playerRunning = new TextureAtlas(Gdx.files.internal("player\\runningCharSet.atlas"));
 
@@ -26,6 +36,9 @@ public class LoadingScreen extends ScreenBase implements Screen {
         loadPlayer();
     }
 
+    /**
+     * this loads all the sound effects of the game.
+     */
     private void loadSoundFX(){
         String[] buttonClickFx = new String[4];
         buttonClickFx[0] = "ui_button_simple_click_01.wav";
@@ -45,10 +58,16 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.soundManager.addSound("collect_item", "collect_item_02.wav");
     }
 
+    /**
+     * this loads all the songs in the game.
+     */
     private void loadMusic(){
         theGame.musicManager.addMusic("bg_1","music_calm_tree_of_life.wav");
     }
 
+    /**
+     * This ensures everything is loaded.
+     */
     @Override
     public void show() {
         //load the music
@@ -57,6 +76,10 @@ public class LoadingScreen extends ScreenBase implements Screen {
         loadGraphics();
     }
 
+    /**
+     * once loading is completed the screen is changed to the main menu.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         theGame.changeScreen(Runnjump.ScreenEn.MENU);

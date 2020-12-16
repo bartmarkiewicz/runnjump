@@ -23,6 +23,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.SoundHandler;
 
+/**
+ * This class represents the in-game UI the player sees while actually playing the level.
+ */
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
@@ -32,7 +35,12 @@ public class Hud implements Disposable {
     private Touchpad movementJoystick;
     private Button jumpBt;
 
-
+    /**
+     * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
+     * @param batch
+     * @param theGame the object representing the app itself
+     * @param skin the skin used for the buttons, labels and other ui elements
+     */
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport,batch);
@@ -94,28 +102,51 @@ public class Hud implements Disposable {
         stage.getBatch().setColor(Color.WHITE);
     }
 
+    /**
+     *  this method is used to update the score displayed on the hud.
+     * @param score
+     */
     public void setScore(int score){
         scoreL.setText("Score: " + score);
     }
 
+    /**
+     * this method is used to update the lives displayed on the ui.
+     * @param lives
+     */
     public void setLives(int lives){
         livesL.setText("Lives: " + lives);
     }
 
+    /**
+     *  this method disposes of all the resources, to prevent memory leaks.
+     */
     @Override
     public void dispose() {
         stage.dispose();
         gameoverFont.dispose();
     }
 
+    /**
+     * getter for the touchpad
+     * @return Touchpad
+     */
     public Touchpad getMovementJoystick(){
         return movementJoystick;
     }
 
+    /**
+     * getter for the android jump button
+     * @return Button
+     */
     public Button getJumpBt(){
         return jumpBt;
     }
 
+    /**
+     * This method prints the game over messages onto the hud, informing the player he can play again. It gets score so it can be printed.
+     * @param score
+     */
     public void gameOver(int score) {
 
         stage.getBatch().begin();
@@ -131,6 +162,11 @@ public class Hud implements Disposable {
         stage.getBatch().end();
     }
 
+    /**
+     *  This method similarly to the game over method prints the game won messages onto the screen/hud informing the player that he has successfully completed the level.
+     * @param score
+     * @param level
+     */
     public void gameWon(int score, int level) {
         stage.getBatch().begin();
 
@@ -138,9 +174,9 @@ public class Hud implements Disposable {
         gameoverFont.draw(stage.getBatch(),"You had acquired "+score +" score points!", (Gdx.graphics.getWidth()/3)-150,(Gdx.graphics.getHeight()/2)+50);
 
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
-            gameoverFont.draw(stage.getBatch(), "Tap the screen to return to main menu!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2f-50);
+            gameoverFont.draw(stage.getBatch(), "Tap the screen to \nreturn to main menu!", (Gdx.graphics.getWidth() / 2)-250, Gdx.graphics.getHeight() / 2f-50);
         } else {
-            gameoverFont.draw(stage.getBatch(), "Press any key to return to the main menu!", Gdx.graphics.getWidth() / 2-200, Gdx.graphics.getHeight() / 2f-100);
+            gameoverFont.draw(stage.getBatch(), "Press any key to \nreturn to the main menu!", (Gdx.graphics.getWidth() / 2)-250, Gdx.graphics.getHeight() / 2f-100);
         }
         stage.getBatch().end();
 

@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
 
+/**
+ * This screen shows the high scores screen, the interface is finished but the functionality isn’t.
+ */
 public class HighScoresScreen extends ScreenBase implements Screen {
 
 

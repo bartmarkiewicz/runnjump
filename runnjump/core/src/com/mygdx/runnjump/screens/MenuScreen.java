@@ -17,11 +17,16 @@ import com.mygdx.runnjump.Runnjump;
 
 import javax.xml.soap.Text;
 
+/**
+ * This class represents the main menu window.
+ */
 public class MenuScreen extends ScreenBase implements Screen {
     //private ImageButton soundBt;
 
 
-
+    /**
+     * this method initialises the GUI of the menu and sets up iuts input processors.
+     */
     public void initGui(){
         currentScreenId = Runnjump.ScreenEn.MENU;
 
@@ -126,7 +131,9 @@ public class MenuScreen extends ScreenBase implements Screen {
         //initGui();
     }
 
-
+    /**
+     * this method inits the gui and plays the background music.
+     */
     @Override
     public void show() {
         super.show();
@@ -135,6 +142,10 @@ public class MenuScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Draws the gui
+     * @param delta time since last call of render method
+     */
     @Override
     public void render(float delta) {
         super.render(delta);

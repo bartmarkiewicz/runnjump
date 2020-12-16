@@ -1,7 +1,6 @@
 package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,13 +13,16 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
 
+
+/**
+ * This is used to represent the screen with the actual game and its level. The constructor initialises the chosen level.
+ */
 public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     //this is the screen where gameplay occurs
     int level;
@@ -52,6 +54,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         batch = new SpriteBatch();
     }
 
+    /**
+     * this method respawns the player at the (currently hard-coded) spawn point, but only if the player has lives left. If  not, a game over boolean is set.
+     */
     public void respawnPlayer(){
         spawnPointX = 5*32;
         spawnPointY = 79*32;
@@ -62,6 +67,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         }
     }
 
+    /**
+     * this method is used for re-starting the level after a game over.
+     * @param level
+     */
     public void startGame(int level){
         try {
             tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
@@ -102,6 +111,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
     }
 
 
+    /**
+     * this method is used for starting the chosen level after the level/game mode is chosen. It sets up the whole tiled map, the screen and input processors.
+     */
     @Override
     public void show() {
         super.show(); //renders the map
@@ -139,6 +151,10 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         tileMapWidth = mapProperties.get("width", Integer.class);
     }
 
+    /**
+     * renders the game world and the hud also makes the camera follow the player. Checks if the game has been won or a game over happened.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -199,6 +215,14 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         //this.height= height;
     }
 
+    /**
+     * this method is used for restarting the level or leaving the level upon winning by the player and going back to the main menu, opon touching of the screen. This is android-specific.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (gameOver){
@@ -211,6 +235,11 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
+    /**
+     * this method is used for restarting the level or leaving the level upon winning by the player and going back to the main menu, opon tapping any key. This is windows-specific.
+     * @param keycode
+     * @return
+     */
     @Override
     public boolean keyUp(int keycode) {
         if (gameOver){
@@ -240,6 +269,9 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         //dispose();
     }
 
+    /**
+     * prevent memory leaks by disposing all game elements with are disposable.
+     */
     @Override
     public void dispose() {
         super.dispose();

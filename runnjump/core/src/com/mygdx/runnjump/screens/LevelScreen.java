@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
 
+/**
+ * This class is the level selection screen, it allows the player to select the level on which to play on.
+ */
 public class LevelScreen extends ScreenBase implements Screen {
     int levelSelected;
     Label levelSelectIndicator;
@@ -23,11 +26,17 @@ public class LevelScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Getter for the level selected.
+     * @return
+     */
     public int getLevelSelected(){
         return levelSelected;
     }
 
-
+    /**
+     * this updates the level selected label to show which level has been selected.
+     */
     private void updateLevelSelectIndicator(){
         if (levelSelected <1){
             levelSelectIndicator.setText(lvlSlctStr + "None");
@@ -36,6 +45,10 @@ public class LevelScreen extends ScreenBase implements Screen {
             theGame.setLevelSelected(levelSelected);
         }
     }
+
+    /**
+     * Initialises the screen and its layout.
+     */
     @Override
     public void show() {
         super.show();
@@ -143,6 +156,10 @@ public class LevelScreen extends ScreenBase implements Screen {
         //stage.setDebugAll(true);
     }
 
+    /**
+     * Draws the layout
+     * @param delta time since last render call.
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -170,6 +187,9 @@ public class LevelScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * prevent memory leaks by disposing all game elements with are disposable.
+     */
     @Override
     public void dispose() {
         super.dispose();

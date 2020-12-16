@@ -23,6 +23,9 @@ import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.TreeMap;
 
+/**
+ * This is the actual ‘main’ class of the aplication. It stores all the managers. So they can easily be accessed from the entire app.
+ */
 public class Runnjump extends Game {
 	//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
@@ -50,10 +53,17 @@ public class Runnjump extends Game {
 	private HighScoresScreen highScoresScreen;
 	private int levelSelected;
 
+	/**
+	 * this sets the level selected by the levelscreen. So it can be accessed from the game screen.
+	 * @param level
+	 */
 	public void setLevelSelected(int level){
 		levelSelected = level;
 	}
 
+	/**
+	 * creates the app-wide elements such as the managers and the sound button.
+	 */
 	@Override
 	public void create () {
 		currentScreen = ScreenEn.LOADING;
@@ -84,8 +94,10 @@ public class Runnjump extends Game {
     }
 
 
-
-
+	/**
+	 * Switches to the screen specified by the enum screenId
+	 * @param screenId - the screen to switch to.
+	 */
     public void changeScreen(ScreenEn screenId){
 		//method used for changing game screens
 		previousScreen = currentScreen;
@@ -134,13 +146,18 @@ public class Runnjump extends Game {
 	}
 
 
-
+	/**
+	 * draws
+	 */
 	@Override
 	public void render () {
 		super.render();
 		//rendering happens here
 	}
-	
+
+	/**
+	 *prevent memory leaks by disposing all game elements with are disposable.
+	 */
 	@Override
 	public void dispose () {
 		super.dispose();
