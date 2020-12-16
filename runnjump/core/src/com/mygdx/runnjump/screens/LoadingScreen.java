@@ -11,6 +11,11 @@ import com.mygdx.runnjump.util.TextureManager;
  */
 public class LoadingScreen extends ScreenBase implements Screen {
 
+    /**
+     * Instantiates a new Loading screen.
+     *
+     * @param theGameO the the game o
+     */
     public LoadingScreen(Runnjump theGameO) {
         super(theGameO);
     }

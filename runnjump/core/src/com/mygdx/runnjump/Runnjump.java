@@ -3,8 +3,6 @@ package com.mygdx.runnjump;
 import com.badlogic.gdx.Game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,24 +25,63 @@ import java.util.TreeMap;
  * This is the actual ‘main’ class of the aplication. It stores all the managers. So they can easily be accessed from the entire app.
  */
 public class Runnjump extends Game {
-	//SpriteBatch batch;
+	/**
+	 * The Sound manager.
+	 */
+//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
 	public SoundManager soundManager;
+	/**
+	 * The Music manager.
+	 */
 	public MusicManager musicManager;
+	/**
+	 * The Texture manager.
+	 */
 	public TextureManager textureManager;
+	/**
+	 * The Texture atlas map.
+	 */
 	public static TreeMap<String, TextureAtlas> textureAtlasMap;
 
+	/**
+	 * The enum Screen en.
+	 */
 	public enum ScreenEn {
+		/**
+		 * Loading screen en.
+		 */
 		LOADING,
+		/**
+		 * Menu screen en.
+		 */
 		MENU,
+		/**
+		 * Game screen en.
+		 */
 		GAME,
+		/**
+		 * Level screen en.
+		 */
 		LEVEL,
+		/**
+		 * Highscores screen en.
+		 */
 		HIGHSCORES,
 	}
 
+	/**
+	 * The constant currentScreen.
+	 */
 	public static ScreenEn currentScreen;
+	/**
+	 * The constant previousScreen.
+	 */
 	public static ScreenEn previousScreen;//todo change to a stack of screens?
 
+	/**
+	 * The Sound bt.
+	 */
 	public ImageButton soundBt;
 	private MenuScreen menuScreen;
 	private LoadingScreen loadingScreen;
@@ -55,7 +92,8 @@ public class Runnjump extends Game {
 
 	/**
 	 * this sets the level selected by the levelscreen. So it can be accessed from the game screen.
-	 * @param level
+	 *
+	 * @param level the level
 	 */
 	public void setLevelSelected(int level){
 		levelSelected = level;
@@ -96,9 +134,10 @@ public class Runnjump extends Game {
 
 	/**
 	 * Switches to the screen specified by the enum screenId
+	 *
 	 * @param screenId - the screen to switch to.
 	 */
-    public void changeScreen(ScreenEn screenId){
+	public void changeScreen(ScreenEn screenId){
 		//method used for changing game screens
 		previousScreen = currentScreen;
 
