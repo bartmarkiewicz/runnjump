@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
@@ -87,6 +89,16 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
         mapProperties= tileMap.getProperties();
         tileMapHeight = mapProperties.get("height", Integer.class);
         tileMapWidth = mapProperties.get("width", Integer.class);
+
+        for (MapObject gameObject: tileMap.getLayers().get("objects").getObjects()) {
+            if (gameObject.getProperties().containsKey("enemy")){
+                float xPos = gameObject.getProperties().get("x", Float.class);
+                float yPos = gameObject.getProperties().get("y", Float.class);
+
+
+            }
+        }
+
     }
 
 

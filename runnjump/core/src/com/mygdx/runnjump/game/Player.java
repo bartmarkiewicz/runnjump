@@ -38,7 +38,7 @@ public class Player implements InputProcessor {
     private TiledMapTileLayer visualLayer;
     private int score, hearts;
     private boolean goldKeyAcquired;
-    private final int STARTING_HEARTS = 0;
+    private final int STARTING_HEARTS = 3;
     boolean canJump;
     float sizeX,sizeY;
     Sprite playerSprite;
@@ -237,6 +237,7 @@ public class Player implements InputProcessor {
         if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
             //gravity collected;
             gravityPowerup();
+            //soundManager.playSound("coin_collect");
         }
 
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
@@ -295,7 +296,7 @@ public class Player implements InputProcessor {
     public void update(float delta) {
         time += delta;
 
-        if (gravityPowerUp && powerUpTime < 5) { //power up lasts 10 seconds
+        if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
             powerUpTime+=delta;
             velocity.y -= (gravity/2)*delta;
         } else{

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="300" height="125" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="26">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="300" height="125" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="29">
  <tileset firstgid="1" name="jungleplatform" tilewidth="32" tileheight="32" tilecount="1024" columns="32">
   <image source="jungleplatform.png" width="1024" height="1024"/>
   <tile id="0">
@@ -6060,4 +6060,12 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="12" name="objects">
+  <object id="26" name="enemy" type="enemy" x="6006.67" y="2309.33">
+   <properties>
+    <property name="enemy" value=""/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>
