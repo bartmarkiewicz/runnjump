@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
 
-/**Singleton, similar to the MusicManager but for simpler/shorter sound effect sounds like the sound effect upon picking up of a coin.
- *
+/**
+ * Singleton, similar to the MusicManager but for simpler/shorter sound effect sounds like the sound effect upon picking up of a coin.
  */
 public class SoundManager implements Disposable {
     //This class should be a singleton
@@ -19,7 +19,14 @@ public class SoundManager implements Disposable {
     private TreeMap<String,Sound> soundMap;
     private TreeMap<String,Sound[]> soundSet;
     private float volume;
+    /**
+     * The Random.
+     */
     Random random;
+
+    /**
+     * Instantiates a new Sound manager.
+     */
     public SoundManager() {
         soundMap = new TreeMap<>();
         soundSet = new TreeMap<>();
@@ -40,8 +47,9 @@ public class SoundManager implements Disposable {
 
     /**
      * this adds a group of sounds under a single name
-     * @param name
-     * @param paths
+     *
+     * @param name  the name
+     * @param paths the paths
      */
     public void addSoundSet(String name, String[] paths){
         //this adds a group of sounds under a single name
@@ -54,8 +62,9 @@ public class SoundManager implements Disposable {
 
     /**
      * adds and loads a single sound under the name specified.
-     * @param name
-     * @param path
+     *
+     * @param name the name
+     * @param path the path
      */
     public void addSound(String name, String path) {
         //this adds a sound
@@ -64,7 +73,8 @@ public class SoundManager implements Disposable {
 
     /**
      * plays the sound specified by the name
-     * @param name
+     *
+     * @param name the name
      */
     public void playSound(String name){
         //this plays a single sound
@@ -73,7 +83,8 @@ public class SoundManager implements Disposable {
 
     /**
      * plays a random sound from a sound set added under the specified name.
-     * @param name
+     *
+     * @param name the name
      */
     public void playRandom(String name){
         Sound[] sounds = soundSet.get(name);

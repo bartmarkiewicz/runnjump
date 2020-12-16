@@ -16,9 +16,18 @@ public class MusicManager implements Disposable {
     private TreeMap<String, Music> musicMap;
     private TreeMap<String, Music[]> musicSet;
     private float volume;
+    /**
+     * The Rand.
+     */
     Random rand = new Random();
+    /**
+     * The Currently playing.
+     */
     Music currentlyPlaying;
 
+    /**
+     * Instantiates a new Music manager.
+     */
     public MusicManager() {
         musicMap = new TreeMap<>();
         musicSet = new TreeMap<>();
@@ -27,9 +36,10 @@ public class MusicManager implements Disposable {
     }
 
     /**
-     *  this method loads and stores a song in the manager, under the name specified. It grabs the file using the path.
-     * @param name
-     * @param path
+     * this method loads and stores a song in the manager, under the name specified. It grabs the file using the path.
+     *
+     * @param name the name
+     * @param path the path
      */
     public void addMusic(String name, String path){
         musicMap.put(name, Gdx.audio.newMusic(Gdx.files.internal("music" + "/"+path)));
@@ -37,8 +47,9 @@ public class MusicManager implements Disposable {
 
     /**
      * Similar as above but instead it grabs multiple songs and puts them under a single name, useful if you want a specific soundtrack for a specific level for example.
-     * @param name
-     * @param paths
+     *
+     * @param name  the name
+     * @param paths the paths
      */
     public void addMusicSet(String name, String[] paths){
         //this adds a group of sounds under a single name
@@ -51,7 +62,8 @@ public class MusicManager implements Disposable {
 
     /**
      * this plays a previously loaded song specified by the name, assuming no song is being played at the moment.
-     * @param name
+     *
+     * @param name the name
      */
     public void playMusic(String name){
         //this plays a single song
@@ -70,7 +82,8 @@ public class MusicManager implements Disposable {
 
     /**
      * this plays a random song from the song set added by music set under the name specified.
-     * @param name
+     *
+     * @param name the name
      */
     public void playRandom(String name){
         Music[] songs = musicSet.get(name);
@@ -89,7 +102,7 @@ public class MusicManager implements Disposable {
     }
 
     /**
-     *  this method mutes music.
+     * this method mutes music.
      */
     public void muteMusic(){
         if (volume == 1){
@@ -112,7 +125,7 @@ public class MusicManager implements Disposable {
     }
 
     /**
-     *  this method is used for stopping all currently playing songs, it is redundant since the current implementation only allows for one song to be playing at the same time, so currently in practice is identical to stopMusic().
+     * this method is used for stopping all currently playing songs, it is redundant since the current implementation only allows for one song to be playing at the same time, so currently in practice is identical to stopMusic().
      */
     public void stopAll(){
         for(Music song: musicMap.values()){

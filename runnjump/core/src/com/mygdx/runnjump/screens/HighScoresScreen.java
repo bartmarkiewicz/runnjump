@@ -18,7 +18,11 @@ import com.mygdx.runnjump.Runnjump;
 public class HighScoresScreen extends ScreenBase implements Screen {
 
 
-
+    /**
+     * Instantiates a new High scores screen.
+     *
+     * @param theGameO the the game o
+     */
     public HighScoresScreen(Runnjump theGameO) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.HIGHSCORES;

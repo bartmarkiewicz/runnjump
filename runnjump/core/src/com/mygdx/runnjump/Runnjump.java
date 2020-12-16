@@ -28,7 +28,6 @@ public class Runnjump extends Game {
 	/**
 	 * The Sound manager.
 	 */
-//SpriteBatch batch;
 	//Texture campaignBt,survivalBt, highScoresBt;
 	public SoundManager soundManager;
 	/**

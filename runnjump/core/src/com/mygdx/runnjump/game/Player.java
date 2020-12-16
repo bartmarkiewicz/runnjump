@@ -66,7 +66,8 @@ public class Player implements InputProcessor {
 
     /**
      * getter for lives left
-     * @return
+     *
+     * @return int int
      */
     public int getHearts(){
         return hearts;
@@ -74,7 +75,8 @@ public class Player implements InputProcessor {
 
     /**
      * getter for score
-     * @return
+     *
+     * @return int int
      */
     public int getScore(){
         return score;
@@ -83,10 +85,11 @@ public class Player implements InputProcessor {
     /**
      * The constructor initialises the player, and his initial values for score, lives remaining and gets its textures from the textureManager. It also sets up the platform-specific touch detection listeners for Android touchpad and jump buttons.
      * It gets the layers for the purpose of collision detection.
-     * @param theGame
-     * @param hud
-     * @param collisionLayer
-     * @param visualLayer
+     *
+     * @param theGame        the the game
+     * @param hud            the hud
+     * @param collisionLayer the collision layer
+     * @param visualLayer    the visual layer
      */
     public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         this.playerSprite = new Sprite(new Texture("player\\Idle_000.png"));
@@ -148,15 +151,17 @@ public class Player implements InputProcessor {
 
     /**
      * this sets the frame(for the purposes of animation) of the sprite which will be displayed upon drawing.
-     * @param texture
+     *
+     * @param texture the texture
      */
     public void setFrame(Texture texture){
         playerSprite.setTexture(texture);
     }
 
     /**
-     *  this draws the sprite after updating.
-     * @param batch
+     * this draws the sprite after updating.
+     *
+     * @param batch the batch
      */
     public void draw(Batch batch) {
         update(Gdx.graphics.getDeltaTime());//updates before drawing
@@ -533,7 +538,8 @@ public class Player implements InputProcessor {
 
     /**
      * Getter for player sprite.
-     * @return
+     *
+     * @return sprite sprite
      */
     public Sprite getPlayerSprite(){
         return playerSprite;
@@ -588,7 +594,8 @@ public class Player implements InputProcessor {
 
     /**
      * Checks if player is still alive
-     * @return
+     *
+     * @return boolean boolean
      */
     public boolean isDead(){
         return !alive;
@@ -643,7 +650,8 @@ public class Player implements InputProcessor {
 
     /**
      * THis method is called when the player is respawning, if no lives left false is returned.
-     * @return
+     *
+     * @return boolean boolean
      */
     public boolean respawn() {
         //returns true if the player can respawn ie has lives left
@@ -656,8 +664,9 @@ public class Player implements InputProcessor {
 
     /**
      * this method is used for setting the layers of the tile map which need to be checked for collisions for the player.
-     * @param visualLayer
-     * @param collisionLayer
+     *
+     * @param visualLayer    the visual layer
+     * @param collisionLayer the collision layer
      */
     public void setLayers(TiledMapTileLayer visualLayer, TiledMapTileLayer collisionLayer) {
         this.visualLayer = visualLayer;
@@ -676,7 +685,8 @@ public class Player implements InputProcessor {
 
     /**
      * Checks if the game has been won.
-     * @return
+     *
+     * @return boolean boolean
      */
     public boolean isGameWon(){
         return gameWon;
@@ -684,7 +694,8 @@ public class Player implements InputProcessor {
 
     /**
      * Returns the time the game had been won at.
-     * @return
+     *
+     * @return time won
      */
     public float getTimeWon() {
         return timeWon;

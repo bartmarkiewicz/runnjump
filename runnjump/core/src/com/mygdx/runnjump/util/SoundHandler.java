@@ -13,9 +13,21 @@ import javax.swing.event.ChangeEvent;
  * This class is used for handling the input for the sound button. It mutes and unmutes sounds as the sound button is checked or unchecked.
  */
 public class SoundHandler extends ChangeListener{
-    //class for handling the input for the sound button
+    /**
+     * The Sound bt.
+     */
+//class for handling the input for the sound button
     ImageButton soundBt;
+    /**
+     * The The game.
+     */
     Runnjump theGame;
+
+    /**
+     * Instantiates a new Sound handler.
+     *
+     * @param theGame the the game
+     */
     public SoundHandler(Runnjump theGame){
         this.theGame = theGame;
         soundBt = theGame.soundBt;

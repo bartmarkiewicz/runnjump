@@ -20,15 +20,41 @@ import com.mygdx.runnjump.Runnjump;
  * This class is the parent of all the screens in the package, it does all the necessary processing required by all the screens. The constructor initialises the skin used by the whole application, the background for the menu system and the batch used for drawing.
  */
 abstract class ScreenBase implements Screen, InputProcessor {
+    /**
+     * The Background.
+     */
     public TextureRegion background;
+    /**
+     * The Stage.
+     */
     public Stage stage;
+    /**
+     * The Skin.
+     */
     Skin skin;
+    /**
+     * The Batch.
+     */
     SpriteBatch batch;
+    /**
+     * The Current screen id.
+     */
     public Runnjump.ScreenEn currentScreenId;
+    /**
+     * The Input multiplexer.
+     */
     InputMultiplexer inputMultiplexer;
 
+    /**
+     * The The game.
+     */
     public Runnjump theGame;
 
+    /**
+     * Instantiates a new Screen base.
+     *
+     * @param theGameO the the game o
+     */
     public ScreenBase(Runnjump theGameO) {
         this.theGame = theGameO;
         skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));

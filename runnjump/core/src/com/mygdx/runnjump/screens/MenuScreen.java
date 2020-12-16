@@ -124,6 +124,11 @@ public class MenuScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Instantiates a new Menu screen.
+     *
+     * @param theGame the the game
+     */
     public MenuScreen(final Runnjump theGame) {
         super(theGame);
         //initGui();

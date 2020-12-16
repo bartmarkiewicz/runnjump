@@ -24,29 +24,85 @@ import com.mygdx.runnjump.game.Player;
  * This is used to represent the screen with the actual game and its level. The constructor initialises the chosen level.
  */
 public class GameScreen extends ScreenBase implements Screen, InputProcessor {
-    //this is the screen where gameplay occurs
+    /**
+     * The Level.
+     */
+//this is the screen where gameplay occurs
     int level;
+    /**
+     * The Map renderer.
+     */
     OrthogonalTiledMapRenderer mapRenderer;
+    /**
+     * The Tile map.
+     */
     TiledMap tileMap;
+    /**
+     * The Hud.
+     */
     Hud hud;
+    /**
+     * The Tile map width.
+     */
     int tileMapWidth;
+    /**
+     * The Tile map height.
+     */
     int tileMapHeight;
+    /**
+     * The Orthographic camera.
+     */
     OrthographicCamera orthographicCamera;
+    /**
+     * The Player.
+     */
     Player player;
+    /**
+     * The Zoom.
+     */
     float zoom;
+    /**
+     * The Map properties.
+     */
     MapProperties mapProperties;
-    float width, height;//Gdx.graphics.getWidth();
+    /**
+     * The Width.
+     */
+    float width, /**
+     * The Height.
+     */
+    height;//Gdx.graphics.getWidth();
 
-    float spawnPointX, spawnPointY;
+    /**
+     * The Spawn point x.
+     */
+    float spawnPointX, /**
+     * The Spawn point y.
+     */
+    spawnPointY;
+    /**
+     * The Game over.
+     */
     boolean gameOver;
     private float timeSinceWin =0f;
 
+    /**
+     * Instantiates a new Game screen.
+     *
+     * @param theGameO the the game o
+     * @param level    the level
+     */
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
         this.level = level;
     }
 
+    /**
+     * Instantiates a new Game screen.
+     *
+     * @param theGameO the the game o
+     */
     public GameScreen(Runnjump theGameO) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
@@ -69,7 +125,8 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
 
     /**
      * this method is used for re-starting the level after a game over.
-     * @param level
+     *
+     * @param level the level
      */
     public void startGame(int level){
         try {

@@ -15,10 +15,24 @@ import com.mygdx.runnjump.Runnjump;
  * This class is the level selection screen, it allows the player to select the level on which to play on.
  */
 public class LevelScreen extends ScreenBase implements Screen {
+    /**
+     * The Level selected.
+     */
     int levelSelected;
+    /**
+     * The Level select indicator.
+     */
     Label levelSelectIndicator;
+    /**
+     * The Lvl slct str.
+     */
     final String lvlSlctStr = "Level Selected: ";
 
+    /**
+     * Instantiates a new Level screen.
+     *
+     * @param theGame the the game
+     */
     public LevelScreen(Runnjump theGame) {
         super(theGame);
         //stage = new Stage(new ScreenViewport());
@@ -28,7 +42,8 @@ public class LevelScreen extends ScreenBase implements Screen {
 
     /**
      * Getter for the level selected.
-     * @return
+     *
+     * @return int
      */
     public int getLevelSelected(){
         return levelSelected;
