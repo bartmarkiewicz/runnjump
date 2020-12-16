@@ -29,9 +29,11 @@ public class Player implements InputProcessor {
 
     //movement velocity
     private Vector2 velocity = new Vector2();
-    private float speedX = 900;
-    private float speedY = 230;
-    private float gravity = 98f;
+    private float speedX = 500;
+    private float speedY = 250;
+    private float gravity = 140f;
+    private boolean gravityPowerUp;
+    private float powerUpTime;
     private TiledMapTileLayer collisionLayer;
     private TiledMapTileLayer visualLayer;
     private int score, hearts;
@@ -76,6 +78,7 @@ public class Player implements InputProcessor {
         setLogicalSize(30*2,30*3);
         this.score = 0;
         this.hearts =STARTING_HEARTS;
+        this.powerUpTime = 0;
         this.goldKeyAcquired = false;
         this.hud = hud;
         hud.setScore(score);
@@ -86,6 +89,7 @@ public class Player implements InputProcessor {
         playerRunning = theGame.textureManager.getPlayerFrameSet("running");
         playerJump = theGame.textureManager.getPlayerFrameSet("jump");
         gameWon = false;
+        gravityPowerUp = false;
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Touchpad joystick = hud.getMovementJoystick();
             joystick.addListener(new ChangeListener() {
@@ -215,6 +219,10 @@ public class Player implements InputProcessor {
         }
     }
 
+    public void gravityPowerup(){
+        gravityPowerUp = true;
+    }
+
     public void removeCollectibe(int tileX, int tileY){
         visualLayer.setCell(tileX, tileY, new TiledMapTileLayer.Cell());
         collisionLayer.setCell(tileX,tileY, new TiledMapTileLayer.Cell()); // gets rid of collectible cells
@@ -225,6 +233,11 @@ public class Player implements InputProcessor {
 
         //removes collectible
         removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); // gets rid of collectible cells
+
+        if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
+            //gravity collected;
+            gravityPowerup();
+        }
 
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
             score+=10;
@@ -280,11 +293,16 @@ public class Player implements InputProcessor {
 
 
     public void update(float delta) {
-        velocity.y -= gravity * delta;
-
         time += delta;
 
-
+        if (gravityPowerUp && powerUpTime < 5) { //power up lasts 10 seconds
+            powerUpTime+=delta;
+            velocity.y -= (gravity/2)*delta;
+        } else{
+            velocity.y -= gravity * delta;
+            gravityPowerUp = false;
+            powerUpTime=0;
+        }
 
         // sets max velocity
         if (velocity.y > speedY)
@@ -379,7 +397,8 @@ public class Player implements InputProcessor {
         return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") ||
                 cell.getTile().getProperties().containsKey("gold_key") ||
                 cell.getTile().getProperties().containsKey("heart") ||
-                cell.getTile().getProperties().containsKey("star"));
+                cell.getTile().getProperties().containsKey("star") ||
+                cell.getTile().getProperties().containsKey("gravity_powerup"));
     }
 
     private boolean cellKillsPlayer(float x, float y){
