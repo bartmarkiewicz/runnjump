@@ -15,7 +15,7 @@ import com.mygdx.runnjump.Runnjump;
 /**
  * This screen shows the high scores screen, the interface is finished but the functionality isn’t.
  */
-public class HighScoresScreen extends ScreenBase implements Screen {
+public class HighScoresScreen extends ScreenBase {
 
 
     /**

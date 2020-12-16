@@ -14,7 +14,7 @@ import com.mygdx.runnjump.Runnjump;
 /**
  * This class is the level selection screen, it allows the player to select the level on which to play on.
  */
-public class LevelScreen extends ScreenBase implements Screen {
+public class LevelScreen extends ScreenBase {
     /**
      * The Level selected.
      */

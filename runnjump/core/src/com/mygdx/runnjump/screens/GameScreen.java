@@ -23,7 +23,7 @@ import com.mygdx.runnjump.game.Player;
 /**
  * This is used to represent the screen with the actual game and its level. The constructor initialises the chosen level.
  */
-public class GameScreen extends ScreenBase implements Screen, InputProcessor {
+public class GameScreen extends ScreenBase implements InputProcessor {
     /**
      * The Level.
      */

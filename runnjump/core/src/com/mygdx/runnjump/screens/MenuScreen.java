@@ -20,7 +20,7 @@ import javax.xml.soap.Text;
 /**
  * This class represents the main menu window.
  */
-public class MenuScreen extends ScreenBase implements Screen {
+public class MenuScreen extends ScreenBase {
     //private ImageButton soundBt;
 
 
