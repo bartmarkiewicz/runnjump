@@ -42,7 +42,7 @@ public class LevelScreen extends ScreenBase implements Screen {
         levelSelected = -1;
         Table mainTable = new Table();
 
-        mainTable.setDebug(true);
+        mainTable.setDebug(false);
         mainTable.setFillParent(true);
         mainTable.center();
         levelSelectIndicator = new Label(lvlSlctStr,skin);

@@ -48,7 +48,7 @@ public class MenuScreen extends ScreenBase implements Screen {
 
 
         leftTable.left().bottom();
-        leftTable.setDebug(true);
+        leftTable.setDebug(false);
         leftTable.add(campaignBt).height(120).width(350).fillX().uniformX();
         leftTable.row().pad(20,10,0,0);
         leftTable.add(survivalBt).height(120).width(350).fillX().uniformX();
@@ -65,7 +65,7 @@ public class MenuScreen extends ScreenBase implements Screen {
         topTable.pad(0);
         topTable.add(theGame.soundBt).width(100).height(100).fill();
 
-        topTable.setDebug(true);
+        topTable.setDebug(false);
         mainTable.add(topTable).colspan(2).expand().right().top();
         mainTable.row();
         mainTable.add(leftTable).expand().left().bottom().uniform();
@@ -114,7 +114,7 @@ public class MenuScreen extends ScreenBase implements Screen {
 
 
         stage.addActor(mainTable);
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
         stage.getBatch().setColor(Color.WHITE);
 
     }

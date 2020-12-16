@@ -27,10 +27,10 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
     private Label scoreL, livesL;
-    public final Runnjump theGame;
-    BitmapFont gameoverFont;
-    Touchpad movementJoystick;
-    Button jumpBt;
+    private final Runnjump theGame;
+    private BitmapFont gameoverFont;
+    private Touchpad movementJoystick;
+    private Button jumpBt;
 
 
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
@@ -90,7 +90,7 @@ public class Hud implements Disposable {
 
         container.setFillParent(true);
         stage.addActor(container);
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
         stage.getBatch().setColor(Color.WHITE);
     }
 
@@ -102,16 +102,11 @@ public class Hud implements Disposable {
         livesL.setText("Lives: " + lives);
     }
 
-
     @Override
     public void dispose() {
         stage.dispose();
         gameoverFont.dispose();
     }
-
-
-
-
 
     public Touchpad getMovementJoystick(){
         return movementJoystick;

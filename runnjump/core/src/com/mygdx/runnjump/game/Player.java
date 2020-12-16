@@ -39,25 +39,25 @@ public class Player implements InputProcessor {
     private int score, hearts;
     private boolean goldKeyAcquired;
     private final int STARTING_HEARTS = 3;
-    boolean canJump;
-    float sizeX,sizeY;
-    Sprite playerSprite;
-    boolean facingRight = true;
-    boolean alive;
-    float time =0f;
+    private boolean canJump;
+    private float sizeX,sizeY;
+    private Sprite playerSprite;
+    private boolean facingRight = true;
+    private boolean alive;
+    private float time =0f;
     private SoundManager soundManager;
-    boolean gameWon;
+    private boolean gameWon;
 
 
     private int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
     private boolean backWardsIdle = false, backWardsRunning = false;
 
-    ArrayList<Texture> playerIdle, playerRunning, playerJump;
+    private ArrayList<Texture> playerIdle, playerRunning, playerJump;
 
     private Hud hud;
     private float timeWon;
 
-    public void setLogicalSize(float width, float height){
+    private void setLogicalSize(float width, float height){
         sizeX = width;
         sizeY = height;
     }
@@ -137,7 +137,7 @@ public class Player implements InputProcessor {
         playerSprite.draw(batch);
     }
 
-    public boolean collidesSouth() {
+    private boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
             if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY())){
                 die();
@@ -154,7 +154,7 @@ public class Player implements InputProcessor {
         return false;
     }
 
-    public boolean collidesEast() {
+    private boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
             if(cellKillsPlayer(playerSprite.getX() + sizeX, playerSprite.getY() + i)){
                 die();
@@ -171,7 +171,7 @@ public class Player implements InputProcessor {
         return false;
     }
 
-    public boolean collidesWest() {
+    private boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
             if(cellKillsPlayer(playerSprite.getX(), playerSprite.getY()+i)){
                 die();
@@ -188,7 +188,7 @@ public class Player implements InputProcessor {
         return false;
     }
 
-    public boolean collidesNorth() {
+    private boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
             if(cellKillsPlayer(playerSprite.getX() + i, playerSprite.getY()+sizeY)){
                 die();
@@ -219,16 +219,16 @@ public class Player implements InputProcessor {
         }
     }
 
-    public void gravityPowerup(){
+    private void gravityPowerup(){
         gravityPowerUp = true;
     }
 
-    public void removeCollectibe(int tileX, int tileY){
+    private void removeCollectibe(int tileX, int tileY){
         visualLayer.setCell(tileX, tileY, new TiledMapTileLayer.Cell());
         collisionLayer.setCell(tileX,tileY, new TiledMapTileLayer.Cell()); // gets rid of collectible cells
     }
 
-    public void handleCollectible(float x, float y){
+    private void handleCollectible(float x, float y){
         TiledMapTileLayer.Cell cellColLayer = collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
 
         //removes collectible
@@ -293,7 +293,7 @@ public class Player implements InputProcessor {
 
 
 
-    public void update(float delta) {
+    private void update(float delta) {
         time += delta;
 
         if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
@@ -492,7 +492,7 @@ public class Player implements InputProcessor {
         return !alive;
     }
 
-    public void die(){
+    private void die(){
         if(alive) {
             hearts--;
             if (hearts >= 0) {
@@ -506,18 +506,18 @@ public class Player implements InputProcessor {
         }
     }
 
-    public boolean isRunning() {
+    private boolean isRunning() {
         if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 3f && velocity.y>-3f)){
             return true;
         }
         return false;
     }
 
-    public boolean inAir(){
+    private boolean inAir(){
         return (velocity.y > 3f || velocity.y<-3f);
     }
 
-    public boolean isIdle() {
+    private boolean isIdle() {
         if (!isRunning()){
             return true;
         }

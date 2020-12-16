@@ -205,7 +205,7 @@ public class GameScreen extends ScreenBase implements Screen, InputProcessor {
             //restart on pressing a button/tapping
             startGame(level);
         }
-        if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 20){
+        if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
         }
         return super.touchDown(screenX, screenY, pointer, button);

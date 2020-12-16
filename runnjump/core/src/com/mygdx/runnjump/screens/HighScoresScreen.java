@@ -83,7 +83,7 @@ public class HighScoresScreen extends ScreenBase implements Screen {
 
 
         stage.addActor(mainTable);
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
 
         backBt.addListener(new ChangeListener() {
             @Override

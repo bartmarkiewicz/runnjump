@@ -56,15 +56,17 @@ public class MusicManager implements Disposable {
     public void playRandom(String name){
         Music[] songs = musicSet.get(name);
         int current = rand.nextInt(songs.length);
-        songs[current].play();
-        currentlyPlaying = songs[current];
-        songs[current].setVolume(volume);
-        songs[current].setOnCompletionListener(new Music.OnCompletionListener() {
-            @Override
-            public void onCompletion(Music music) {
-                currentlyPlaying = null;
-            }
-        });
+        if (currentlyPlaying == null) {
+            songs[current].play();
+            currentlyPlaying = songs[current];
+            songs[current].setVolume(volume);
+            songs[current].setOnCompletionListener(new Music.OnCompletionListener() {
+                @Override
+                public void onCompletion(Music music) {
+                    currentlyPlaying = null;
+                }
+            });
+        }
     }
     public void muteMusic(){
         if (volume == 1){
@@ -76,8 +78,10 @@ public class MusicManager implements Disposable {
 
     }
 
-    public void stopMusic(String name){
-        musicMap.get(name).stop();
+    public void stopMusic(){
+        if (currentlyPlaying != null) {
+            currentlyPlaying.stop();
+        }
         currentlyPlaying=null;
     }
 
