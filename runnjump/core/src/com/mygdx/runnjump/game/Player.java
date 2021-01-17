@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.SoundManager;
 
@@ -46,6 +47,7 @@ public class Player implements InputProcessor {
     private boolean gameWon;
 
 
+
     private int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
     private boolean backWardsIdle = false, backWardsRunning = false;
 
@@ -53,6 +55,7 @@ public class Player implements InputProcessor {
 
     private Hud hud;
     private float timeWon;
+    private long collisionSouthTime =0;
 
     /**
      *  largely redundant method for changing the logical size of the player, ignoring his sprite’s size, for collision detection. Only useful for debugging purposes.
@@ -363,12 +366,12 @@ public class Player implements InputProcessor {
         time += delta;
 
         if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
-            powerUpTime+=delta;
-            velocity.y -= (gravity/2)*delta;
-        } else{
+            powerUpTime += delta;
+            velocity.y -= (gravity / 2) * delta;
+        } else {
             velocity.y -= gravity * delta;
             gravityPowerUp = false;
-            powerUpTime=0;
+            powerUpTime = 0;
         }
 
         // sets max velocity
@@ -399,10 +402,22 @@ public class Player implements InputProcessor {
         // move on y
         playerSprite.setY(playerSprite.getY() + velocity.y * delta * 5f);
 
-        if (velocity.y < 2.5f)
-            canJump = collisionY = collidesSouth();
-        else if (velocity.y > 2.5f)
+        if (velocity.y < 2.5f) {
+            collisionY = collidesSouth();
+            if (collisionY) {
+                collisionSouthTime = TimeUtils.millis();
+            }
+        } else if (velocity.y > 2.5f){
             collisionY = collidesNorth();
+        }
+
+        if (TimeUtils.millis()-collisionSouthTime  < 300){
+            canJump = true;
+        } else {
+            canJump = false;
+            collisionSouthTime =0;
+
+        }
 
         if (collisionY) {
             playerSprite.setY(oldY);
