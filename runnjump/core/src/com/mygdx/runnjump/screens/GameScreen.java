@@ -2,7 +2,6 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -117,7 +116,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         spawnPointX = 5*32;
         spawnPointY = 79*32;
         if (player.respawn()) {
-            player.getPlayerSprite().setPosition(spawnPointX, spawnPointY);//start position
+            player.getSprite().setPosition(spawnPointX, spawnPointY);//start position
         } else {// no more lives left GAME OVER
             gameOver = true;
         }
@@ -223,20 +222,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
 
         if (!gameOver) {
-            if (player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2 < width/2) {
+            if (player.getSprite().getX() + player.getSprite().getWidth() / 2 < width/2) {
                 cameraPosToSetX = width/2;
-            } else if ((tileMapWidth * 32) - width/2 < player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2) {
+            } else if ((tileMapWidth * 32) - width/2 < player.getSprite().getX() + player.getSprite().getWidth() / 2) {
                 cameraPosToSetX = (tileMapWidth * 32) - width/2;
             } else {
-                cameraPosToSetX = player.getPlayerSprite().getX() + player.getPlayerSprite().getWidth() / 2;
+                cameraPosToSetX = player.getSprite().getX() + player.getSprite().getWidth() / 2;
             }
 
-            if (player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2 < height/2) {
+            if (player.getSprite().getY() + player.getSprite().getHeight() / 2 < height/2) {
                 cameraPosToSetY = height/2;
-            } else if ((tileMapHeight * 32) - height/2 < player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2) {
+            } else if ((tileMapHeight * 32) - height/2 < player.getSprite().getY() + player.getSprite().getHeight() / 2) {
                 cameraPosToSetY = (tileMapHeight * 32) - height/2;
             } else {
-                cameraPosToSetY = player.getPlayerSprite().getY() + player.getPlayerSprite().getHeight() / 2;
+                cameraPosToSetY = player.getSprite().getY() + player.getSprite().getHeight() / 2;
             }
             if (player.isDead()) {
                 respawnPlayer();
@@ -332,7 +331,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     @Override
     public void dispose() {
         super.dispose();
-        player.getPlayerSprite().getTexture().dispose();
+        player.getSprite().getTexture().dispose();
         mapRenderer.dispose();
         hud.dispose();
         tileMap.dispose();
