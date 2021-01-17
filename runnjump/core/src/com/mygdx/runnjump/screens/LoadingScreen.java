@@ -2,15 +2,26 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.async.AsyncTask;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.TextureManager;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class represents the loading screen which is shown when the game begins, currently it has no look of its own but this class does all the loading of assets necessary for the rest of the game.
  */
 public class LoadingScreen extends ScreenBase implements Screen {
 
+
+    AtomicBoolean stillLoading;
+    Sprite background;
     /**
      * Instantiates a new Loading screen.
      *
@@ -18,6 +29,9 @@ public class LoadingScreen extends ScreenBase implements Screen {
      */
     public LoadingScreen(Runnjump theGameO) {
         super(theGameO);
+        stillLoading = new AtomicBoolean(true);
+        Texture loadingScreenImg = new Texture("background.png");
+        background = new Sprite(loadingScreenImg);
     }
 
     /**
@@ -76,9 +90,18 @@ public class LoadingScreen extends ScreenBase implements Screen {
     @Override
     public void show() {
         //load the music
-        loadSoundFX();
-        loadMusic();
-        loadGraphics();
+        super.show();
+        Timer.instance().scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                stillLoading.set(true);
+                loadSoundFX();
+                loadMusic();
+                loadGraphics();
+                stillLoading.set(false);
+            }
+        }, 1);
+
     }
 
     /**
@@ -87,7 +110,12 @@ public class LoadingScreen extends ScreenBase implements Screen {
      */
     @Override
     public void render(float delta) {
-        theGame.changeScreen(Runnjump.ScreenEn.MENU);
+        if (!stillLoading.get()) {
+            theGame.changeScreen(Runnjump.ScreenEn.MENU);
+        } else {
+            //show loading screen
+            super.render(delta);
+        }
     }
 
     @Override
