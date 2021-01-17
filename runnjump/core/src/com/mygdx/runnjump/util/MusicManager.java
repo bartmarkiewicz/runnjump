@@ -17,18 +17,35 @@ public class MusicManager implements Disposable {
     private TreeMap<String, Music[]> musicSet;
     private float volume;
     /**
-     * The Rand.
+     * The Random object.
      */
     Random rand = new Random();
     /**
-     * The Currently playing.
+     * The Currently playing music.
      */
     Music currentlyPlaying;
 
+
+
     /**
-     * Instantiates a new Music manager.
+     * This is the sole instance of the music manager singleton class
      */
-    public MusicManager() {
+    private static MusicManager musicManager;
+
+    /**
+     * this is the factory method for getting the music manager
+     * @return
+     */
+    public static MusicManager getMusicManager(){
+        if (musicManager == null){
+            musicManager = new MusicManager();
+        }
+        return musicManager;
+    }
+    /**
+     * Instantiates a new MusicManager. Private so its only created once using the factory method.
+     */
+    private MusicManager() {
         musicMap = new TreeMap<>();
         musicSet = new TreeMap<>();
         volume = 1;

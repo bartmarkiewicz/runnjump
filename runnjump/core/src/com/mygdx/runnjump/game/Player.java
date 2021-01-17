@@ -554,9 +554,15 @@ public class Player implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode) {
             case Input.Keys.D:
-                velocity.x = 0;
+                if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    velocity.x = 0;
+                }
+                break;
             case Input.Keys.A:
-                velocity.x = 0;
+                if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    velocity.x =0;
+                }
+                break;
         }
         return true;
     }

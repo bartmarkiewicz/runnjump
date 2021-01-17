@@ -106,9 +106,9 @@ public class Runnjump extends Game {
 		currentScreen = ScreenEn.LOADING;
 		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
-		soundManager = new SoundManager();
-		musicManager = new MusicManager();
-		textureManager = new TextureManager();
+		soundManager = SoundManager.getSoundManager();
+		musicManager = MusicManager.getMusicManager();
+		textureManager = TextureManager.getTextureManager();
 		textureAtlasMap = new TreeMap<>();
 		setScreen(loadingScreen);
 		Drawable soundOnIcon;

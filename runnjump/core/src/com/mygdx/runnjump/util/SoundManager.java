@@ -20,14 +20,30 @@ public class SoundManager implements Disposable {
     private TreeMap<String,Sound[]> soundSet;
     private float volume;
     /**
-     * The Random.
+     * The Random object instance.
      */
     Random random;
 
     /**
-     * Instantiates a new Sound manager.
+     * This is the sole instance of the sound manager singleton class
      */
-    public SoundManager() {
+    private static SoundManager soundManager;
+
+    /**
+     * this is the factory method for getting the sound manager
+     * @return
+     */
+    public static SoundManager getSoundManager(){
+        if (soundManager == null){
+            soundManager = new SoundManager();
+        }
+        return soundManager;
+    }
+
+    /**
+     * Instantiates a new SoundManager. Private so its only created once using the factory method.
+     */
+    private SoundManager() {
         soundMap = new TreeMap<>();
         soundSet = new TreeMap<>();
         random = new Random();

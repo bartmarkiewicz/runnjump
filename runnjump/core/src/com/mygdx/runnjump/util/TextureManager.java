@@ -19,9 +19,24 @@ public class TextureManager implements Disposable {
     Random random;
 
     /**
-     * Instantiates a new Texture manager.
+     * This is the sole instance of the music manager singleton class
      */
-    public TextureManager() {
+    private static TextureManager textureManager;
+
+    /**
+     * this is the factory method for getting the texture manager
+     * @return
+     */
+    public static TextureManager getTextureManager(){
+        if (textureManager == null){
+            textureManager = new TextureManager();
+        }
+        return textureManager;
+    }
+    /**
+     * Instantiates a new TextureManager. Private so its only created once using the factory method.
+     */
+    private TextureManager() {
         playerFrames = new TreeMap<>();
         random = new Random();
     }
