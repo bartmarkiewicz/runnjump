@@ -42,6 +42,8 @@ public class Player extends MovingActor implements InputProcessor {
     protected Hud hud;
     protected float timeWon;
     protected long collisionSouthTime =0;
+    private boolean dKeyHeld;
+    private boolean aKeyHeld;
 
     /**
      * getter for lives left
@@ -86,6 +88,8 @@ public class Player extends MovingActor implements InputProcessor {
         playerJump = theGame.textureManager.getPlayerFrameSet("jump");
         gameWon = false;
         gravityPowerUp = false;
+        dKeyHeld = false;
+        aKeyHeld = false;
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Touchpad joystick = hud.getMovementJoystick();
             joystick.addListener(new ChangeListener() {
@@ -267,8 +271,20 @@ public class Player extends MovingActor implements InputProcessor {
         if (collisionX) {
             getSprite().setX(oldX);
             velocity.x = 0;
+        } else {
+            if (dKeyHeld){
+                velocity.x = speedX;
+            }
+            if (aKeyHeld){
+                velocity.x = -speedX;
+            }
+            if(aKeyHeld && dKeyHeld){
+                velocity.x = 0;
+            }
+            if(!aKeyHeld && !dKeyHeld){
+                velocity.x = 0;
+            }
         }
-
         // move on y
         getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
 
@@ -352,14 +368,16 @@ public class Player extends MovingActor implements InputProcessor {
                 }
                 break;
             case Input.Keys.D:
-                velocity.x = speedX;
+                //velocity.x = speedX;
+                dKeyHeld = true;
                 if (!facingRight) {
                     getSprite().flip(true, false);
                     facingRight=true;
                 }
                 break;
             case Input.Keys.A:
-                velocity.x = -speedX;
+                //velocity.x = -speedX;
+                aKeyHeld = true;
                 if(facingRight){
                     getSprite().flip(true, false);
                     facingRight=false;
@@ -441,13 +459,20 @@ public class Player extends MovingActor implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode) {
             case Input.Keys.D:
-                if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    velocity.x = 0;
+                if (dKeyHeld){
+                    dKeyHeld = false;
                 }
+                //if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    //velocity.x = 0;
+
+                //}
                 break;
             case Input.Keys.A:
-                if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
+                /*if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
                     velocity.x =0;
+                }*/
+                if (aKeyHeld){
+                    aKeyHeld = false;
                 }
                 break;
         }
