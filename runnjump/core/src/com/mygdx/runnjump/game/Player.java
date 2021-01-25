@@ -333,13 +333,9 @@ public class Player extends MovingActor implements InputProcessor {
                 backWardsRunning=false;
             }
             if (playerRunLastFrame == playerRunning.size()-1){//if at last element
-                backWardsRunning=true;
+                playerRunLastFrame=0;
             }
-            if (backWardsRunning){
-                playerRunLastFrame--;
-            } else {
-                playerRunLastFrame++;
-            }
+            playerRunLastFrame++;
             time=0;
         } else if (inAir() && time > 0.06f){
             this.setFrame(playerJump.get(playerJumpLastFrame));
@@ -509,12 +505,5 @@ public class Player extends MovingActor implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
-
-    /**
-     * Checks if player is still alive
-     *
-     * @return boolean boolean
-     */
-
 
 }
