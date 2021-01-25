@@ -76,6 +76,13 @@ public class Hud implements Disposable {
         Table bottomTable = new Table();
         bottomTable.bottom().left();
         container.row();
+        Table messageTable = new Table();
+        container.add(messageTable).top().fill().expand().colspan(2).center();
+        Label label = new Label("test",skin);
+        label.setAlignment(Align.top);
+        messageTable.add(label).fill().expand().top().align(Align.top).colspan(2);
+        container.row();
+
         container.add(bottomTable).bottom().left().fill().expand();
         Table bottomRightTable = new Table();
         bottomRightTable.bottom().right();
@@ -102,7 +109,7 @@ public class Hud implements Disposable {
 
         container.setFillParent(true);
         stage.addActor(container);
-        stage.setDebugAll(false);
+        stage.setDebugAll(true);
         stage.getBatch().setColor(Color.WHITE);
     }
 
@@ -191,5 +198,14 @@ public class Hud implements Disposable {
         stage.getBatch().end();
 
 
+    }
+
+    /**
+     * This method is meant to inform the player that he has picked up a certain power up.
+     */
+    public void powerUpFeedback(){
+        stage.getBatch().begin();
+
+        stage.getBatch().end();
     }
 }
