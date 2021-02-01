@@ -75,7 +75,7 @@ public class Player extends MovingActor implements InputProcessor {
     public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         super(collisionLayer, visualLayer);
         getSprite().setSize(30*2,30*3);//2 by 3 tiles size
-        setLogicalSize(30*2,30*3);
+        setLogicalSize(25*2,30*3);
         this.score = 0;
         this.hearts =STARTING_HEARTS;
         this.powerUpTime = 0;
@@ -151,6 +151,9 @@ public class Player extends MovingActor implements InputProcessor {
     protected void gravityPowerup(){
         gravityPowerUp = true;
     }
+
+
+
 
     /**
      * removes the collectible from the specified position

@@ -17,6 +17,10 @@ public abstract class MovingActor extends GameObject {
     protected TiledMapTileLayer visualLayer;
     protected boolean facingRight = true;
 
+    protected float getX(){
+        return getSprite().getX()+10f;//shifts the logical location of the sprite 10 pixels to the right
+    }
+
     public MovingActor(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer) {
         super();
         this.collisionLayer = collisionLayer;
@@ -40,16 +44,16 @@ public abstract class MovingActor extends GameObject {
      */
     public boolean collidesSouth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if(cellKills(getSprite().getX() + i, getSprite().getY())){
+            if(cellKills(getX() + i, getSprite().getY())){
                 die();
             }
-            if (isCellCollectible(getSprite().getX() + i, getSprite().getY())) {
-                handleCollectible(getSprite().getX() + i, getSprite().getY());
+            if (isCellCollectible(getX() + i, getSprite().getY())) {
+                handleCollectible(getX() + i, getSprite().getY());
             }
-            if(isCellMisc(getSprite().getX() + i, getSprite().getY())){
-                handleMisc(getSprite().getX() + i, getSprite().getY());
+            if(isCellMisc(getX() + i, getSprite().getY())){
+                handleMisc(getX() + i, getSprite().getY());
             }
-            if (isCellBlocked(getSprite().getX() + i, getSprite().getY()))
+            if (isCellBlocked(getX() + i, getSprite().getY()))
                 return true;
         }
         return false;
@@ -61,16 +65,16 @@ public abstract class MovingActor extends GameObject {
      */
     public boolean collidesEast() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
-            if(cellKills(getSprite().getX() + sizeX, getSprite().getY() + i)){
+            if(cellKills(getX() + sizeX, getSprite().getY() + i)){
                 die();
             }
-            if (isCellCollectible(getSprite().getX() + sizeX, getSprite().getY() + i)) {
-                handleCollectible(getSprite().getX() + sizeX, getSprite().getY() + i);
+            if (isCellCollectible(getX() + sizeX, getSprite().getY() + i)) {
+                handleCollectible(getX() + sizeX, getSprite().getY() + i);
             }
-            if(isCellMisc(getSprite().getX() + sizeX, getSprite().getY() + i)){
-                handleMisc(getSprite().getX() + sizeX, getSprite().getY() + i);
+            if(isCellMisc(getX() + sizeX, getSprite().getY() + i)){
+                handleMisc(getX() + sizeX, getSprite().getY() + i);
             }
-            if (isCellBlocked(getSprite().getX() + sizeX, getSprite().getY() + i))
+            if (isCellBlocked(getX() + sizeX, getSprite().getY() + i))
                 return true;
         }
         return false;
@@ -82,16 +86,16 @@ public abstract class MovingActor extends GameObject {
      */
     public boolean collidesWest() {
         for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
-            if(cellKills(getSprite().getX(), getSprite().getY()+i)){
+            if(cellKills(getX(), getSprite().getY()+i)){
                 die();
             }
-            if (isCellCollectible(getSprite().getX(), getSprite().getY()+i)) {
-                handleCollectible(getSprite().getX(), getSprite().getY()+i);
+            if (isCellCollectible(getX(), getSprite().getY()+i)) {
+                handleCollectible(getX(), getSprite().getY()+i);
             }
-            if (isCellMisc(getSprite().getX(), getSprite().getY()+i)){
-                handleMisc(getSprite().getX(), getSprite().getY()+i);
+            if (isCellMisc(getX(), getSprite().getY()+i)){
+                handleMisc(getX(), getSprite().getY()+i);
             }
-            if (isCellBlocked(getSprite().getX(), getSprite().getY() + i))
+            if (isCellBlocked(getX(), getSprite().getY() + i))
                 return true;
         }
         return false;
@@ -103,17 +107,17 @@ public abstract class MovingActor extends GameObject {
      */
     public boolean collidesNorth() {
         for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if(cellKills(getSprite().getX() + i, getSprite().getY()+sizeY)){
+            if(cellKills(getX() + i, getSprite().getY()+sizeY)){
                 die();
             }
-            if (isCellCollectible(getSprite().getX() + i, getSprite().getY()+sizeY)) {
-                handleCollectible(getSprite().getX() + i, getSprite().getY()+sizeY);
+            if (isCellCollectible(getX() + i, getSprite().getY()+sizeY)) {
+                handleCollectible(getX() + i, getSprite().getY()+sizeY);
             }
-            if (isCellMisc(getSprite().getX() + i, getSprite().getY()+sizeY)){
-                handleMisc(getSprite().getX() + i, getSprite().getY()+sizeY);
+            if (isCellMisc(getX() + i, getSprite().getY()+sizeY)){
+                handleMisc(getX() + i, getSprite().getY()+sizeY);
             }
 
-            if (isCellBlocked(getSprite().getX() + i, getSprite().getY() + sizeY))
+            if (isCellBlocked(getX() + i, getSprite().getY() + sizeY))
                 return true;
         }
         return false;
