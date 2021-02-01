@@ -6067,7 +6067,7 @@
    </properties>
    <point/>
   </object>
-  <object id="29" name="player_spawn" x="286.667" y="1560">
+  <object id="29" name="player" x="241.212" y="1602.42">
    <point/>
   </object>
  </objectgroup>

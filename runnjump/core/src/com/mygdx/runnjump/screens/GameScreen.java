@@ -111,12 +111,18 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         batch = new SpriteBatch();
     }
 
+
+    public void setSpawnPoint(float x, float y){
+        spawnPointX = x;
+        spawnPointY = y;
+    }
+
     /**
      * this method respawns the player at the (currently hard-coded) spawn point, but only if the player has lives left. If  not, a game over boolean is set.
      */
     public void respawnPlayer(){
-        spawnPointX = 5*32;
-        spawnPointY = 79*32;
+        //spawnPointX = 5*32;
+        //spawnPointY = 79*32;
         if (player.respawn()) {
             player.getSprite().setPosition(spawnPointX, spawnPointY);//start position
         } else {// no more lives left GAME OVER
@@ -148,6 +154,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         player.setLayers(visualLayer,layer);
         player.restart();
         gameOver = false;
+
         respawnPlayer();
         zoom = 0f;
         orthographicCamera.zoom += zoom;
@@ -198,7 +205,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         hud = new Hud(new SpriteBatch(), theGame, skin);
         player = new Player(theGame,hud,layer,visualLayer);
         gameOver = false;
-        respawnPlayer();
+
         zoom = 0f;
         orthographicCamera.zoom += zoom;
         inputMultiplexer.addProcessor(hud.stage);
@@ -207,10 +214,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         mapProperties= tileMap.getProperties();
         tileMapHeight = mapProperties.get("height", Integer.class);
         tileMapWidth = mapProperties.get("width", Integer.class);
-
+        //setSpawnPoint(5*32, 79*32);
+        //respawnPlayer();
         for(MapObject object: tileMap.getLayers().get("objects").getObjects()){ // gets the map objects from the object layer
-            System.out.println();
+            float x, y;
+            x = Float.parseFloat(object.getProperties().get("x").toString());
+            y = Float.parseFloat(object.getProperties().get("y").toString());
+            if(object.getName().toString().equals("player")){
+                setSpawnPoint(x, y);
+                respawnPlayer();
+            }
+            System.out.println("x " + x + " y: " + y);
         }
+
+
 
 
     }
