@@ -5,20 +5,23 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
+import com.mygdx.runnjump.libs.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -73,7 +76,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * The Height.
      */
     height;//Gdx.graphics.getWidth();
-
+    Toast.ToastFactory toastFactory;
+    ArrayList<Toast> toasts;
     /**
      * The Spawn point x.
      */
@@ -217,7 +221,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         //setSpawnPoint(5*32, 79*32);
         //respawnPlayer();
         for(MapObject object: tileMap.getLayers().get("objects").getObjects()){ // gets the map objects from the object layer
-            float x, y;
+            float x, y; // object position
             x = Float.parseFloat(object.getProperties().get("x").toString());
             y = Float.parseFloat(object.getProperties().get("y").toString());
             if(object.getName().toString().equals("player")){
@@ -226,11 +230,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             }
             System.out.println("x " + x + " y: " + y);
         }
-
-
-
-
+        toastFactory = new Toast.ToastFactory.Builder()
+                .font(new BitmapFont()).positionY(10).build();
+        toasts = new ArrayList<>();
     }
+
+    public void createLongToast(String message){
+        toasts.add(toastFactory.create(message, Toast.Length.LONG));
+    }
+
+    public void createShortToast(String message){
+        toasts.add(toastFactory.create(message, Toast.Length.SHORT));
+    }
+
+
 
     /**
      * renders the game world and the hud also makes the camera follow the player. Checks if the game has been won or a game over happened.
@@ -284,6 +297,15 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             hud.gameWon(player.getScore(), level);
         }
 
+        Iterator<Toast> iter = toasts.iterator();
+        while(iter.hasNext()) {
+            Toast toast = iter.next();
+            if (!toast.render(delta)) {
+                iter.remove();
+            } else {
+                break;
+            }
+        }
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();

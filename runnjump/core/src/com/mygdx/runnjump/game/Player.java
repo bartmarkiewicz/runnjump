@@ -5,10 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -16,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
@@ -44,6 +42,7 @@ public class Player extends MovingActor implements InputProcessor {
     protected long collisionSouthTime =0;
     private boolean dKeyHeld;
     private boolean aKeyHeld;
+    Runnjump theGame;
 
     /**
      * getter for lives left
@@ -80,6 +79,7 @@ public class Player extends MovingActor implements InputProcessor {
         this.hearts =STARTING_HEARTS;
         this.powerUpTime = 0;
         this.hud = hud;
+        this.theGame = theGame;
         hud.setScore(score);
         hud.setLives(hearts);
         this.soundManager = theGame.soundManager;
@@ -150,6 +150,7 @@ public class Player extends MovingActor implements InputProcessor {
 
     protected void gravityPowerup(){
         gravityPowerUp = true;
+
     }
 
 
@@ -180,12 +181,15 @@ public class Player extends MovingActor implements InputProcessor {
         if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
             //gravity collected;
             gravityPowerup();
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up activated!");
             //soundManager.playSound("coin_collect");
         }
 
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
             score+=10;
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("+10 score");
             hud.setScore(score);
+
             soundManager.playRandom("coin_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("coin")){
@@ -196,9 +200,13 @@ public class Player extends MovingActor implements InputProcessor {
         if (cellColLayer.getTile().getProperties().containsKey("heart")){
             hearts += 1;
             hud.setLives(hearts);
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("+1 lives");
+
             soundManager.playSound("heart_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("gold_key")){
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("Golden key acquired!");
+
             soundManager.playSound("collect_item");
         }
 

@@ -37,6 +37,8 @@ public class Hud implements Disposable {
     private BitmapFont gameoverFont;
     private Touchpad movementJoystick;
     private Button jumpBt;
+    private Label feedbackLabel;
+    private Table messageTable;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -76,11 +78,11 @@ public class Hud implements Disposable {
         Table bottomTable = new Table();
         bottomTable.bottom().left();
         container.row();
-        Table messageTable = new Table();
+        messageTable = new Table();
         container.add(messageTable).top().fill().expand().colspan(2).center();
-        Label label = new Label("test",skin);
-        label.setAlignment(Align.top);
-        messageTable.add(label).fill().expand().top().align(Align.top).colspan(2);
+        feedbackLabel = new Label("",skin);
+        feedbackLabel.setAlignment(Align.top);
+        messageTable.add(feedbackLabel).fill().expand().top().align(Align.top).colspan(2);
         container.row();
 
         container.add(bottomTable).bottom().left().fill().expand();
@@ -203,9 +205,11 @@ public class Hud implements Disposable {
     /**
      * This method is meant to inform the player that he has picked up a certain power up.
      */
-    public void powerUpFeedback(){
-        stage.getBatch().begin();
-
-        stage.getBatch().end();
+    public void powerUpFeedback(int timeBegun, int timeToDisplay, String message){
+        String currentMessage = feedbackLabel.getText().toString();
+        if (currentMessage.length() > 0){
+            feedbackLabel.setText(message);
+        }
+        feedbackLabel.setText("You have ");
     }
 }
