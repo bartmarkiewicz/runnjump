@@ -238,6 +238,9 @@ public class Player extends MovingActor implements InputProcessor {
         }
         if (isCellCollectible(x-33, y-33)){
             removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight()); // checks cell to the left and below
+
+
+
         }
     }
 
