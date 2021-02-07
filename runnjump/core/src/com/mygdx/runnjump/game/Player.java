@@ -74,7 +74,7 @@ public class Player extends MovingActor implements InputProcessor {
     public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         super(collisionLayer, visualLayer);
         getSprite().setSize(30*2,30*3);//2 by 3 tiles size
-        setLogicalSize(25*2,30*3);
+        setLogicalSize(42,85); //little less than 2 tiles by 3 tiles
         this.score = 0;
         this.hearts =STARTING_HEARTS;
         this.powerUpTime = 0;
@@ -126,6 +126,26 @@ public class Player extends MovingActor implements InputProcessor {
         }
 
 
+    }
+
+    @Override
+    public boolean collidesEast() {
+        float sizeX = this.sizeX -8;
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {//+32 every time
+            //so far this checks 0,32,64
+            if(cellKills(getX() + sizeX, getSprite().getY() + i)){
+                die();
+            }
+            if (isCellCollectible(getX() + sizeX, getSprite().getY() + i)) {
+                handleCollectible(getX() + sizeX, getSprite().getY() + i);
+            }
+            if(isCellMisc(getX() + sizeX, getSprite().getY() + i)){
+                handleMisc(getX() + sizeX, getSprite().getY() + i);
+            }
+            if (isCellBlocked(getX() + sizeX, getSprite().getY() + i))
+                return true;
+        }
+        return false;
     }
 
     /**

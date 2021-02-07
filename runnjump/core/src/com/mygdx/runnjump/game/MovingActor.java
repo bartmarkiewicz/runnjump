@@ -37,7 +37,26 @@ public abstract class MovingActor extends GameObject {
         update(Gdx.graphics.getDeltaTime());//updates before drawing
         getSprite().draw(batch);
     }
-
+    /**
+     * methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
+     * @return
+     */
+    public boolean collidesNorth() {
+        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
+            if(cellKills(getX() + i, getSprite().getY()+sizeY)){
+                die();
+            }
+            if (isCellCollectible(getX() + i, getSprite().getY()+sizeY)) {
+                handleCollectible(getX() + i, getSprite().getY()+sizeY);
+            }
+            if (isCellMisc(getX() + i, getSprite().getY()+sizeY)){
+                handleMisc(getX() + i, getSprite().getY()+sizeY);
+            }
+            if (isCellBlocked(getX() + i, getSprite().getY() + sizeY))
+                return true;
+        }
+        return false;
+    }
     /**
      * methods methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
      * @return
@@ -64,7 +83,8 @@ public abstract class MovingActor extends GameObject {
      * @return
      */
     public boolean collidesEast() {
-        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {
+        for(float i = 0; i <= sizeY; i += collisionLayer.getTileHeight()) {//+32 every time
+            //so far this checks 0,32,64
             if(cellKills(getX() + sizeX, getSprite().getY() + i)){
                 die();
             }
@@ -101,27 +121,7 @@ public abstract class MovingActor extends GameObject {
         return false;
     }
 
-    /**
-     * methods used for testing collisions on all sides of the player character, returns true if a collision is found, false if there is no collision. Also detects collectibles and things that kill the player.
-     * @return
-     */
-    public boolean collidesNorth() {
-        for(float i = 0; i <= sizeX; i += collisionLayer.getTileWidth()) {
-            if(cellKills(getX() + i, getSprite().getY()+sizeY)){
-                die();
-            }
-            if (isCellCollectible(getX() + i, getSprite().getY()+sizeY)) {
-                handleCollectible(getX() + i, getSprite().getY()+sizeY);
-            }
-            if (isCellMisc(getX() + i, getSprite().getY()+sizeY)){
-                handleMisc(getX() + i, getSprite().getY()+sizeY);
-            }
 
-            if (isCellBlocked(getX() + i, getSprite().getY() + sizeY))
-                return true;
-        }
-        return false;
-    }
 
     protected abstract void handleMisc(float x, float y);
 
