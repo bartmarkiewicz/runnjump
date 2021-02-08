@@ -95,22 +95,30 @@ public class Player extends MovingActor implements InputProcessor {
             joystick.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+
                     if(((Touchpad)actor).getKnobPercentX() >0){ // right
-                        velocity.x = speedX;
+                        dKeyHeld = true;
+                        aKeyHeld = false;
                         if (!facingRight) {
                             getSprite().flip(true, false);
                             facingRight = true;
                         }
                     } else if (((Touchpad)actor).getKnobPercentX() < 0){ // left
-                        velocity.x = -speedX;
+                        aKeyHeld = true;
+                        dKeyHeld = false;
                         if(facingRight){
                             getSprite().flip(true, false);
                             facingRight=false;
                         }
+                    } else if(((Touchpad)actor).getKnobPercentX()==0.0){ // centre
+                        if (dKeyHeld){
+                            dKeyHeld = false;
+                        }
+                        if(aKeyHeld){
+                            aKeyHeld = false;
+                        }
                     }
-                    if(((Touchpad)actor).getKnobPercentX()==0.0){
-                        velocity.x = 0;
-                    }
+
                 }
             });
             Button jumpBt = hud.getJumpBt();
@@ -510,7 +518,6 @@ public class Player extends MovingActor implements InputProcessor {
 
                 break;
             case Input.Keys.A:
-
                 if (aKeyHeld){
                     aKeyHeld = false;
                 }
