@@ -21,6 +21,7 @@ import com.mygdx.runnjump.game.Player;
 import com.mygdx.runnjump.libs.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -90,6 +91,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      */
     boolean gameOver;
     private float timeSinceWin =0f;
+    
+    HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
     /**
      * Instantiates a new Game screen.
@@ -230,6 +233,22 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             }
             System.out.println("x " + x + " y: " + y);
         }
+
+        tileGroups = new HashMap<>();
+
+        ArrayList<TiledMapTileLayer.Cell> goldKeyBlockers = new ArrayList<>();
+        for(int i = 0; i < visualLayer.getWidth();i++) { // finds tiles of a specific type and puts them in a collection for quick access during runtime of the game.
+            for (int j = 0; j < visualLayer.getHeight(); j++) {
+                TiledMapTileLayer.Cell cell =visualLayer.getCell((int)i, (int)j);
+
+                if (cell != null && cell.getTile().getProperties().containsKey("gold_key_blocker")){
+                    goldKeyBlockers.add(cell);
+                }
+            }
+        }
+
+        tileGroups.put("gold_key", goldKeyBlockers);
+
         toastFactory = new Toast.ToastFactory.Builder()
                 .font(new BitmapFont()).positionY(10).build();
         toasts = new ArrayList<>();
@@ -383,5 +402,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         hud.dispose();
         tileMap.dispose();
 
+    }
+
+    public ArrayList<TiledMapTileLayer.Cell> getBlockedCells(String key) {
+        return tileGroups.get(key);
     }
 }

@@ -226,6 +226,7 @@ public class Player extends MovingActor implements InputProcessor {
         }
         if (cellColLayer.getTile().getProperties().containsKey("gold_key")){
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("Golden key acquired!");
+            handleKey("gold_key");
 
             soundManager.playSound("collect_item");
         }
@@ -262,6 +263,20 @@ public class Player extends MovingActor implements InputProcessor {
 
 
         }
+    }
+
+    /**
+     * Handles unlocking of doors via key
+     * @param key
+     */
+    private void handleKey(String key) {
+        ArrayList<TiledMapTileLayer.Cell> blockedCells = ((GameScreen)theGame.getCurrentScreen()).getBlockedCells(key);
+        for(TiledMapTileLayer.Cell cell: blockedCells){
+            cell.getTile().getProperties().remove("blocked");
+            cell.setFlipHorizontally(true);
+        }
+
+        //visualLayer.getCell().getTile(key)
     }
 
 

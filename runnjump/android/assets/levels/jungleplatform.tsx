@@ -4,6 +4,7 @@
  <tile id="0">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
  <tile id="1">
@@ -41,24 +42,28 @@
    <property name="spikes" value=""/>
   </properties>
  </tile>
- <tile id="8">
+ <tile id="8" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="9">
+ <tile id="9" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="10">
+ <tile id="10" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="11">
+ <tile id="11" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
  <tile id="12">
@@ -201,24 +206,28 @@
    <property name="spikes" value=""/>
   </properties>
  </tile>
- <tile id="40">
+ <tile id="40" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="41">
+ <tile id="41" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="42">
+ <tile id="42" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="43">
+ <tile id="43" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
  <tile id="44">
@@ -356,24 +365,28 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
- <tile id="72">
+ <tile id="72" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="73">
+ <tile id="73" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="74">
+ <tile id="74" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="75">
+ <tile id="75" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
  <tile id="76">
@@ -516,24 +529,28 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
- <tile id="104">
+ <tile id="104" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="105">
+ <tile id="105" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="106">
+ <tile id="106" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
- <tile id="107">
+ <tile id="107" type="gold_key_blocker">
   <properties>
    <property name="blocked" value=""/>
+   <property name="gold_key_blocker" value=""/>
   </properties>
  </tile>
  <tile id="108">
