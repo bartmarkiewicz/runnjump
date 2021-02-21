@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -39,6 +40,7 @@ public class Hud implements Disposable {
     private Button jumpBt;
     private Label feedbackLabel;
     private Table messageTable;
+    private Table bottomRightTable, bottomTable;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -52,6 +54,7 @@ public class Hud implements Disposable {
         stage = new Stage(viewport,batch);
         this.theGame = theGame;
         gameoverFont = skin.get(Label.LabelStyle.class).font;
+        Stack stackContainer = new Stack();
         Table container = new Table();
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
@@ -75,7 +78,7 @@ public class Hud implements Disposable {
         container.top();
         container.add(mainTable).top().expandX().fill().colspan(2);
         mainTable.top().right();
-        Table bottomTable = new Table();
+        bottomTable = new Table();
         bottomTable.bottom().left();
         container.row();
         messageTable = new Table();
@@ -86,7 +89,7 @@ public class Hud implements Disposable {
         container.row();
 
         container.add(bottomTable).bottom().left().fill().expand();
-        Table bottomRightTable = new Table();
+        bottomRightTable = new Table();
         bottomRightTable.bottom().right();
         container.add(bottomRightTable).bottom().right().fill().expand();
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -108,11 +111,13 @@ public class Hud implements Disposable {
             bottomRightTable.add(jumpBt).width(stage.getWidth()/3).height(stage.getHeight()/5).right().bottom().pad(40);
         }
 
-
         container.setFillParent(true);
-        stage.addActor(container);
+        stackContainer.setFillParent(true);
+        stackContainer.add(container);
+        stage.addActor(stackContainer);
         stage.setDebugAll(true);
         stage.getBatch().setColor(Color.WHITE);
+
     }
 
     /**
@@ -204,6 +209,7 @@ public class Hud implements Disposable {
 
     /**
      * This method is meant to inform the player that he has picked up a certain power up.
+     * todo remove this
      */
     public void powerUpFeedback(int timeBegun, int timeToDisplay, String message){
         String currentMessage = feedbackLabel.getText().toString();
@@ -212,4 +218,21 @@ public class Hud implements Disposable {
         }
         feedbackLabel.setText("You have ");
     }
+
+    /**
+     * Hides lower part of the HUD,
+     */
+    public void hideGui(){
+        bottomTable.setVisible(false);
+        bottomRightTable.setVisible(false);
+    }
+
+    /**
+     * Shows lower part of the HUD/
+     */
+    public void showGui(){
+        bottomTable.setVisible(true);
+        bottomRightTable.setVisible(true);
+    }
+
 }

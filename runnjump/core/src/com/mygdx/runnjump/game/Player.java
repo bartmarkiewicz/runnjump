@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.screens.GameScreen;
+import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Player extends MovingActor implements InputProcessor {
     protected boolean canJump;
     protected float time =0f;
     protected SoundManager soundManager;
+    protected DialogueManager dialogueManager;
     protected boolean gameWon;
 
     protected int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
@@ -83,9 +85,10 @@ public class Player extends MovingActor implements InputProcessor {
         hud.setScore(score);
         hud.setLives(hearts);
         this.soundManager = theGame.soundManager;
-        playerIdle = theGame.textureManager.getPlayerFrameSet("idle");
-        playerRunning = theGame.textureManager.getPlayerFrameSet("running");
-        playerJump = theGame.textureManager.getPlayerFrameSet("jump");
+        this.dialogueManager = DialogueManager.getManager();
+        playerIdle = theGame.textureManager.getFrameSet("idle");
+        playerRunning = theGame.textureManager.getFrameSet("running");
+        playerJump = theGame.textureManager.getFrameSet("jump");
         gameWon = false;
         gravityPowerUp = false;
         dKeyHeld = false;
@@ -230,13 +233,13 @@ public class Player extends MovingActor implements InputProcessor {
             hud.setLives(hearts);
             ((GameScreen) theGame.getCurrentScreen()).createLongToast("+1 lives");
 
-            soundManager.playSound("heart_collect");
+            soundManager.play("heart_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("gold_key")){
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("Golden key acquired!");
             handleKey("gold_key");
 
-            soundManager.playSound("collect_item");
+            soundManager.play("collect_item");
         }
 
 

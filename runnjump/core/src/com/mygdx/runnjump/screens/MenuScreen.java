@@ -1,21 +1,12 @@
 package com.mygdx.runnjump.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
-
-import javax.xml.soap.Text;
 
 /**
  * This class represents the main menu window.
@@ -142,7 +133,7 @@ public class MenuScreen extends ScreenBase {
     @Override
     public void show() {
         super.show();
-        theGame.musicManager.playMusic("bg_1");
+        theGame.musicManager.play("bg_1");
         initGui();
 
     }

@@ -1,13 +1,9 @@
 package com.mygdx.runnjump.util;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.runnjump.Runnjump;
-
-import javax.swing.event.ChangeEvent;
 
 /**
  * This class is used for handling the input for the sound button. It mutes and unmutes sounds as the sound button is checked or unchecked.
@@ -43,8 +39,8 @@ public class SoundHandler extends ChangeListener{
             soundBt.setChecked(true);
             System.out.println("Checked true");
         }
-        theGame.soundManager.muteSound();
-        theGame.musicManager.muteMusic();
+        theGame.soundManager.mute();
+        theGame.musicManager.mute();
 
         soundBt.invalidate();
     }

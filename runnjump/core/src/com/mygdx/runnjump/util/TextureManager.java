@@ -11,7 +11,7 @@ import java.util.TreeMap;
 /**
  * This class is similar to the other managers, but is used for pre-loading textures and animation frames.
  */
-public class TextureManager implements Disposable {
+public class TextureManager extends Manager implements Disposable {
     private TreeMap<String, ArrayList<Texture>> playerFrames;
     /**
      * The Random.
@@ -41,6 +41,16 @@ public class TextureManager implements Disposable {
         random = new Random();
     }
 
+    @Override
+    public void addAsset(String name, String path) {
+        //todo
+    }
+
+    @Override
+    public void addAssetSet(String name, String[] paths) {
+        //todo
+    }
+
     /**
      * this adds a set of player images which show an animation if played after one another, the name of the file must end with a 3 digit number and .png. Number is the number of images in the set.
      *
@@ -48,7 +58,7 @@ public class TextureManager implements Disposable {
      * @param path   the path
      * @param number the number
      */
-    public void addPlayerFrameSet(String name,String path, int number){
+    public void addPlayerAssetSet(String name, String path, int number){
         ArrayList<Texture> textures = new ArrayList<>(); //texture paths must be of the  format NAME_0 + number.png)
         for(int i = 0; i < number; i++){
             if (i<=9){
@@ -66,7 +76,7 @@ public class TextureManager implements Disposable {
      * @param name the name
      * @return array list
      */
-    public ArrayList<Texture> getPlayerFrameSet(String name){
+    public ArrayList<Texture> getFrameSet(String name){
         return playerFrames.get(name);
     }
 
@@ -81,4 +91,6 @@ public class TextureManager implements Disposable {
             }
         }
     }
+
+
 }

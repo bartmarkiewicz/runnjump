@@ -15,6 +15,7 @@ import com.mygdx.runnjump.screens.HighScoresScreen;
 import com.mygdx.runnjump.screens.LevelScreen;
 import com.mygdx.runnjump.screens.LoadingScreen;
 import com.mygdx.runnjump.screens.MenuScreen;
+import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.MusicManager;
 import com.mygdx.runnjump.util.SoundHandler;
 import com.mygdx.runnjump.util.SoundManager;
@@ -39,6 +40,8 @@ public class Runnjump extends Game {
 	 * The Texture manager.
 	 */
 	public TextureManager textureManager;
+
+	public DialogueManager dialogueManager;
 	/**
 	 * The Texture atlas map.
 	 */
@@ -108,8 +111,9 @@ public class Runnjump extends Game {
 		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
 		soundManager = SoundManager.getSoundManager();
-		musicManager = MusicManager.getMusicManager();
+		musicManager = MusicManager.getManager();
 		textureManager = TextureManager.getTextureManager();
+		dialogueManager = DialogueManager.getManager();
 		textureAtlasMap = new TreeMap<>();
 		setScreen(loadingScreen);
 		Drawable soundOnIcon;

@@ -12,31 +12,22 @@ import java.util.TreeMap;
 /**
  * This class loads and manages all the music tracks in the game.
  */
-public class MusicManager implements Disposable {
-    private TreeMap<String, Music> musicMap;
-    private TreeMap<String, Music[]> musicSet;
-    private float volume;
+public class MusicManager extends AudioManager<Music> implements Disposable {
     /**
-     * The Random object.
+     * This is the sole instance of the music manager singleton class
      */
-    Random rand = new Random();
+    protected static MusicManager musicManager;
     /**
      * The Currently playing music.
      */
     Music currentlyPlaying;
 
 
-
-    /**
-     * This is the sole instance of the music manager singleton class
-     */
-    private static MusicManager musicManager;
-
     /**
      * this is the factory method for getting the music manager
      * @return
      */
-    public static MusicManager getMusicManager(){
+    public static MusicManager getManager(){
         if (musicManager == null){
             musicManager = new MusicManager();
         }
@@ -46,9 +37,8 @@ public class MusicManager implements Disposable {
      * Instantiates a new MusicManager. Private so its only created once using the factory method.
      */
     private MusicManager() {
-        musicMap = new TreeMap<>();
-        musicSet = new TreeMap<>();
-        volume = 1;
+        super();
+
         currentlyPlaying = null;
     }
 
@@ -58,8 +48,8 @@ public class MusicManager implements Disposable {
      * @param name the name
      * @param path the path
      */
-    public void addMusic(String name, String path){
-        musicMap.put(name, Gdx.audio.newMusic(Gdx.files.internal("music" + "/"+path)));
+    public void addAsset(String name, String path){
+        assetMap.put(name, Gdx.audio.newMusic(Gdx.files.internal("music" + "/"+path)));
     }
 
     /**
@@ -68,13 +58,13 @@ public class MusicManager implements Disposable {
      * @param name  the name
      * @param paths the paths
      */
-    public void addMusicSet(String name, String[] paths){
+    public void addAssetSet(String name, String[] paths){
         //this adds a group of sounds under a single name
         Music[] music = new Music[paths.length];
         for(int i = 0; i < paths.length; i++){
             music[i] = Gdx.audio.newMusic(new FileHandle("sound" + "/"+paths[i]));
         }
-        musicSet.put(name,music);
+        assetSet.put(name,music);
     }
 
     /**
@@ -82,13 +72,13 @@ public class MusicManager implements Disposable {
      *
      * @param name the name
      */
-    public void playMusic(String name){
+    public void play(String name){
         //this plays a single song
         if (currentlyPlaying == null) { //prevents multiple songs being played at once
-            musicMap.get(name).play();
-            currentlyPlaying = musicMap.get(name);
-            musicMap.get(name).setVolume(volume);
-            musicMap.get(name).setOnCompletionListener(new Music.OnCompletionListener() {
+            assetMap.get(name).play();
+            currentlyPlaying = assetMap.get(name);
+            assetMap.get(name).setVolume(volume);
+            assetMap.get(name).setOnCompletionListener(new Music.OnCompletionListener() {
                 @Override
                 public void onCompletion(Music music) {
                     currentlyPlaying = null;
@@ -103,7 +93,7 @@ public class MusicManager implements Disposable {
      * @param name the name
      */
     public void playRandom(String name){
-        Music[] songs = musicSet.get(name);
+        Music[] songs = assetSet.get(name);
         int current = rand.nextInt(songs.length);
         if (currentlyPlaying == null) {
             songs[current].play();
@@ -121,20 +111,20 @@ public class MusicManager implements Disposable {
     /**
      * this method mutes music.
      */
-    public void muteMusic(){
+    public void mute(){
         if (volume == 1){
             volume=0;
         } else {
             volume =1;
         }
-        currentlyPlaying.setVolume(volume);
+        if(currentlyPlaying != null) currentlyPlaying.setVolume(volume);
 
     }
 
     /**
      * this method stops the currently playing song
      */
-    public void stopMusic(){
+    public void stop(){
         if (currentlyPlaying != null) {
             currentlyPlaying.stop();
         }
@@ -145,10 +135,10 @@ public class MusicManager implements Disposable {
      * this method is used for stopping all currently playing songs, it is redundant since the current implementation only allows for one song to be playing at the same time, so currently in practice is identical to stopMusic().
      */
     public void stopAll(){
-        for(Music song: musicMap.values()){
+        for(Music song: assetMap.values()){
             song.stop();
         }
-        for (Music[] songs: musicSet.values()) {
+        for (Music[] songs: assetSet.values()) {
             for(Music song: songs){
                 song.stop();
             }
@@ -162,10 +152,10 @@ public class MusicManager implements Disposable {
     @Override
     public void dispose() {
         //disposes of all the sounds
-        for (Music music : musicMap.values()) {
+        for (Music music : assetMap.values()) {
             music.dispose();
         }
-        for (Music[] musicL: musicSet.values()) {
+        for (Music[] musicL: assetSet.values()) {
             for(Music music: musicL){
                 music.dispose();
             }
