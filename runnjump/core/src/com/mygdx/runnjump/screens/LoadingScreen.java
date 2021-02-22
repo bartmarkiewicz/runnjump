@@ -33,12 +33,18 @@ public class LoadingScreen extends ScreenBase implements Screen {
      */
     private void loadPlayer(){
         //idle
-        theGame.textureManager.addPlayerAssetSet("idle","player\\Idle_",12);
-        theGame.textureManager.addPlayerAssetSet("running","player\\Running_",12);
-        theGame.textureManager.addPlayerAssetSet("jump","player\\Jump Start_",6);
+        theGame.textureManager.addFrameAssetSet("player_idle","player\\Idle_",12);
+        theGame.textureManager.addFrameAssetSet("player_running","player\\Running_",12);
+        theGame.textureManager.addFrameAssetSet("player_jump","player\\Jump Start_",6);
 
     }
 
+
+    private void loadEnemyAssets(){
+        theGame.textureManager.addFrameAssetSet("hedgehog_moving", "hedgehog\\Walking_", 18);
+        theGame.textureManager.addFrameAssetSet("hedgehog_idle", "hedgehog\\Idle_Blinking_", 12);
+
+    }
 
     /**
      *
@@ -101,6 +107,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
                 loadMusic();
                 loadGraphics();
                 loadTextAssets();
+                loadEnemyAssets();
                 stillLoading.set(false);
             }
         }, 1);

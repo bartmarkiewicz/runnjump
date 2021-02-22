@@ -29,13 +29,11 @@ public class Player extends MovingActor implements InputProcessor {
     protected int score, hearts;
     protected final int STARTING_HEARTS = 3;
     protected boolean canJump;
-    protected float time =0f;
     protected SoundManager soundManager;
     protected DialogueManager dialogueManager;
     protected boolean gameWon;
 
     protected int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
-    protected boolean backWardsIdle = false, backWardsRunning = false;
 
     protected ArrayList<Texture> playerIdle, playerRunning, playerJump;
 
@@ -86,9 +84,9 @@ public class Player extends MovingActor implements InputProcessor {
         hud.setLives(hearts);
         this.soundManager = theGame.soundManager;
         this.dialogueManager = DialogueManager.getManager();
-        playerIdle = theGame.textureManager.getFrameSet("idle");
-        playerRunning = theGame.textureManager.getFrameSet("running");
-        playerJump = theGame.textureManager.getFrameSet("jump");
+        playerIdle = theGame.textureManager.getFrameSet("player_idle");
+        playerRunning = theGame.textureManager.getFrameSet("player_running");
+        playerJump = theGame.textureManager.getFrameSet("player_jump");
         gameWon = false;
         gravityPowerUp = false;
         dKeyHeld = false;
@@ -297,25 +295,11 @@ public class Player extends MovingActor implements InputProcessor {
      */
     @Override
     protected void update(float delta) {
-        time += delta;
-
-        if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
-            powerUpTime += delta;
-            velocity.y -= (gravity / 2) * delta;
-        } else {
-            velocity.y -= gravity * delta;
-            gravityPowerUp = false;
-            powerUpTime = 0;
-        }
-
-        // sets max velocity
-        if (velocity.y > speedY)
-            velocity.y = speedY;
-        else if (velocity.y < -speedY)
-            velocity.y = -speedY;
+        super.update(delta);
 
         // saves previous position
         float oldX = getSprite().getX(), oldY = getSprite().getY();
+
         boolean collisionX = false, collisionY = false;
 
         // move horizontally
@@ -326,6 +310,16 @@ public class Player extends MovingActor implements InputProcessor {
             collisionX = collidesWest();
         else if (velocity.x > 0) // going right
             collisionX = collidesEast();
+
+        if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
+            powerUpTime += delta;
+            velocity.y -= (gravity / 2) * delta;
+        } else {
+            velocity.y -= gravity * delta;
+            gravityPowerUp = false;
+            powerUpTime = 0;
+        }
+
 
         // x collision handling
         if (collisionX) {

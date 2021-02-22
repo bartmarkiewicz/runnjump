@@ -27,7 +27,7 @@ public class TextureManager extends Manager implements Disposable {
      * this is the factory method for getting the texture manager
      * @return
      */
-    public static TextureManager getTextureManager(){
+    public static TextureManager getManager(){
         if (textureManager == null){
             textureManager = new TextureManager();
         }
@@ -48,7 +48,11 @@ public class TextureManager extends Manager implements Disposable {
 
     @Override
     public void addAssetSet(String name, String[] paths) {
-        //todo
+        /*ArrayList<Texture> textures = new ArrayList<>();
+        for(int i = 0; i < paths.length; i++){
+            if
+        }*/
+        //todo or remove
     }
 
     /**
@@ -58,7 +62,7 @@ public class TextureManager extends Manager implements Disposable {
      * @param path   the path
      * @param number the number
      */
-    public void addPlayerAssetSet(String name, String path, int number){
+    public void addFrameAssetSet(String name, String path, int number){
         ArrayList<Texture> textures = new ArrayList<>(); //texture paths must be of the  format NAME_0 + number.png)
         for(int i = 0; i < number; i++){
             if (i<=9){

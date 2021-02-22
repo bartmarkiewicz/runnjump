@@ -16,6 +16,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.game.Enemy;
+import com.mygdx.runnjump.game.GameObject;
+import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.Player;
 import com.mygdx.runnjump.libs.Toast;
@@ -94,6 +97,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     
     HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
+    ArrayList<GameObject> dynamicObjects;
+
     /**
      * Instantiates a new Game screen.
      *
@@ -171,15 +176,6 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         tileMapHeight = mapProperties.get("height", Integer.class);
         tileMapWidth = mapProperties.get("width", Integer.class);
 
-        for (MapObject gameObject: tileMap.getLayers().get("objects").getObjects()) {
-            if (gameObject.getProperties().containsKey("enemy")){
-                float xPos = gameObject.getProperties().get("x", Float.class);
-                float yPos = gameObject.getProperties().get("y", Float.class);
-
-
-            }
-        }
-
     }
 
 
@@ -212,7 +208,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         hud = new Hud(new SpriteBatch(), theGame, skin);
         player = new Player(theGame,hud,layer,visualLayer);
         gameOver = false;
-
+        dynamicObjects = new ArrayList<>();
         zoom = 0f;
         orthographicCamera.zoom += zoom;
         inputMultiplexer.addProcessor(hud.stage);
@@ -227,9 +223,15 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             float x, y; // object position
             x = Float.parseFloat(object.getProperties().get("x").toString());
             y = Float.parseFloat(object.getProperties().get("y").toString());
-            if(object.getName().toString().equals("player")){
+            if(object.getName().equals("player")){
                 setSpawnPoint(x, y);
                 respawnPlayer();
+            }
+
+            if(object.getName().equals("hedgehog")){
+                Hedgehog hedgehog = new Hedgehog(layer, visualLayer);
+                hedgehog.getSprite().setPosition(x,y);
+                dynamicObjects.add(hedgehog);
             }
             System.out.println("x " + x + " y: " + y);
         }
@@ -307,6 +309,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             mapRenderer.getBatch().begin();
 
             player.draw(mapRenderer.getBatch());
+            for(int i = 0; i < dynamicObjects.size(); i++){ //loops through all dynamic game objects
+                if(dynamicObjects.get(i) instanceof Hedgehog){
+                    dynamicObjects.get(i).draw(mapRenderer.getBatch());
+                }
+            }
             mapRenderer.getBatch().end();
         } else if(gameOver) {
             hud.gameOver(player.getScore());
@@ -325,6 +332,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 break;
             }
         }
+
+
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();

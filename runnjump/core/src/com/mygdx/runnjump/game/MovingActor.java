@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class MovingActor extends GameObject {
     //movement velocity
+    protected float time = 0f;
     protected Vector2 velocity = new Vector2();
     protected float speedX = 500;
     protected float speedY = 250;
@@ -16,6 +17,8 @@ public abstract class MovingActor extends GameObject {
     protected TiledMapTileLayer collisionLayer;
     protected TiledMapTileLayer visualLayer;
     protected boolean facingRight = true;
+    protected boolean backWardsIdle = false;
+    protected boolean backWardsRunning = false;
 
     protected float getX(){
         return getSprite().getX()+10f;//shifts the logical location of the sprite 10 pixels to the right
@@ -127,7 +130,16 @@ public abstract class MovingActor extends GameObject {
 
     protected abstract void handleCollectible(float x, float y);
 
-    protected abstract void update(float delta);
+    protected void update(float delta){
+        time += delta;
+
+        // sets max velocity
+        if (velocity.y > speedY)
+            velocity.y = speedY;
+        else if (velocity.y < -speedY)
+            velocity.y = -speedY;
+
+    }
 
     /**
      * Similar to its sister methods, checks if the cell specified by the x and y coordinates is miscellaneous.

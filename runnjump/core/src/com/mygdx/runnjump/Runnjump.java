@@ -112,7 +112,7 @@ public class Runnjump extends Game {
 		loadingScreen = new LoadingScreen(this);
 		soundManager = SoundManager.getSoundManager();
 		musicManager = MusicManager.getManager();
-		textureManager = TextureManager.getTextureManager();
+		textureManager = TextureManager.getManager();
 		dialogueManager = DialogueManager.getManager();
 		textureAtlasMap = new TreeMap<>();
 		setScreen(loadingScreen);
