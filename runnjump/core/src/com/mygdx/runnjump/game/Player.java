@@ -326,16 +326,16 @@ public class Player extends MovingActor implements InputProcessor {
             getSprite().setX(oldX);
             velocity.x = 0;
         } else {
-            if (dKeyHeld){
+            if (dKeyHeld) {
                 velocity.x = speedX;
             }
-            if (aKeyHeld){
+            if (aKeyHeld) {
                 velocity.x = -speedX;
             }
-            if(aKeyHeld && dKeyHeld){
+            if (aKeyHeld && dKeyHeld) {
                 velocity.x = 0;
             }
-            if(!aKeyHeld && !dKeyHeld){
+            if (!aKeyHeld && !dKeyHeld) {
                 velocity.x = 0;
             }
         }
@@ -347,15 +347,15 @@ public class Player extends MovingActor implements InputProcessor {
             if (collisionY) {
                 collisionSouthTime = TimeUtils.millis();
             }
-        } else if (velocity.y > 2.5f){
+        } else if (velocity.y > 2.5f) {
             collisionY = collidesNorth();
         }
 
-        if (TimeUtils.millis()-collisionSouthTime  < 300){
+        if (TimeUtils.millis() - collisionSouthTime < 300) {
             canJump = true;
         } else {
             canJump = false;
-            collisionSouthTime =0;
+            collisionSouthTime = 0;
 
         }
 
@@ -364,41 +364,41 @@ public class Player extends MovingActor implements InputProcessor {
             velocity.y = 0;
         }
         if (this.isIdle() && time > 0.2f) {
-            playerJumpLastFrame=0;
+            playerJumpLastFrame = 0;
 
             this.setFrame(playerIdle.get(playerIdleLastFrame));
-            if (playerIdleLastFrame == playerIdle.size() - 1){
-                backWardsIdle=true;
+            if (playerIdleLastFrame == playerIdle.size() - 1) {
+                backWardsIdle = true;
             }
-            if (playerIdleLastFrame==0){
-                backWardsIdle=false;
+            if (playerIdleLastFrame == 0) {
+                backWardsIdle = false;
             }
-            if (backWardsIdle){
+            if (backWardsIdle) {
                 playerIdleLastFrame--;
             } else {
                 playerIdleLastFrame++;
             }
-            time=0;
-        }else if (isRunning() && time > 0.15f){
-            playerJumpLastFrame=0;
+            time = 0;
+        } else if (isRunning() && time > 0.15f) {
+            playerJumpLastFrame = 0;
 
             this.setFrame(playerRunning.get(playerRunLastFrame));
-            if (playerRunLastFrame==0){
-                backWardsRunning=false;
+            if (playerRunLastFrame == 0) {
+                backWardsRunning = false;
             }
-            if (playerRunLastFrame == playerRunning.size()-1){//if at last element
-                playerRunLastFrame=0;
+            if (playerRunLastFrame == playerRunning.size() - 1) {//if at last element
+                playerRunLastFrame = 0;
             }
             playerRunLastFrame++;
-            time=0;
-        } else if (inAir() && time > 0.06f){
+            time = 0;
+        } else if (inAir() && time > 0.06f) {
             this.setFrame(playerJump.get(playerJumpLastFrame));
-            if (playerJumpLastFrame== playerJump.size()-1){
+            if (playerJumpLastFrame == playerJump.size() - 1) {
             } else {
                 playerJumpLastFrame++;
             }
-            time =0;
-        } else if(playerJumpLastFrame==playerJump.size()-1 && !inAir()&&!isRunning() && collisionY){
+            time = 0;
+        } else if (playerJumpLastFrame == playerJump.size() - 1 && !inAir() && !isRunning() && collisionY) {
             this.setFrame(playerIdle.get(playerIdleLastFrame));
         }
     }

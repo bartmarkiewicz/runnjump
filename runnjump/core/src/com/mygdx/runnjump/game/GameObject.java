@@ -9,10 +9,16 @@ public abstract class GameObject {
     protected float sizeY;
     protected Sprite sprite;
     protected boolean alive;
+    protected boolean playerCollidable;
+
+    public boolean isPlayerCollidable() {
+        return playerCollidable;
+    }
 
     public GameObject() {
         this.sprite = new Sprite(new Texture("player\\Idle_000.png"));
         this.alive = true;
+        this.playerCollidable = false;
     }
 
     /**
@@ -34,7 +40,7 @@ public abstract class GameObject {
         sprite.setTexture(texture);
     }
 
-    public abstract void draw(Batch batch);
+    public abstract void draw(Batch batch, float delta);
 
     /**
      * Getter for player sprite.

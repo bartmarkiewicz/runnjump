@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Enemy;
@@ -45,6 +46,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * The Tile map.
      */
     TiledMap tileMap;
+
+    public static boolean GAME_PAUSED = false;
+
     /**
      * The Hud.
      */
@@ -273,7 +277,12 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      */
     @Override
     public void render(float delta) {
+        if(GAME_PAUSED) {
+            delta = 0;
+        }
+        delta = delta > 0.1f ? 0.1f: delta ;//0.1f is max delta time
         super.render(delta);
+
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -282,18 +291,18 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
 
         if (!gameOver) {
-            if (player.getSprite().getX() + player.getSprite().getWidth() / 2 < width/2) {
-                cameraPosToSetX = width/2;
-            } else if ((tileMapWidth * 32) - width/2 < player.getSprite().getX() + player.getSprite().getWidth() / 2) {
-                cameraPosToSetX = (tileMapWidth * 32) - width/2;
+            if (player.getSprite().getX() + player.getSprite().getWidth() / 2 < width / 2) {
+                cameraPosToSetX = width / 2;
+            } else if ((tileMapWidth * 32) - width / 2 < player.getSprite().getX() + player.getSprite().getWidth() / 2) {
+                cameraPosToSetX = (tileMapWidth * 32) - width / 2;
             } else {
                 cameraPosToSetX = player.getSprite().getX() + player.getSprite().getWidth() / 2;
             }
 
-            if (player.getSprite().getY() + player.getSprite().getHeight() / 2 < height/2) {
-                cameraPosToSetY = height/2;
-            } else if ((tileMapHeight * 32) - height/2 < player.getSprite().getY() + player.getSprite().getHeight() / 2) {
-                cameraPosToSetY = (tileMapHeight * 32) - height/2;
+            if (player.getSprite().getY() + player.getSprite().getHeight() / 2 < height / 2) {
+                cameraPosToSetY = height / 2;
+            } else if ((tileMapHeight * 32) - height / 2 < player.getSprite().getY() + player.getSprite().getHeight() / 2) {
+                cameraPosToSetY = (tileMapHeight * 32) - height / 2;
             } else {
                 cameraPosToSetY = player.getSprite().getY() + player.getSprite().getHeight() / 2;
             }
@@ -309,28 +318,37 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             mapRenderer.render();
             mapRenderer.getBatch().begin();
 
-            player.draw(mapRenderer.getBatch());
-            for(int i = 0; i < dynamicObjects.size(); i++){ //loops through all dynamic game objects
-                if(dynamicObjects.get(i) instanceof Hedgehog){
-                    dynamicObjects.get(i).draw(mapRenderer.getBatch());
+            player.draw(mapRenderer.getBatch(), delta);
+            for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
+                if (dynamicObjects.get(i) instanceof Hedgehog) {
+                    dynamicObjects.get(i).draw(mapRenderer.getBatch(), delta);
                 }
             }
             mapRenderer.getBatch().end();
-        } else if(gameOver) {
+        } else if (gameOver) {
             hud.gameOver(player.getScore());
         }
-        if (player.isGameWon()){
-            timeSinceWin+=delta;
+        if (player.isGameWon()) {
+            timeSinceWin += delta;
             hud.gameWon(player.getScore(), level);
         }
 
         Iterator<Toast> iter = toasts.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Toast toast = iter.next();
             if (!toast.render(delta)) {
                 iter.remove();
             } else {
                 break;
+            }
+        }
+        Iterator<GameObject> gameObjectsIterator = dynamicObjects.iterator();
+        while (gameObjectsIterator.hasNext()) {
+            GameObject current = gameObjectsIterator.next();
+            if (current.isPlayerCollidable() && !current.isDead()) {
+                Intersector.overlaps(player.getSprite().getBoundingRectangle(),
+                        current.getSprite().getBoundingRectangle());
+                System.out.println("Collision between player and " + current.getClass());
             }
         }
 
@@ -388,12 +406,12 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     @Override
     public void pause() {
-
+        GAME_PAUSED = true;
     }
 
     @Override
     public void resume() {
-
+        GAME_PAUSED = false;
     }
 
     @Override

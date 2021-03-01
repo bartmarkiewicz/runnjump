@@ -11,13 +11,15 @@ public class Hedgehog extends Enemy{
         super(collisionLayer, visualLayer);
         getSprite().setSize(40*2, 25*2); // 2 by 1 tile
         setLogicalSize(40*2,25*2);
-        this.tilesToMove = tilesToMove;
+        this.tilesToMove = blocksToMove;
         enemyIdle = TextureManager.getManager().getFrameSet("hedgehog_idle");
         enemyMoving = TextureManager.getManager().getFrameSet("hedgehog_moving");
         movingRight = false;
+        this.playerCollidable = true;
+
         speedX = 200;
         speedY = 250;
-        TIME_TO_TURN = blocksToMove/(speedX/32);
+        TIME_TO_TURN = tilesToMove/(speedX/32);
         //Formula for how many blocks moved =
         // Blocks moved = (speedX/32)*TIME_TO_TURN
         // Time to turn = blocks moved/(speedX/32)

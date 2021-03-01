@@ -36,8 +36,8 @@ public abstract class MovingActor extends GameObject {
      * @param batch the batch
      */
     @Override
-    public void draw(Batch batch) {
-        update(Gdx.graphics.getDeltaTime());//updates before drawing
+    public void draw(Batch batch,float delta) {
+        update(delta);//updates before drawing
         getSprite().draw(batch);
     }
     /**
@@ -138,7 +138,6 @@ public abstract class MovingActor extends GameObject {
             velocity.y = speedY;
         else if (velocity.y < -speedY)
             velocity.y = -speedY;
-
     }
 
     /**
