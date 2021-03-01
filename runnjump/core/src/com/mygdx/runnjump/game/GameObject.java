@@ -11,6 +11,10 @@ public abstract class GameObject {
     protected boolean alive;
     protected boolean playerCollidable;
 
+    public void collidesObject(GameObject other){
+        //dummy
+    }
+
     public boolean isPlayerCollidable() {
         return playerCollidable;
     }

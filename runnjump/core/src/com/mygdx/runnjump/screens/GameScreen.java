@@ -348,9 +348,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         while (gameObjectsIterator.hasNext()) {
             GameObject current = gameObjectsIterator.next();
             if (current.isPlayerCollidable() && !current.isDead()) {
-                if(Intersector.overlaps(player.getSprite().getBoundingRectangle(),
-                        current.getSprite().getBoundingRectangle())) {
+                if(Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
                     System.out.println("Collision between player and " + current.getClass());
+                    player.collidesObject(current);
+                    current.collidesObject(player);
                 }
             }
         }

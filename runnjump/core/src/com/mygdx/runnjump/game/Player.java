@@ -403,6 +403,13 @@ public class Player extends MovingActor implements InputProcessor {
             this.setFrame(playerIdle.get(playerIdleLastFrame));
         }
     }
+    @Override
+    public void collidesObject(GameObject other){
+        super.collidesObject(other);
+        if(other instanceof Hedgehog){
+            die();
+        }
+    }
 
     /**
      * This method allows for keyboard input for controlling the player character on windows desktop.

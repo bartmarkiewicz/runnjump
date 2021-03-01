@@ -14,7 +14,7 @@ public class Hedgehog extends Enemy{
         this.tilesToMove = blocksToMove;
         enemyIdle = TextureManager.getManager().getFrameSet("hedgehog_idle");
         enemyMoving = TextureManager.getManager().getFrameSet("hedgehog_moving");
-        movingRight = false;
+        movingRight = true;
         this.playerCollidable = true;
 
         speedX = 200;
@@ -31,6 +31,7 @@ public class Hedgehog extends Enemy{
     @Override
     public void update(float delta) {
         super.update(delta);
+        time += delta;
         // saves previous position
         float oldX = getSprite().getX(), oldY = getSprite().getY();
 
@@ -82,7 +83,6 @@ public class Hedgehog extends Enemy{
         }
 
         if (this.isIdle() && time > 0.2f) {
-            lastIdleFrame=0;
 
             this.setFrame(enemyIdle.get(lastIdleFrame));
             if (lastIdleFrame == enemyIdle.size() - 1){
@@ -97,8 +97,7 @@ public class Hedgehog extends Enemy{
                 lastIdleFrame++;
             }
             time=0;
-        } else if (isRunning() &&  time > 0.15f){
-            lastMovingFrame = 0;
+        } else if (isRunning() &&  time > 0.02f){
             this.setFrame(enemyMoving.get(lastMovingFrame));
 
             if(lastMovingFrame == 0){
@@ -109,6 +108,7 @@ public class Hedgehog extends Enemy{
                 lastMovingFrame = 0;
             }
             lastMovingFrame++;
+
             time=0;
         } else if (!inAir() && !isRunning()){
             this.setFrame(enemyIdle.get(lastIdleFrame));

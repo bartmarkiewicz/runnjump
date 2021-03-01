@@ -32,6 +32,8 @@ public abstract class MovingActor extends GameObject {
 
     }
 
+
+
     /**
      * this draws the sprite after updating.
      *
