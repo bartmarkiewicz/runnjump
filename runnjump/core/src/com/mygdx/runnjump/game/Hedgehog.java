@@ -9,8 +9,8 @@ public class Hedgehog extends Enemy{
     private final double TIME_TO_TURN;
     public Hedgehog(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, int blocksToMove) {
         super(collisionLayer, visualLayer);
-        getSprite().setSize(40*2, 25*2); // 2 by 1 tile
-        setLogicalSize(40*2,25*2);
+        getSprite().setSize(32*2, 23*2); // 2 by 1 tile
+        setLogicalSize(32*2,23*2);
         this.tilesToMove = blocksToMove;
         enemyIdle = TextureManager.getManager().getFrameSet("hedgehog_idle");
         enemyMoving = TextureManager.getManager().getFrameSet("hedgehog_moving");
@@ -115,5 +115,13 @@ public class Hedgehog extends Enemy{
         }
 
 
+    }
+
+    @Override
+    public void collidesObject(GameObject other) {
+        super.collidesObject(other);
+        if(other instanceof Player){
+            //make noise
+        }
     }
 }

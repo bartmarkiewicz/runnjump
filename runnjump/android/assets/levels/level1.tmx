@@ -781,21 +781,21 @@
   <object id="29" name="player" x="241.212" y="1602.42">
    <point/>
   </object>
-  <object id="30" name="hedgehog" type="enemy" x="1151.12" y="1315.12">
+  <object id="30" name="hedgehog" type="enemy" x="1083.12" y="1311.12">
    <properties>
     <property name="blocks_to_move" type="int" value="6"/>
     <property name="enemy" value=""/>
    </properties>
    <point/>
   </object>
-  <object id="31" name="hedgehog" type="enemy" x="3231.33" y="1613.27">
+  <object id="31" name="hedgehog" type="enemy" x="2375.33" y="1613.27">
    <properties>
     <property name="blocks_to_move" type="int" value="12"/>
     <property name="enemy" value=""/>
    </properties>
    <point/>
   </object>
-  <object id="32" name="hedgehog" type="enemy" x="6413" y="2307">
+  <object id="32" name="hedgehog" type="enemy" x="6179" y="2299">
    <properties>
     <property name="blocks_to_move" type="int" value="12"/>
     <property name="enemy" value=""/>

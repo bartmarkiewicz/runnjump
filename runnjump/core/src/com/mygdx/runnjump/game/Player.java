@@ -456,6 +456,7 @@ public class Player extends MovingActor implements InputProcessor {
             hearts--;
             if (hearts >= 0) {
                 hud.setLives(hearts);
+                SoundManager.getSoundManager().playRandom("male_death");
             } else {
                 hud.setLives(0);
             }

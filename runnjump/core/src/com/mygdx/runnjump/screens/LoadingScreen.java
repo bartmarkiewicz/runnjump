@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LoadingScreen extends ScreenBase implements Screen {
 
-
     AtomicBoolean stillLoading;
     Sprite background;
     /**
@@ -80,9 +79,19 @@ public class LoadingScreen extends ScreenBase implements Screen {
         coinCollectedFx[2] = "collect_coin_03.wav";
         coinCollectedFx[3] = "collect_coin_04.wav";
         coinCollectedFx[4] = "collect_coin_05.wav";
+
+        String[] humanDeathFx = new String[3];
+        humanDeathFx[0] = "Male_Death_1.mp3";
+        humanDeathFx[1] = "Male_Death_2.mp3";
+        humanDeathFx[2] = "Male_Death_3.mp3";
+
         theGame.soundManager.addAssetSet("coin_collect", coinCollectedFx);
+        theGame.soundManager.addAssetSet("male_death", humanDeathFx);
         theGame.soundManager.addAsset("heart_collect", "happy_collect_item_01.wav");
         theGame.soundManager.addAsset("collect_item", "collect_item_02.wav");
+
+
+
     }
 
     /**
