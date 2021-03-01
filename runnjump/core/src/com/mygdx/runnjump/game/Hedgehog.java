@@ -1,21 +1,29 @@
 package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.util.TextureManager;
 
 public class Hedgehog extends Enemy{
     float movingTime = 0;
-
-    public Hedgehog(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer) {
+    private final double TIME_TO_TURN;
+    public Hedgehog(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, int blocksToMove) {
         super(collisionLayer, visualLayer);
-        getSprite().setSize(50*2, 30*2); // 2 by 1 tile
-        setLogicalSize(50*2,30*2);
+        getSprite().setSize(40*2, 25*2); // 2 by 1 tile
+        setLogicalSize(40*2,25*2);
         this.tilesToMove = tilesToMove;
         enemyIdle = TextureManager.getManager().getFrameSet("hedgehog_idle");
         enemyMoving = TextureManager.getManager().getFrameSet("hedgehog_moving");
         movingRight = false;
-        speedX = 300;
+        speedX = 200;
         speedY = 250;
+        TIME_TO_TURN = blocksToMove/(speedX/32);
+        //Formula for how many blocks moved =
+        // Blocks moved = (speedX/32)*TIME_TO_TURN
+        // Time to turn = blocks moved/(speedX/32)
+
+
+
     }
 
     @Override
@@ -26,9 +34,9 @@ public class Hedgehog extends Enemy{
 
         boolean collisionX = false, collisionY = false;
 
-        getSprite().setX(getSprite().getX() + velocity.x * delta);
+        getSprite().setX(getSprite().getX() + velocity.x * delta); // move on x
 
-        if (movingTime < 3){
+        if (movingTime < TIME_TO_TURN){ //how much time in seconds passes until the hedgehog moves
             movingTime += delta;
         } else {
             movingTime = 0;
@@ -59,7 +67,17 @@ public class Hedgehog extends Enemy{
                 velocity.x = -speedX;
             }
         }
+        getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
+        if (velocity.y < 2.5f) {
+            collisionY = collidesSouth();
+        } else if (velocity.y > 2.5f){
+            collisionY = collidesNorth();
+        }
 
+        if (collisionY) {
+            getSprite().setY(oldY);
+            velocity.y = 0;
+        }
 
         if (this.isIdle() && time > 0.2f) {
             lastIdleFrame=0;

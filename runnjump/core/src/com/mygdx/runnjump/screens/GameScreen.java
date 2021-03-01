@@ -229,7 +229,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             }
 
             if(object.getName().equals("hedgehog")){
-                Hedgehog hedgehog = new Hedgehog(layer, visualLayer);
+                int blocks_to_move = Integer.parseInt(object.getProperties().get("blocks_to_move").toString());
+                Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move);
                 hedgehog.getSprite().setPosition(x,y);
                 dynamicObjects.add(hedgehog);
             }
