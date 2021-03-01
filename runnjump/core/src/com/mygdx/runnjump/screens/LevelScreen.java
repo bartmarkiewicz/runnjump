@@ -18,7 +18,7 @@ public class LevelScreen extends ScreenBase {
     /**
      * The Level selected.
      */
-    int levelSelected;
+    static int levelSelected;
     /**
      * The Level select indicator.
      */
@@ -45,7 +45,7 @@ public class LevelScreen extends ScreenBase {
      *
      * @return int
      */
-    public int getLevelSelected(){
+    public static int getLevelSelected(){
         return levelSelected;
     }
 
@@ -57,7 +57,7 @@ public class LevelScreen extends ScreenBase {
             levelSelectIndicator.setText(lvlSlctStr + "None");
         } else{
             levelSelectIndicator.setText(lvlSlctStr + levelSelected);
-            theGame.setLevelSelected(levelSelected);
+            Runnjump.setLevelSelected(levelSelected);
         }
     }
 

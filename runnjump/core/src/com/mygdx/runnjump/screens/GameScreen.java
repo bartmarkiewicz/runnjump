@@ -112,7 +112,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     public GameScreen(Runnjump theGameO, int level) {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
-        this.level = level;
+        this.level = Runnjump.getLevelSelected();
     }
 
     /**
@@ -152,6 +152,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * @param level the level
      */
     public void startGame(int level){
+        this.level = Runnjump.getLevelSelected();
         try {
             tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
         }catch (SerializationException e){
@@ -166,7 +167,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
-
+        player = new Player(theGame,hud,layer,visualLayer);
         player.setLayers(visualLayer,layer);
         player.restart();
         gameOver = false;
@@ -189,6 +190,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     @Override
     public void show() {
         super.show(); //renders the map
+        this.level = Runnjump.getLevelSelected();
         currentScreenId = Runnjump.ScreenEn.GAME;
         width = 1280;
         height = 720;//Gdx.graphics.getHeight();
@@ -280,7 +282,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if(GAME_PAUSED) {
             delta = 0;
         }
-        delta = delta > 0.1f ? 0.1f: delta ;//0.1f is max delta time
+        delta = delta > 0.2f ? 0.2f: delta ;//0.1f is max delta time
         super.render(delta);
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -346,9 +348,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         while (gameObjectsIterator.hasNext()) {
             GameObject current = gameObjectsIterator.next();
             if (current.isPlayerCollidable() && !current.isDead()) {
-                Intersector.overlaps(player.getSprite().getBoundingRectangle(),
-                        current.getSprite().getBoundingRectangle());
-                System.out.println("Collision between player and " + current.getClass());
+                if(Intersector.overlaps(player.getSprite().getBoundingRectangle(),
+                        current.getSprite().getBoundingRectangle())) {
+                    System.out.println("Collision between player and " + current.getClass());
+                }
             }
         }
 

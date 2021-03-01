@@ -79,6 +79,7 @@ public class Player extends MovingActor implements InputProcessor {
         this.hearts =STARTING_HEARTS;
         this.powerUpTime = 0;
         this.hud = hud;
+
         this.theGame = theGame;
         hud.setScore(score);
         hud.setLives(hearts);

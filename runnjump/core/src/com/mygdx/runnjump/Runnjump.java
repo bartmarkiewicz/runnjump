@@ -91,15 +91,19 @@ public class Runnjump extends Game {
 	private GameScreen gameScreen;
 	private LevelScreen levelScreen;
 	private HighScoresScreen highScoresScreen;
-	private int levelSelected;
+	private static int levelSelected;
 
 	/**
 	 * this sets the level selected by the levelscreen. So it can be accessed from the game screen.
 	 *
 	 * @param level the level
 	 */
-	public void setLevelSelected(int level){
+	public static void setLevelSelected(int level){
 		levelSelected = level;
+	}
+
+	public static int getLevelSelected(){
+		return levelSelected;
 	}
 
 	/**
@@ -120,7 +124,6 @@ public class Runnjump extends Game {
 		Texture soundTexture;
 		Texture soundOff;
 		Drawable soundOffIcon;
-		levelSelected = -1;
 
 		soundTexture = new Texture(Gdx.files.internal("sound.png"));
 		soundOnIcon = new TextureRegionDrawable(new TextureRegion(soundTexture));
