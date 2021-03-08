@@ -21,6 +21,7 @@ import com.mygdx.runnjump.game.Enemy;
 import com.mygdx.runnjump.game.GameObject;
 import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
+import com.mygdx.runnjump.game.NPC;
 import com.mygdx.runnjump.game.Player;
 import com.mygdx.runnjump.libs.Toast;
 
@@ -228,10 +229,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             float x, y; // object position
             x = Float.parseFloat(object.getProperties().get("x").toString());
             y = Float.parseFloat(object.getProperties().get("y").toString());
-            if(object.getName().equals("player")){
-                setSpawnPoint(x, y);
-                respawnPlayer();
-            }
+
 
             if(object.getName().equals("hedgehog")){
                 int blocks_to_move = Integer.parseInt(object.getProperties().get("blocks_to_move").toString());
@@ -240,7 +238,17 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move,max_speed);
                 hedgehog.getSprite().setPosition(x,y);
                 dynamicObjects.add(hedgehog);
+            } else if (object.getName().equals("npc")){
+                String name = object.getProperties().get("name").toString();
+                String assetName = object.getProperties().get("assetName").toString();
+                NPC npc = new NPC(layer,visualLayer,name,assetName);
+                npc.getSprite().setPosition(x,y);
+                dynamicObjects.add(npc);
+            } else if (object.getName().equals("player")){
+                setSpawnPoint(x, y);
+                respawnPlayer();
             }
+
             System.out.println("x " + x + " y: " + y);
         }
 
@@ -297,10 +305,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             mapRenderer.setView(orthographicCamera);
             mapRenderer.render();
             mapRenderer.getBatch().begin();
-
+            updateDynamicObjects(delta);
             player.draw(mapRenderer.getBatch(), delta);
 
-            updateDynamicObjects(delta);
 
             mapRenderer.getBatch().end();
         } else if (gameOver) {
@@ -364,9 +371,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     private void updateDynamicObjects(float delta){
         for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
             GameObject current = dynamicObjects.get(i);
-            if (current instanceof Hedgehog) {
-                current.draw(mapRenderer.getBatch(), delta);
-            }
+            current.draw(mapRenderer.getBatch(), delta);
+
             if (current.isPlayerCollidable() && !current.isDead()) {
                 if(Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
                     System.out.println("Collision between player and " + current.getClass());

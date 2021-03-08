@@ -20,6 +20,8 @@ public abstract class MovingActor extends GameObject {
     protected boolean facingRight = true;
     protected boolean backWardsIdle = false;
     protected boolean backWardsRunning = false;
+    protected int lastIdleFrame;
+    protected int lastMovingFrame;
 
     protected float getX(){
         return getSprite().getX()+10f;//shifts the logical location of the sprite 10 pixels to the right
@@ -30,6 +32,8 @@ public abstract class MovingActor extends GameObject {
         this.collisionLayer = collisionLayer;
         this.visualLayer = visualLayer;
 
+        lastIdleFrame = 0;
+        lastMovingFrame = 0;
     }
 
 

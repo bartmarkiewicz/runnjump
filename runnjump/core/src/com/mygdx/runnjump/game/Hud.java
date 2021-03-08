@@ -4,12 +4,15 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -17,11 +20,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.ColorDrawable;
+import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundHandler;
 
 /**
@@ -41,6 +49,11 @@ public class Hud implements Disposable {
     private Label feedbackLabel;
     private Table messageTable;
     private Table bottomRightTable, bottomTable;
+    private DialogueManager dialogueManager;
+    Table dialogueTable;
+    Queue dialogueQueue = new Queue();
+
+    Label dialogueLabel, npcLabel;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -56,6 +69,7 @@ public class Hud implements Disposable {
         gameoverFont = skin.get(Label.LabelStyle.class).font;
         Stack stackContainer = new Stack();
         Table container = new Table();
+
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
         mainTable.right().top();
@@ -96,13 +110,53 @@ public class Hud implements Disposable {
             createAndroidUI(skin);
         }
 
+        dialogueManager = DialogueManager.getManager();
+        createDialogueUI(stackContainer, skin);
+
         container.setFillParent(true);
         stackContainer.setFillParent(true);
         stackContainer.add(container);
         stage.addActor(stackContainer);
-        stage.setDebugAll(true);
         stage.getBatch().setColor(Color.WHITE);
 
+    }
+
+    /**
+     * Creates the dialogue window.
+     * @param stackContainer
+     * @param skin
+     */
+    private void createDialogueUI(Stack stackContainer, Skin skin) {
+        Table dialogueContainer = new Table();
+        dialogueTable = new Table();
+        Table dummyTopTable = new Table();
+        npcLabel = new Label("Jack", skin);
+        dialogueLabel = new Label("Dialogue here", skin);
+
+        npcLabel.setFontScale(2.5f);
+        npcLabel.setColor(Color.LIGHT_GRAY);
+        dialogueLabel.setFontScale(1.25f);
+
+        dialogueTable.top().left();
+        npcLabel.setAlignment(Align.left);
+        dialogueTable.row().colspan(5).pad(5).fillX();
+        dialogueTable.add(npcLabel).top().left().colspan(1).fillX().expandX();
+        dialogueTable.add();
+        dialogueTable.add();
+        dialogueTable.add();
+        dialogueTable.add().fill();;
+        dialogueTable.row().colspan(5).pad(5).fill();
+        dialogueLabel.setAlignment(Align.topLeft);
+        dialogueTable.add(dialogueLabel).top().left().colspan(5).fillX().expand();
+        dialogueTable.setBackground(new ColorDrawable(0,0,0,0.6f));
+
+        dialogueContainer.add(dummyTopTable).top().expand().fill();
+        dialogueContainer.row().colspan(1);
+        dialogueContainer.add(dialogueTable).left().bottom().expandX().fillX().height(Gdx.graphics.getHeight()/3.5f);
+        dialogueContainer.setFillParent(true);
+        dialogueTable.setVisible(false);
+        stackContainer.add(dialogueContainer);
+        dialogueTable.setDebug(true);
     }
 
     private void createAndroidUI(Skin skin) {
@@ -190,6 +244,24 @@ public class Hud implements Disposable {
         }
         stage.getBatch().end();
     }
+
+    public void hideDialogue(){
+        dialogueTable.setVisible(false);
+    }
+
+    public void showDialogue(String toShow, String npc){
+        //Hide gui.
+        //Show dialogue window.
+        //Allow the user to tap the screen/press any key to go to the next screen.
+        hideGui();
+        dialogueTable.setVisible(true);
+
+
+        dialogueLabel.setText(toShow);
+        npcLabel.setText(npc);
+    }
+
+
 
     /**
      * This method similarly to the game over method prints the game won messages onto the screen/hud informing the player that he has successfully completed the level.

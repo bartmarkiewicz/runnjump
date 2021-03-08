@@ -15,15 +15,12 @@ import java.util.ArrayList;
 public abstract class Enemy extends MovingActor{
     protected ArrayList<Texture> enemyIdle, enemyMoving;
     protected boolean movingRight;
-    protected int lastIdleFrame, lastMovingFrame;
     int tilesToMove;
     public Enemy(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer) {
         super(collisionLayer, visualLayer);
         enemyIdle = new ArrayList<Texture>();
         enemyMoving = new ArrayList<Texture>();
         alive = true;
-        lastIdleFrame = 0;
-        lastMovingFrame = 0;
     }
 
     @Override

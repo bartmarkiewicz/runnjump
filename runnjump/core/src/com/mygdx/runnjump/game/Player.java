@@ -24,6 +24,9 @@ import java.util.ArrayList;
  */
 public class Player extends MovingActor implements InputProcessor {
 
+    protected boolean touchingNPC;
+    String npcName, npcAssetName;
+
     protected boolean gravityPowerUp;
     protected float powerUpTime;
     protected int score, hearts;
@@ -44,6 +47,7 @@ public class Player extends MovingActor implements InputProcessor {
     private boolean dKeyHeld;
     private boolean aKeyHeld;
     Runnjump theGame;
+    private boolean dialogueMode = false;
 
     /**
      * getter for lives left
@@ -135,6 +139,8 @@ public class Player extends MovingActor implements InputProcessor {
                 }
             });
         }
+
+        touchingNPC = false;
 
 
     }
@@ -424,6 +430,10 @@ public class Player extends MovingActor implements InputProcessor {
         super.collidesObject(other);
         if(other instanceof Hedgehog){
             die();
+        } else if (other instanceof NPC){
+            touchingNPC = true;
+            npcName = ((NPC) other).getNpcName();
+            npcAssetName = ((NPC) other).getAssetName();
         }
     }
 
@@ -435,8 +445,18 @@ public class Player extends MovingActor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch(keycode) {
+            case Input.Keys.SPACE:
+                if(dialogueMode){
+                    //Go to the next dialogue
+                    break;
+                }
+                if(touchingNPC && !dialogueMode){
+                    hud.showDialogue(npcAssetName, npcName);
+                    dialogueMode = true;
+                }
+                break;
             case Input.Keys.W:
-                if(canJump) {
+                if(canJump && !dialogueMode) {
                     velocity.y = speedY / 1.8f;
                     canJump = false;
                 }
@@ -444,7 +464,7 @@ public class Player extends MovingActor implements InputProcessor {
             case Input.Keys.D:
                 //velocity.x = speedX;
                 dKeyHeld = true;
-                if (!facingRight) {
+                if (!facingRight && !dialogueMode) {
                     getSprite().flip(true, false);
                     facingRight=true;
                 }
@@ -452,7 +472,7 @@ public class Player extends MovingActor implements InputProcessor {
             case Input.Keys.A:
                 //velocity.x = -speedX;
                 aKeyHeld = true;
-                if(facingRight){
+                if(facingRight && !dialogueMode){
                     getSprite().flip(true, false);
                     facingRight=false;
                 }

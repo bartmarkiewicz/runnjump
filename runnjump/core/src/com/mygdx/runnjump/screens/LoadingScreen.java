@@ -38,6 +38,12 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     }
 
+    private void loadNPCAssets(){
+        theGame.textureManager.addFrameAssetSet("oldguy", "oldguy\\Idle_",18);
+
+
+
+    }
 
     private void loadEnemyAssets(){
         theGame.textureManager.addFrameAssetSet("hedgehog_moving", "hedgehog\\Walking_", 18);
@@ -117,6 +123,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
                 loadGraphics();
                 loadTextAssets();
                 loadEnemyAssets();
+                loadNPCAssets();
                 stillLoading.set(false);
             }
         }, 1);
