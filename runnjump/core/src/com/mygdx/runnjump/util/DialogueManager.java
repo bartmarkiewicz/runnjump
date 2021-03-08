@@ -51,6 +51,9 @@ public class DialogueManager extends Manager implements Disposable {
     }
 
     public String getDialogue(String name, int screenNum){
+        if((screenNum)>dialogueMap.get(name).size()){
+            return null;
+        }
         return dialogueMap.get(name).get(screenNum-1);
     }
 

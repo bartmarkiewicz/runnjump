@@ -32,6 +32,8 @@ import com.mygdx.runnjump.util.ColorDrawable;
 import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundHandler;
 
+import java.util.ArrayList;
+
 /**
  * This class represents the in-game UI the player sees while actually playing the level.
  */
@@ -42,17 +44,15 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
     private Label scoreL, livesL;
-    private final Runnjump theGame;
     private BitmapFont gameoverFont;
     private Touchpad movementJoystick;
     private Button jumpBt;
     private Label feedbackLabel;
     private Table messageTable;
     private Table bottomRightTable, bottomTable;
-    private DialogueManager dialogueManager;
     Table dialogueTable;
-    Queue dialogueQueue = new Queue();
 
+    int dialogueNum = 1;
     Label dialogueLabel, npcLabel;
 
     /**
@@ -65,7 +65,6 @@ public class Hud implements Disposable {
     public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport,batch);
-        this.theGame = theGame;
         gameoverFont = skin.get(Label.LabelStyle.class).font;
         Stack stackContainer = new Stack();
         Table container = new Table();
@@ -110,7 +109,6 @@ public class Hud implements Disposable {
             createAndroidUI(skin);
         }
 
-        dialogueManager = DialogueManager.getManager();
         createDialogueUI(stackContainer, skin);
 
         container.setFillParent(true);
@@ -135,19 +133,21 @@ public class Hud implements Disposable {
 
         npcLabel.setFontScale(2.5f);
         npcLabel.setColor(Color.LIGHT_GRAY);
-        dialogueLabel.setFontScale(1.25f);
+        //dialogueLabel.setFontScale(1.25f);
+        dialogueLabel.setWrap(true);
 
         dialogueTable.top().left();
         npcLabel.setAlignment(Align.left);
-        dialogueTable.row().colspan(5).pad(5).fillX();
+        dialogueTable.row().colspan(5).pad(10).fillX();
         dialogueTable.add(npcLabel).top().left().colspan(1).fillX().expandX();
         dialogueTable.add();
         dialogueTable.add();
         dialogueTable.add();
         dialogueTable.add().fill();;
-        dialogueTable.row().colspan(5).pad(5).fill();
+        dialogueTable.row().colspan(5).pad(10).fill();
         dialogueLabel.setAlignment(Align.topLeft);
-        dialogueTable.add(dialogueLabel).top().left().colspan(5).fillX().expand();
+        //dialogueLabel.setWidth(Gdx.graphics.getWidth()-40);
+        dialogueTable.add(dialogueLabel).top().left().colspan(5).expandY().fillY().pad(10);
         dialogueTable.setBackground(new ColorDrawable(0,0,0,0.6f));
 
         dialogueContainer.add(dummyTopTable).top().expand().fill();
@@ -249,16 +249,39 @@ public class Hud implements Disposable {
         dialogueTable.setVisible(false);
     }
 
-    public void showDialogue(String toShow, String npc){
+    public void progressDialogue(String dialogueAsset, Player player){
+        String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
+        if(dialogue != null) {
+            dialogueLabel.setText(getDialogue(dialogue));
+            npcLabel.setText(getNPCname(dialogue));
+            npcLabel.invalidate();
+            dialogueNum += 1;
+        } else {
+            hideDialogue();
+            showGui();
+            dialogueNum = 1;
+            player.setDialogueMode(false);
+        }
+    }
+    public String getDialogue(String dialog){
+        return dialog.split("@")[1];
+    }
+
+    public String getNPCname(String dialog){
+        return dialog.split("@")[0];
+    }
+
+    public void showDialogue(String dialogueAsset){
         //Hide gui.
         //Show dialogue window.
         //Allow the user to tap the screen/press any key to go to the next screen.
         hideGui();
         dialogueTable.setVisible(true);
+        dialogueNum = 1;
+        String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
+        dialogueLabel.setText(getDialogue(dialogue));
 
-
-        dialogueLabel.setText(toShow);
-        npcLabel.setText(npc);
+        npcLabel.setText(getNPCname(dialogue));
     }
 
 
@@ -281,20 +304,6 @@ public class Hud implements Disposable {
             gameoverFont.draw(stage.getBatch(), "Press any key to \nreturn to the main menu!", (Gdx.graphics.getWidth() / 2)-250, Gdx.graphics.getHeight() / 2f-100);
         }
         stage.getBatch().end();
-
-
-    }
-
-    /**
-     * This method is meant to inform the player that he has picked up a certain power up.
-     * todo remove this
-     */
-    public void powerUpFeedback(int timeBegun, int timeToDisplay, String message){
-        String currentMessage = feedbackLabel.getText().toString();
-        if (currentMessage.length() > 0){
-            feedbackLabel.setText(message);
-        }
-        feedbackLabel.setText("You have ");
     }
 
     /**

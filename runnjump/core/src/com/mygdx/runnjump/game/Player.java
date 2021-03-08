@@ -380,7 +380,6 @@ public class Player extends MovingActor implements InputProcessor {
 
         determineFrame();
 
-
     }
 
     @Override
@@ -448,11 +447,12 @@ public class Player extends MovingActor implements InputProcessor {
             case Input.Keys.SPACE:
                 if(dialogueMode){
                     //Go to the next dialogue
-                    break;
-                }
-                if(touchingNPC && !dialogueMode){
-                    hud.showDialogue(npcAssetName, npcName);
+                    hud.progressDialogue(npcAssetName, this);
+                } else if(touchingNPC){
+                    hud.showDialogue(npcAssetName);
                     dialogueMode = true;
+                    dKeyHeld = false;
+                    aKeyHeld = false;
                 }
                 break;
             case Input.Keys.W:
@@ -463,22 +463,26 @@ public class Player extends MovingActor implements InputProcessor {
                 break;
             case Input.Keys.D:
                 //velocity.x = speedX;
-                dKeyHeld = true;
-                if (!facingRight && !dialogueMode) {
-                    getSprite().flip(true, false);
-                    facingRight=true;
+                if(!dialogueMode) {
+                    dKeyHeld = true;
+                    if (!facingRight) {
+                        getSprite().flip(true, false);
+                        facingRight = true;
+                    }
                 }
                 break;
             case Input.Keys.A:
-                //velocity.x = -speedX;
-                aKeyHeld = true;
-                if(facingRight && !dialogueMode){
-                    getSprite().flip(true, false);
-                    facingRight=false;
+                if(!dialogueMode) {
+                    aKeyHeld = true;
+                    if (facingRight) {
+                        getSprite().flip(true, false);
+                        facingRight = false;
+                    }
                 }
                 break;
 
         }
+        touchingNPC = false;
         return true;
     }
 
@@ -599,4 +603,7 @@ public class Player extends MovingActor implements InputProcessor {
         return false;
     }
 
+    public void setDialogueMode(boolean b) {
+        this.dialogueMode = b;
+    }
 }
