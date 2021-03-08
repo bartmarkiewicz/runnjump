@@ -15,6 +15,7 @@ import com.mygdx.runnjump.screens.HighScoresScreen;
 import com.mygdx.runnjump.screens.LevelScreen;
 import com.mygdx.runnjump.screens.LoadingScreen;
 import com.mygdx.runnjump.screens.MenuScreen;
+import com.mygdx.runnjump.util.AudioManager;
 import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.MusicManager;
 import com.mygdx.runnjump.util.SoundHandler;
@@ -114,7 +115,7 @@ public class Runnjump extends Game {
 		currentScreen = ScreenEn.LOADING;
 		previousScreen = ScreenEn.LOADING;
 		loadingScreen = new LoadingScreen(this);
-		soundManager = SoundManager.getSoundManager();
+		soundManager = SoundManager.getManager();
 		musicManager = MusicManager.getManager();
 		textureManager = TextureManager.getManager();
 		dialogueManager = DialogueManager.getManager();
@@ -131,10 +132,6 @@ public class Runnjump extends Game {
 		soundOffIcon = new TextureRegionDrawable(new TextureRegionDrawable(soundOff));
 		soundBt = new ImageButton(soundOnIcon, soundOffIcon, soundOffIcon);
 		soundBt.addListener(new SoundHandler(this));
-
-		//bgMusic = Gdx.audio.newMusic(//todo get a music file);
-		//bgMusic.setLooping(true);
-		//bgMusic.play();
 
     }
 

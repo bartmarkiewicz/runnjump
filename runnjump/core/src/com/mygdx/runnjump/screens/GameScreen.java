@@ -134,11 +134,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     }
 
     /**
-     * this method respawns the player at the (currently hard-coded) spawn point, but only if the player has lives left. If  not, a game over boolean is set.
+     * this method respawns the player at the spawn point, but only if the player has lives left. If  not, a game over boolean is set.
      */
     public void respawnPlayer(){
-        //spawnPointX = 5*32;
-        //spawnPointY = 79*32;
         if (player.respawn()) {
             player.getSprite().setPosition(spawnPointX, spawnPointY);//start position
         } else {// no more lives left GAME OVER
@@ -166,8 +164,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         respawnPlayer();
         zoom = 0f;
         orthographicCamera.zoom += zoom;
-        //inputMultiplexer.addProcessor(hud.stage);
-        //inputMultiplexer.addProcessor(player);
+
         mapProperties= tileMap.getProperties();
         tileMapHeight = mapProperties.get("height", Integer.class);
         tileMapWidth = mapProperties.get("width", Integer.class);
@@ -286,50 +283,25 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if(GAME_PAUSED) {
             delta = 0;
         }
-        delta = delta > 0.2f ? 0.2f: delta ;//0.1f is max delta time
+        delta = delta > 0.2f ? 0.2f: delta ;//0.2f is max delta time
         super.render(delta);
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float cameraPosToSetX;
-        float cameraPosToSetY;
 
 
         if (!gameOver) {
-            if (player.getSprite().getX() + player.getSprite().getWidth() / 2 < width / 2) {
-                cameraPosToSetX = width / 2;
-            } else if ((tileMapWidth * 32) - width / 2 < player.getSprite().getX() + player.getSprite().getWidth() / 2) {
-                cameraPosToSetX = (tileMapWidth * 32) - width / 2;
-            } else {
-                cameraPosToSetX = player.getSprite().getX() + player.getSprite().getWidth() / 2;
-            }
-
-            if (player.getSprite().getY() + player.getSprite().getHeight() / 2 < height / 2) {
-                cameraPosToSetY = height / 2;
-            } else if ((tileMapHeight * 32) - height / 2 < player.getSprite().getY() + player.getSprite().getHeight() / 2) {
-                cameraPosToSetY = (tileMapHeight * 32) - height / 2;
-            } else {
-                cameraPosToSetY = player.getSprite().getY() + player.getSprite().getHeight() / 2;
-            }
-            if (player.isDead()) {
-                respawnPlayer();
-            }
-
-            orthographicCamera.position.set(cameraPosToSetX, cameraPosToSetY, 0);
-
-            orthographicCamera.update();
+            updateCamera();
 
             mapRenderer.setView(orthographicCamera);
             mapRenderer.render();
             mapRenderer.getBatch().begin();
 
             player.draw(mapRenderer.getBatch(), delta);
-            for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
-                if (dynamicObjects.get(i) instanceof Hedgehog) {
-                    dynamicObjects.get(i).draw(mapRenderer.getBatch(), delta);
-                }
-            }
+
+            updateDynamicObjects(delta);
+
             mapRenderer.getBatch().end();
         } else if (gameOver) {
             hud.gameOver(player.getScore());
@@ -339,6 +311,14 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             hud.gameWon(player.getScore(), level);
         }
 
+        updatePopups(delta);
+
+
+        batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+    }
+
+    private void updatePopups(float delta) {
         Iterator<Toast> iter = toasts.iterator();
         while (iter.hasNext()) {
             Toast toast = iter.next();
@@ -348,11 +328,45 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 break;
             }
         }
+    }
 
+    private void updateCamera() {
+        float cameraPosToSetX;
+        float cameraPosToSetY;
+        if (player.getSprite().getX() + player.getSprite().getWidth() / 2 < width / 2) {
+            cameraPosToSetX = width / 2;
+        } else if ((tileMapWidth * 32) - width / 2 < player.getSprite().getX() + player.getSprite().getWidth() / 2) {
+            cameraPosToSetX = (tileMapWidth * 32) - width / 2;
+        } else {
+            cameraPosToSetX = player.getSprite().getX() + player.getSprite().getWidth() / 2;
+        }
 
-        Iterator<GameObject> gameObjectsIterator = dynamicObjects.iterator(); //loops through dynamic objects and checks for collisions.
-        while (gameObjectsIterator.hasNext()) {
-            GameObject current = gameObjectsIterator.next();
+        if (player.getSprite().getY() + player.getSprite().getHeight() / 2 < height / 2) {
+            cameraPosToSetY = height / 2;
+        } else if ((tileMapHeight * 32) - height / 2 < player.getSprite().getY() + player.getSprite().getHeight() / 2) {
+            cameraPosToSetY = (tileMapHeight * 32) - height / 2;
+        } else {
+            cameraPosToSetY = player.getSprite().getY() + player.getSprite().getHeight() / 2;
+        }
+        if (player.isDead()) {
+            respawnPlayer();
+        }
+
+        orthographicCamera.position.set(cameraPosToSetX, cameraPosToSetY, 0);
+
+        orthographicCamera.update();
+    }
+
+    /**
+     * Updates dynamic game objects such as enemies and NPCs.
+     *
+     */
+    private void updateDynamicObjects(float delta){
+        for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
+            GameObject current = dynamicObjects.get(i);
+            if (current instanceof Hedgehog) {
+                current.draw(mapRenderer.getBatch(), delta);
+            }
             if (current.isPlayerCollidable() && !current.isDead()) {
                 if(Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
                     System.out.println("Collision between player and " + current.getClass());
@@ -361,12 +375,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 }
             }
         }
-
-
-
-        batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
     }
+
 
     @Override
     public void resize(int width, int height) {

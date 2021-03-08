@@ -28,7 +28,7 @@ public class SoundManager extends AudioManager<Sound> implements Disposable {
      * this is the factory method for getting the sound manager
      * @return
      */
-    public static SoundManager getSoundManager(){
+    public static SoundManager getManager(){
         if (soundManager == null){
             soundManager = new SoundManager();
         }
