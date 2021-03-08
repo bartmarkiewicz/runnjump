@@ -32,6 +32,7 @@ public class Player extends MovingActor implements InputProcessor {
     protected SoundManager soundManager;
     protected DialogueManager dialogueManager;
     protected boolean gameWon;
+    private boolean collisionX = false, collisionY = false;
 
     protected int playerIdleLastFrame=0,playerRunLastFrame=0, playerJumpLastFrame = 0;
 
@@ -241,37 +242,42 @@ public class Player extends MovingActor implements InputProcessor {
             soundManager.play("collect_item");
         }
 
+        removeCollectibles(x, y);
 
-        if (isCellCollectible((int)x+33, (int)y)){
-            removeCollectibe((int)(x+33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); //checks cell to the right
+    }
+
+    private void removeCollectibles(float x, float y) {
+        if (isCellCollectible((int) x + 33, (int) y)) {
+            removeCollectibe((int) (x + 33) / collisionLayer.getTileWidth(), (int) y / collisionLayer.getTileHeight()); //checks cell to the right
         }
-        if(isCellCollectible((int)x-33, (int)y)){
-           removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
-        }; //checks cell to the left
-
-        if (isCellCollectible((int)x, (int)y+33)){
-            removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());// checks cell above
+        if (isCellCollectible((int) x - 33, (int) y)) {
+            removeCollectibe((int) (x - 33) / collisionLayer.getTileWidth(), (int) y / collisionLayer.getTileHeight());
         }
-        if(isCellCollectible(x, (int)y-33)){
-            removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight());
-        };//checks cell below
-        if(isCellCollectible(x-33, y)){
-            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
-        }; // checks cell to the left and below
-        if(isCellCollectible(x-33, y+33)){
-            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());
-        };//checks cell to the left and above
-        if(isCellCollectible(x+33, y-33)){
-            removeCollectibe((int)(x+33)/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight());// checks cell to the left and below
+        ; //checks cell to the left
+
+        if (isCellCollectible((int) x, (int) y + 33)) {
+            removeCollectibe((int) x / collisionLayer.getTileWidth(), (int) (y + 33) / collisionLayer.getTileHeight());// checks cell above
         }
-        if (isCellCollectible(x+33, y+33)){
-            removeCollectibe((int)(x+32)/collisionLayer.getTileWidth(), (int)(y+33)/collisionLayer.getTileHeight());//checks cell above and to the right
+        if (isCellCollectible(x, (int) y - 33)) {
+            removeCollectibe((int) x / collisionLayer.getTileWidth(), (int) (y - 33) / collisionLayer.getTileHeight());
         }
-        if (isCellCollectible(x-33, y-33)){
-            removeCollectibe((int)(x-33)/collisionLayer.getTileWidth(), (int)(y-33)/collisionLayer.getTileHeight()); // checks cell to the left and below
-
-
-
+        ;//checks cell below
+        if (isCellCollectible(x - 33, y)) {
+            removeCollectibe((int) (x - 33) / collisionLayer.getTileWidth(), (int) y / collisionLayer.getTileHeight());
+        }
+        ; // checks cell to the left and below
+        if (isCellCollectible(x - 33, y + 33)) {
+            removeCollectibe((int) (x - 33) / collisionLayer.getTileWidth(), (int) (y + 33) / collisionLayer.getTileHeight());
+        }
+        ;//checks cell to the left and above
+        if (isCellCollectible(x + 33, y - 33)) {
+            removeCollectibe((int) (x + 33) / collisionLayer.getTileWidth(), (int) (y - 33) / collisionLayer.getTileHeight());// checks cell to the left and below
+        }
+        if (isCellCollectible(x + 33, y + 33)) {
+            removeCollectibe((int) (x + 32) / collisionLayer.getTileWidth(), (int) (y + 33) / collisionLayer.getTileHeight());//checks cell above and to the right
+        }
+        if (isCellCollectible(x - 33, y - 33)) {
+            removeCollectibe((int) (x - 33) / collisionLayer.getTileWidth(), (int) (y - 33) / collisionLayer.getTileHeight()); // checks cell to the left and below
         }
     }
 
@@ -301,7 +307,8 @@ public class Player extends MovingActor implements InputProcessor {
         // saves previous position
         float oldX = getSprite().getX(), oldY = getSprite().getY();
 
-        boolean collisionX = false, collisionY = false;
+        collisionX = false;
+        collisionY = false;
 
         // move horizontally
         getSprite().setX(getSprite().getX() + velocity.x * delta);
@@ -364,6 +371,14 @@ public class Player extends MovingActor implements InputProcessor {
             getSprite().setY(oldY);
             velocity.y = 0;
         }
+
+        determineFrame();
+
+
+    }
+
+    @Override
+    protected void determineFrame() {
         if (this.isIdle() && time > 0.2f) {
             playerJumpLastFrame = 0;
 
@@ -403,6 +418,7 @@ public class Player extends MovingActor implements InputProcessor {
             this.setFrame(playerIdle.get(playerIdleLastFrame));
         }
     }
+
     @Override
     public void collidesObject(GameObject other){
         super.collidesObject(other);
@@ -462,7 +478,7 @@ public class Player extends MovingActor implements InputProcessor {
             }
             velocity.y = 0;
             velocity.x = 0;
-            alive = false;
+            super.die();
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * A class used to represent an enemy NPC and its assorted AI and the logic related to it. Unfinished as of week 11.
  */
-public class Enemy extends MovingActor{
+public abstract class Enemy extends MovingActor{
     protected ArrayList<Texture> enemyIdle, enemyMoving;
     protected boolean movingRight;
     protected int lastIdleFrame, lastMovingFrame;
@@ -35,24 +35,6 @@ public class Enemy extends MovingActor{
     protected void handleCollectible(float x, float y) {
         //dummy implementation
 
-    }
-
-    @Override
-    public void update(float delta) {
-        time += delta;
-
-        // sets max velocity
-        if (velocity.y > speedY)
-            velocity.y = speedY;
-        else if (velocity.y < -speedY)
-            velocity.y = -speedY;
-
-
-    }
-
-    @Override
-    protected void die() {
-        alive = false;
     }
 
     @Override

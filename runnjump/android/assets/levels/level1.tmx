@@ -781,31 +781,35 @@
   <object id="29" name="player" x="241.212" y="1602.42">
    <point/>
   </object>
-  <object id="30" name="hedgehog" type="enemy" x="1083.12" y="1311.12">
+  <object id="30" name="hedgehog" type="enemy" x="1033.12" y="1333.12">
    <properties>
-    <property name="blocks_to_move" type="int" value="6"/>
+    <property name="blocks_to_move" type="int" value="7"/>
     <property name="enemy" value=""/>
+    <property name="max_speed_x" type="int" value="150"/>
    </properties>
    <point/>
   </object>
-  <object id="31" name="hedgehog" type="enemy" x="2375.33" y="1613.27">
+  <object id="31" name="hedgehog" type="enemy" x="2118.33" y="1621.27">
    <properties>
-    <property name="blocks_to_move" type="int" value="12"/>
+    <property name="blocks_to_move" type="int" value="20"/>
     <property name="enemy" value=""/>
+    <property name="max_speed_x" type="int" value="200"/>
    </properties>
    <point/>
   </object>
-  <object id="32" name="hedgehog" type="enemy" x="6179" y="2299">
+  <object id="32" name="hedgehog" type="enemy" x="6022" y="2315">
    <properties>
-    <property name="blocks_to_move" type="int" value="12"/>
+    <property name="blocks_to_move" type="int" value="16"/>
     <property name="enemy" value=""/>
+    <property name="max_speed_x" type="int" value="250"/>
    </properties>
    <point/>
   </object>
-  <object id="33" name="hedgehog" type="enemy" x="9128" y="1615">
+  <object id="33" name="hedgehog" type="enemy" x="8571" y="1620">
    <properties>
-    <property name="blocks_to_move" type="int" value="15"/>
+    <property name="blocks_to_move" type="int" value="35"/>
     <property name="enemy" value=""/>
+    <property name="max_speed_x" type="int" value="300"/>
    </properties>
    <point/>
   </object>

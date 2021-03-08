@@ -7,7 +7,7 @@ import com.mygdx.runnjump.util.TextureManager;
 public class Hedgehog extends Enemy{
     float movingTime = 0;
     private final double TIME_TO_TURN;
-    public Hedgehog(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, int blocksToMove) {
+    public Hedgehog(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, int blocksToMove, int MAX_SPEED) {
         super(collisionLayer, visualLayer);
         getSprite().setSize(32*2, 23*2); // 2 by 1 tile
         setLogicalSize(32*2,23*2);
@@ -17,10 +17,10 @@ public class Hedgehog extends Enemy{
         movingRight = true;
         this.playerCollidable = true;
 
-        speedX = 200;
+        speedX = MAX_SPEED;
         speedY = 250;
         TIME_TO_TURN = tilesToMove/(speedX/32);
-        //Formula for how many blocks moved =
+        // Formula for how many blocks moved =
         // Blocks moved = (speedX/32)*TIME_TO_TURN
         // Time to turn = blocks moved/(speedX/32)
 
@@ -46,11 +46,13 @@ public class Hedgehog extends Enemy{
             movingRight = !movingRight;
             getSprite().flip(true, false);
         }
+
         if (movingRight){
             velocity.x = speedX;
         } else {
             velocity.x = -speedX;
         }
+
 
         if(velocity.x < 0){
             collisionX = collidesWest();
@@ -70,6 +72,7 @@ public class Hedgehog extends Enemy{
                 velocity.x = -speedX;
             }
         }
+        //move on y
         getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
         if (velocity.y < 2.5f) {
             collisionY = collidesSouth();
@@ -82,6 +85,14 @@ public class Hedgehog extends Enemy{
             velocity.y = 0;
         }
 
+        determineFrame();
+
+
+
+    }
+
+    @Override
+    protected void determineFrame() {
         if (this.isIdle() && time > 0.2f) {
 
             this.setFrame(enemyIdle.get(lastIdleFrame));
@@ -113,15 +124,13 @@ public class Hedgehog extends Enemy{
         } else if (!inAir() && !isRunning()){
             this.setFrame(enemyIdle.get(lastIdleFrame));
         }
-
-
     }
 
     @Override
     public void collidesObject(GameObject other) {
         super.collidesObject(other);
         if(other instanceof Player){
-            //make noise
+            //make noise?
         }
     }
 }

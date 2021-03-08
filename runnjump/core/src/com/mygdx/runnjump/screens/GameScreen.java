@@ -149,21 +149,12 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     /**
      * this method is used for re-starting the level after a game over.
      *
-     * @param level the level
      */
-    public void startGame(int level){
+    public void startGame(){
         this.level = Runnjump.getLevelSelected();
-        try {
-            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
-        }catch (SerializationException e){
-            //lvl not implemented so it will load lvl 1 by default
-            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
-        }
-        mapRenderer.dispose();
-        mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
 
-        orthographicCamera.update();
-        stage.getViewport().setCamera(orthographicCamera);
+        mapRenderer.dispose();
+        loadLevel();
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
@@ -183,6 +174,28 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     }
 
+    /**
+     * This method is used for loading the level
+     */
+    public void loadLevel(){
+        try {
+            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
+        }catch (SerializationException e){
+            //lvl not implemented so it will load lvl 1 by default
+            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
+        }
+        mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
+        if (orthographicCamera == null) {
+            orthographicCamera = new OrthographicCamera();
+        }
+
+        orthographicCamera.setToOrtho(false,width,height);
+        orthographicCamera.update();
+        stage.getViewport().setCamera(orthographicCamera);
+        if (background == null) {
+            background = new TextureRegion(new Texture("levels\\background.png"));
+        }
+    }
 
     /**
      * this method is used for starting the chosen level after the level/game mode is chosen. It sets up the whole tiled map, the screen and input processors.
@@ -194,19 +207,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         currentScreenId = Runnjump.ScreenEn.GAME;
         width = 1280;
         height = 720;//Gdx.graphics.getHeight();
-        try {
-            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
-        }catch (SerializationException e){
-            //lvl not implemented so it will load lvl 1 by default
-            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
-        }
-        mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
-        orthographicCamera = new OrthographicCamera();
 
-        orthographicCamera.setToOrtho(false,width,height);
-        orthographicCamera.update();
-        stage.getViewport().setCamera(orthographicCamera);
-        background = new TextureRegion(new Texture("levels\\background.png"));
+        loadLevel();
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
@@ -236,7 +238,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
             if(object.getName().equals("hedgehog")){
                 int blocks_to_move = Integer.parseInt(object.getProperties().get("blocks_to_move").toString());
-                Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move);
+                int max_speed = Integer.parseInt(object.getProperties().get("max_speed_x").toString());
+
+                Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move,max_speed);
                 hedgehog.getSprite().setPosition(x,y);
                 dynamicObjects.add(hedgehog);
             }
@@ -344,7 +348,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 break;
             }
         }
-        Iterator<GameObject> gameObjectsIterator = dynamicObjects.iterator();
+
+
+        Iterator<GameObject> gameObjectsIterator = dynamicObjects.iterator(); //loops through dynamic objects and checks for collisions.
         while (gameObjectsIterator.hasNext()) {
             GameObject current = gameObjectsIterator.next();
             if (current.isPlayerCollidable() && !current.isDead()) {
@@ -381,7 +387,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (gameOver){
             //restart on pressing a button/tapping
-            startGame(level);
+            startGame();
         }
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
@@ -398,7 +404,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     public boolean keyUp(int keycode) {
         if (gameOver){
             //restart on pressing a button/tapping
-            startGame(level);
+            startGame();
             return true;
         }
 

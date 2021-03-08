@@ -93,22 +93,7 @@ public class Hud implements Disposable {
         bottomRightTable.bottom().right();
         container.add(bottomRightTable).bottom().right().fill().expand();
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
-            Skin touchpadSkin = new Skin();
-            touchpadSkin.add("touchBg", new Texture("skin\\touchbg.png"));
-            touchpadSkin.add("touchKnob", new Texture("skin\\touchknob.png"));
-            Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
-            touchpadStyle.background = touchpadSkin.getDrawable("touchBg");
-            touchpadStyle.knob = touchpadSkin.getDrawable("touchKnob");
-            touchpadStyle.background.setMinWidth(200);
-            touchpadStyle.background.setMinHeight(200);
-            touchpadStyle.knob.setMinWidth(100);
-            touchpadStyle.knob.setMinHeight(100);
-            movementJoystick = new Touchpad(30, touchpadStyle);
-            movementJoystick.setResetOnTouchUp(true);
-            bottomTable.add(movementJoystick).width(stage.getWidth()/3).height(stage.getHeight()/3).left().bottom();
-            jumpBt = new Button(skin);
-
-            bottomRightTable.add(jumpBt).width(stage.getWidth()/3).height(stage.getHeight()/5).right().bottom().pad(40);
+            createAndroidUI(skin);
         }
 
         container.setFillParent(true);
@@ -119,6 +104,27 @@ public class Hud implements Disposable {
         stage.getBatch().setColor(Color.WHITE);
 
     }
+
+    private void createAndroidUI(Skin skin) {
+        Skin touchpadSkin = new Skin();
+        touchpadSkin.add("touchBg", new Texture("skin\\touchbg.png"));
+        touchpadSkin.add("touchKnob", new Texture("skin\\touchknob.png"));
+        Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
+        touchpadStyle.background = touchpadSkin.getDrawable("touchBg");
+        touchpadStyle.knob = touchpadSkin.getDrawable("touchKnob");
+        touchpadStyle.background.setMinWidth(200);
+        touchpadStyle.background.setMinHeight(200);
+        touchpadStyle.knob.setMinWidth(100);
+        touchpadStyle.knob.setMinHeight(100);
+        movementJoystick = new Touchpad(30, touchpadStyle);
+        movementJoystick.setResetOnTouchUp(true);
+        bottomTable.add(movementJoystick).width(stage.getWidth()/3).height(stage.getHeight()/3).left().bottom();
+        jumpBt = new Button(skin);
+
+        bottomRightTable.add(jumpBt).width(stage.getWidth()/3).height(stage.getHeight()/5).right().bottom().pad(40);
+
+    }
+
 
     /**
      * this method is used to update the score displayed on the hud.

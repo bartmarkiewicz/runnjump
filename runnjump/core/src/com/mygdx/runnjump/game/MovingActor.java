@@ -144,6 +144,8 @@ public abstract class MovingActor extends GameObject {
             velocity.y = -speedY;
     }
 
+    abstract void determineFrame();
+
     /**
      * Similar to its sister methods, checks if the cell specified by the x and y coordinates is miscellaneous.
      * @param x
@@ -236,4 +238,9 @@ public abstract class MovingActor extends GameObject {
         this.collisionLayer = collisionLayer;
     }
 
+
+    @Override
+    protected void die() {
+        alive = false;
+    }
 }
