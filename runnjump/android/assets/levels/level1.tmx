@@ -821,7 +821,7 @@
    </properties>
    <point/>
   </object>
-  <object id="35" name="npc" x="1474.18" y="1537.58">
+  <object id="35" name="npc" x="1512.18" y="1581.58">
    <properties>
     <property name="assetName" value="damsel"/>
     <property name="name" value="Jessica"/>

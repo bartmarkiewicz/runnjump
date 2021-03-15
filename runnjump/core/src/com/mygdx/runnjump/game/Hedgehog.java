@@ -127,8 +127,8 @@ public class Hedgehog extends Enemy{
     }
 
     @Override
-    public void collidesObject(GameObject other) {
-        super.collidesObject(other);
+    public void collidesObject(GameObject other, float delta) {
+        super.collidesObject(other, delta);
         if(other instanceof Player){
             //make noise?
         }

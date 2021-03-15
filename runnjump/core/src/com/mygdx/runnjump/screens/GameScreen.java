@@ -217,9 +217,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             } else if (object.getName().equals("npc")){
                 String name = object.getProperties().get("name").toString();
                 String assetName = object.getProperties().get("assetName").toString();
-                Boolean rescuable = Boolean.parseBoolean(object.getProperties().get("rescuable").toString());
 
-                NPC npc = new NPC(layer,visualLayer,name,assetName, rescuable);
+                NPC npc = new NPC(layer,visualLayer,name,assetName);
                 npc.getSprite().setPosition(x,y);
                 dynamicObjects.add(npc);
             } else if (object.getName().equals("player")){
@@ -388,8 +387,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 if (current.isPlayerCollidable()) {
                     if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
                         System.out.println("Collision between player and " + current.getClass());
-                        player.collidesObject(current);
-                        current.collidesObject(player);
+                        player.collidesObject(current, delta);
+                        current.collidesObject(player, delta);
                     }
                 }
             }

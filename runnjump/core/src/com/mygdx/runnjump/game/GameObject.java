@@ -11,7 +11,7 @@ public abstract class GameObject {
     protected boolean alive;
     protected boolean playerCollidable;
 
-    public void collidesObject(GameObject other){
+    public void collidesObject(GameObject other, float delta){
         //dummy
     }
 

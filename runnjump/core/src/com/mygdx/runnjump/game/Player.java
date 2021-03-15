@@ -29,7 +29,16 @@ public class Player extends MovingActor implements InputProcessor {
     String npcName, npcAssetName;
 
     protected boolean gravityPowerUp;
-    protected float powerUpTime;
+    protected boolean superSpeedPU;
+    protected boolean ghostWalkPU;
+    protected int gravityPowerUps;
+    protected int superSpeedPowerUps;
+    protected int ghostWalkPowerUps;
+
+    protected float gravityPowerUpTime;
+    private float speedTime;
+    private float ghostWalkPUTime;
+
     protected int score, hearts;
     protected final int STARTING_HEARTS = 3;
     protected boolean canJump;
@@ -87,7 +96,7 @@ public class Player extends MovingActor implements InputProcessor {
         setLogicalSize(42,85); //little less than 2 tiles by 3 tiles
         this.score = 0;
         this.hearts =STARTING_HEARTS;
-        this.powerUpTime = 0;
+        this.gravityPowerUpTime = 0;
         this.hud = hud;
         dialogueContext = new TreeMap<String, Integer>();
         conditionsMet = new TreeMap<>();
@@ -145,9 +154,14 @@ public class Player extends MovingActor implements InputProcessor {
                 }
             });
         }
-
+        gravityPowerUps = 2;// put these to 0 on release todo
+        superSpeedPowerUps = 2;
+        ghostWalkPowerUps = 2;
+        ghostWalkPU = false;
+        superSpeedPU = false;
         touchingNPC = false;
-
+        speedTime = 0;
+        ghostWalkPUTime = 0;
 
     }
 
@@ -193,7 +207,6 @@ public class Player extends MovingActor implements InputProcessor {
 
     protected void gravityPowerup(){
         gravityPowerUp = true;
-
     }
 
 
@@ -223,8 +236,8 @@ public class Player extends MovingActor implements InputProcessor {
 
         if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
             //gravity collected;
-            gravityPowerup();
-            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up activated!");
+            gravityPowerUps += 1;
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up acquired!");
             //soundManager.playSound("coin_collect");
         }
 
@@ -325,19 +338,26 @@ public class Player extends MovingActor implements InputProcessor {
         // move horizontally
         getSprite().setX(getSprite().getX() + velocity.x * delta);
 
+        if(ghostWalkPU && ghostWalkPUTime < 4) { // ghost walk disables left/right collisions
+            ghostWalkPUTime += delta;
+        } else { // maybe keep checking for collisions and have ghost walk active while inside a wall?
+            if (velocity.x < 0) // going left
+                collisionX = collidesWest();
+            else if (velocity.x > 0) // going right
+                collisionX = collidesEast();
+            if(!collidesEast() && !collidesWest()) {
+                ghostWalkPU = false;
+                ghostWalkPUTime = 0;
+            }
+        }
 
-        if (velocity.x < 0) // going left
-            collisionX = collidesWest();
-        else if (velocity.x > 0) // going right
-            collisionX = collidesEast();
-
-        if (gravityPowerUp && powerUpTime < 9) { //power up lasts 9 seconds
-            powerUpTime += delta;
+        if (gravityPowerUp && gravityPowerUpTime < 9) { //power up lasts 9 seconds
+            gravityPowerUpTime += delta;
             velocity.y -= (gravity / 2) * delta;
         } else {
             velocity.y -= gravity * delta;
             gravityPowerUp = false;
-            powerUpTime = 0;
+            gravityPowerUpTime = 0;
         }
 
 
@@ -347,10 +367,25 @@ public class Player extends MovingActor implements InputProcessor {
             velocity.x = 0;
         } else {
             if (dKeyHeld) {
-                velocity.x = speedX;
+                if (superSpeedPU && speedTime < 9){
+                    velocity.x = speedX*2;
+                    speedTime += delta;
+                } else {
+                    velocity.x = speedX;
+                    speedTime = 0;
+                    superSpeedPU = false;
+                }
             }
             if (aKeyHeld) {
-                velocity.x = -speedX;
+                if(superSpeedPU && speedTime < 9) {
+                    velocity.x = -speedX*2;
+                    speedTime += delta;
+                } else {
+                    velocity.x = -speedX;
+                    speedTime = 0;
+                    superSpeedPU = false;
+
+                }
             }
             if (aKeyHeld && dKeyHeld) {
                 velocity.x = 0;
@@ -382,6 +417,10 @@ public class Player extends MovingActor implements InputProcessor {
         if (collisionY) {
             getSprite().setY(oldY);
             velocity.y = 0;
+        }
+
+        if (time > 0.15f ){
+            touchingNPC = false;
         }
 
         determineFrame();
@@ -431,8 +470,8 @@ public class Player extends MovingActor implements InputProcessor {
     }
 
     @Override
-    public void collidesObject(GameObject other){
-        super.collidesObject(other);
+    public void collidesObject(GameObject other, float delta){
+        super.collidesObject(other, delta);
         if(other instanceof Hedgehog){
             die();
         } else if (other instanceof NPC){
@@ -452,11 +491,11 @@ public class Player extends MovingActor implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch(keycode) {
             case Input.Keys.SPACE:
-                if(dialogueMode){
+                if (dialogueMode) {
                     //Go to the next dialogue
                     hud.progressDialogue(npcAssetName, this);
-                } else if(touchingNPC){
-                    if(dialogueContext.containsKey(npcAssetName)){
+                } else if(touchingNPC) {
+                    if (dialogueContext.containsKey(npcAssetName)) {
                         hud.showDialogue(npcAssetName, dialogueContext.get(npcAssetName));
                     } else {
                         hud.showDialogue(npcAssetName, 1);
@@ -492,9 +531,38 @@ public class Player extends MovingActor implements InputProcessor {
                 }
                 break;
 
+            case Input.Keys.NUM_1://power up 1 activated
+                if(gravityPowerUps > 0){
+                    gravityPowerup();
+                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up has been activated!");
+                    gravityPowerUps -= 1;
+                }
+                break;
+            case Input.Keys.NUM_2:
+                if(superSpeedPowerUps > 0){
+                    superSpeedPU();
+                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super speed power-up has been activated!");
+                    superSpeedPowerUps -= 1;
+                }
+                break;
+            case Input.Keys.NUM_3:
+                if(ghostWalkPowerUps > 0){
+                    ghostWalkPU();
+                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost walk power-up has been activated!");
+                    ghostWalkPowerUps -= 1;
+                }
+                break;
         }
         touchingNPC = false;
         return true;
+    }
+
+    private void ghostWalkPU() {
+        ghostWalkPU = true;
+    }
+
+    private void superSpeedPU() {
+        superSpeedPU = true;
     }
 
 
@@ -538,6 +606,7 @@ public class Player extends MovingActor implements InputProcessor {
     public void restart() {
         hearts = STARTING_HEARTS;
         hud.setLives(STARTING_HEARTS);
+        gravityPowerUps = 0;
         dialogueContext.clear();//clears the dialogues
         conditionsMet.clear();//clears met conditions
         score = 0;
