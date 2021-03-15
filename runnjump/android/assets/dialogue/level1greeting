@@ -6,6 +6,7 @@ Player@I'll help you, im a professional.
 Jack@You look like you know your way around the jungle, alright, I'll wait here while you go looking for her.
 Jack@You should watch out for the wild animals in this area, assume anything can kill you.
 Player@I'll keep that in mind.
+CONDITION@QUEST1
 END@END
 Jack@Stop wasting time go look for my daughter, quickly!
 CHECK@RESCUED1
