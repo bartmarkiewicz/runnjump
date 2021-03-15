@@ -18,6 +18,7 @@ import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * This class represents the player character on the game map.
@@ -48,6 +49,10 @@ public class Player extends MovingActor implements InputProcessor {
     private boolean aKeyHeld;
     Runnjump theGame;
     private boolean dialogueMode = false;
+    private TreeMap<String, Integer> dialogueContext;
+    private TreeMap<String, Boolean> conditionsMet;
+    private GameObject npcTouched;
+
 
     /**
      * getter for lives left
@@ -84,7 +89,8 @@ public class Player extends MovingActor implements InputProcessor {
         this.hearts =STARTING_HEARTS;
         this.powerUpTime = 0;
         this.hud = hud;
-
+        dialogueContext = new TreeMap<String, Integer>();
+        conditionsMet = new TreeMap<>();
         this.theGame = theGame;
         hud.setScore(score);
         hud.setLives(hearts);
@@ -431,6 +437,7 @@ public class Player extends MovingActor implements InputProcessor {
             die();
         } else if (other instanceof NPC){
             touchingNPC = true;
+            npcTouched = other;
             npcName = ((NPC) other).getNpcName();
             npcAssetName = ((NPC) other).getAssetName();
         }
@@ -449,7 +456,11 @@ public class Player extends MovingActor implements InputProcessor {
                     //Go to the next dialogue
                     hud.progressDialogue(npcAssetName, this);
                 } else if(touchingNPC){
-                    hud.showDialogue(npcAssetName);
+                    if(dialogueContext.containsKey(npcAssetName)){
+                        hud.showDialogue(npcAssetName, dialogueContext.get(npcAssetName));
+                    } else {
+                        hud.showDialogue(npcAssetName, 1);
+                    }
                     dialogueMode = true;
                     dKeyHeld = false;
                     aKeyHeld = false;
@@ -527,6 +538,8 @@ public class Player extends MovingActor implements InputProcessor {
     public void restart() {
         hearts = STARTING_HEARTS;
         hud.setLives(STARTING_HEARTS);
+        dialogueContext.clear();//clears the dialogues
+        conditionsMet.clear();//clears met conditions
         score = 0;
         hud.setScore(0);
     }
@@ -605,5 +618,41 @@ public class Player extends MovingActor implements InputProcessor {
 
     public void setDialogueMode(boolean b) {
         this.dialogueMode = b;
+    }
+
+    public void killNPC() {
+        npcTouched.die();
+        if(npcTouched instanceof NPC){
+            SoundManager.getManager().play("heart_collect");
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast(npcName + " has been rescued!");
+        }
+    }
+
+    public void setDialogueContext(String dialogueAsset, int dialogueStart) {
+        dialogueContext.put(dialogueAsset, dialogueStart);
+    }
+
+    public void grantCondition(String tag, boolean condition){
+        conditionsMet.put(tag,condition);
+    }
+
+    public void getGift(String name, int amount){
+        if(name.equals("SCORE")){
+            score+=amount;
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("+"+amount + " score");
+            hud.setScore(score);
+            soundManager.playRandom("coin_collect");
+        } else if(name.equals("HEARTS")){
+            hearts += amount;
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("+"+amount + " lives");
+            hud.setScore(hearts);
+        }
+    }
+
+    public boolean conditionMet(String tag) {
+        if(conditionsMet.containsKey(tag)){
+            return true;
+        }
+        return false;
     }
 }

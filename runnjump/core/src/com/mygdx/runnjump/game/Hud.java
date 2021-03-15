@@ -53,6 +53,7 @@ public class Hud implements Disposable {
     Table dialogueTable;
 
     int dialogueNum = 1;
+    int dialogueStart = 1;
     Label dialogueLabel, npcLabel;
 
     /**
@@ -249,9 +250,44 @@ public class Hud implements Disposable {
         dialogueTable.setVisible(false);
     }
 
+
     public void progressDialogue(String dialogueAsset, Player player){
         String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
-        if(dialogue != null) {
+        if (dialogue != null && dialogue.equals("END@END")){
+            hideDialogue();
+            showGui();
+            player.setDialogueMode(false);
+            dialogueStart = dialogueNum + 1;
+            player.setDialogueContext(dialogueAsset, dialogueStart);
+        } else if(dialogue!=null && dialogue.equals("KILL@KILL")){
+            player.killNPC();
+            hideDialogue();
+            showGui();
+            player.setDialogueMode(false);
+        } else if (dialogue!=null && getNPCname(dialogue).equals("CHECK")) {
+            if (player.conditionMet(getDialogue(dialogue))){
+                dialogueNum += 1;
+                progressDialogue(dialogueAsset, player); // if condition met, progress to the next dialogue.
+            } else {
+                hideDialogue();
+                showGui();
+                //player.setDialogueContext(dialogueAsset, dialogueStart+1);
+                player.setDialogueMode(false);
+            }
+        } else if (dialogue!=null && getNPCname(dialogue).equals("CONDITION")){
+            player.grantCondition(getDialogue(dialogue), true);
+            dialogueNum += 1;
+            progressDialogue(dialogueAsset, player); //progress to the next dialogue
+        } else if (dialogue!=null && getNPCname(dialogue).equals("GIVE")){
+            String[] gift = getDialogue(dialogue).split(" ");
+            if(gift[0].equals("POWER_UP")){
+                // GRANT POWER UP todo
+            } else {
+                player.getGift(gift[1], Integer.parseInt(gift[0]));
+            }
+            dialogueNum += 1;
+            progressDialogue(dialogueAsset, player);
+        } else if(dialogue != null) {
             dialogueLabel.setText(getDialogue(dialogue));
             npcLabel.setText(getNPCname(dialogue));
             npcLabel.invalidate();
@@ -259,7 +295,7 @@ public class Hud implements Disposable {
         } else {
             hideDialogue();
             showGui();
-            dialogueNum = 1;
+            dialogueNum = dialogueStart;
             player.setDialogueMode(false);
         }
     }
@@ -271,17 +307,18 @@ public class Hud implements Disposable {
         return dialog.split("@")[0];
     }
 
-    public void showDialogue(String dialogueAsset){
+    public void showDialogue(String dialogueAsset, int context){
         //Hide gui.
         //Show dialogue window.
         //Allow the user to tap the screen/press any key to go to the next screen.
         hideGui();
         dialogueTable.setVisible(true);
-        dialogueNum = 1;
+        dialogueNum = context;
         String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
-        dialogueLabel.setText(getDialogue(dialogue));
 
+        dialogueLabel.setText(getDialogue(dialogue));
         npcLabel.setText(getNPCname(dialogue));
+        dialogueNum+=1;
     }
 
 

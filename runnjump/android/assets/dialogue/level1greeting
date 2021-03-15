@@ -6,3 +6,12 @@ Player@I'll help you, im a professional.
 Jack@You look like you know your way around the jungle, alright, I'll wait here while you go looking for her.
 Jack@You should watch out for the wild animals in this area, assume anything can kill you.
 Player@I'll keep that in mind.
+END@END
+Jack@Stop wasting time go look for my daughter, quickly!
+CHECK@RESCUED1
+Jack@Oh, thank you so much for finding my daughter!
+Jack@I'll give you this as a token of gratitude.
+GIVE@15 SCORE
+Player@All in a day's work.
+END@END
+Jack@Thanks once again for saving my daughter.

@@ -1,0 +1,8 @@
+Player@Hey!
+Jessica@Help me please!
+Player@I'll get you out of here.
+Jessica@Oh thank god you are here.
+Jessica@Go first, I'll be right behind you.
+Player@Alright, I'll find us a way to safety.
+CONDITION@RESCUED1
+KILL@KILL

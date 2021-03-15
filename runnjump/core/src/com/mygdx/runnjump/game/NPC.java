@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class NPC extends MovingActor{
     ArrayList<Texture> idle;
     private String npcName, assetName;
-    public NPC(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, String name,  String assetName) {
+    private boolean rescuable;
+    public NPC(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, String name,  String assetName, boolean rescuable) {
         super(collisionLayer, visualLayer);
         idle = TextureManager.getManager().getFrameSet(assetName);
         this.assetName = assetName;
@@ -20,7 +21,7 @@ public class NPC extends MovingActor{
         getSprite().setFlip(true, false);
         setLogicalSize(32*2,32*3);
         this.playerCollidable = true;
-
+        this.rescuable = rescuable;
     }
 
     @Override

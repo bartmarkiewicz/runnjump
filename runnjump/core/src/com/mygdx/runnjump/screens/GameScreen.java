@@ -189,6 +189,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         orthographicCamera.setToOrtho(false,width,height);
         orthographicCamera.update();
         stage.getViewport().setCamera(orthographicCamera);
+
         if (background == null) {
             background = new TextureRegion(new Texture("levels\\background.png"));
         }
@@ -216,7 +217,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             } else if (object.getName().equals("npc")){
                 String name = object.getProperties().get("name").toString();
                 String assetName = object.getProperties().get("assetName").toString();
-                NPC npc = new NPC(layer,visualLayer,name,assetName);
+                Boolean rescuable = Boolean.parseBoolean(object.getProperties().get("rescuable").toString());
+
+                NPC npc = new NPC(layer,visualLayer,name,assetName, rescuable);
                 npc.getSprite().setPosition(x,y);
                 dynamicObjects.add(npc);
             } else if (object.getName().equals("player")){
@@ -380,13 +383,14 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     private void updateDynamicObjects(float delta){
         for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
             GameObject current = dynamicObjects.get(i);
-            current.draw(mapRenderer.getBatch(), delta);
-
-            if (current.isPlayerCollidable() && !current.isDead()) {
-                if(Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
-                    System.out.println("Collision between player and " + current.getClass());
-                    player.collidesObject(current);
-                    current.collidesObject(player);
+            if (!current.isDead()) {
+                current.draw(mapRenderer.getBatch(), delta);
+                if (current.isPlayerCollidable()) {
+                    if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
+                        System.out.println("Collision between player and " + current.getClass());
+                        player.collidesObject(current);
+                        current.collidesObject(player);
+                    }
                 }
             }
         }
