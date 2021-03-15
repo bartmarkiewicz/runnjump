@@ -134,6 +134,7 @@ public class MenuScreen extends ScreenBase {
     public void show() {
         super.show();
         theGame.musicManager.play("bg_1");
+        theGame.musicManager.setLooping(true);
         initGui();
 
     }

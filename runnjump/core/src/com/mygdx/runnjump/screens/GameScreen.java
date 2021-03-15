@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
-import com.mygdx.runnjump.game.Enemy;
 import com.mygdx.runnjump.game.GameObject;
 import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
@@ -200,7 +199,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * @param layer
      * @param visualLayer
      */
-    public void placeDynamicObjects(TiledMapTileLayer layer, TiledMapTileLayer visualLayer){
+    public void placeObjects(TiledMapTileLayer layer, TiledMapTileLayer visualLayer){
         for(MapObject object: tileMap.getLayers().get("objects").getObjects()){ // gets the map objects from the object layer
             float x, y; // object position
             x = Float.parseFloat(object.getProperties().get("x").toString());
@@ -260,7 +259,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         tileMapWidth = mapProperties.get("width", Integer.class);
         //setSpawnPoint(5*32, 79*32);
         //respawnPlayer();
-        placeDynamicObjects(layer,visualLayer);
+        placeObjects(layer,visualLayer);
 
         tileGroups = new HashMap<>();
 

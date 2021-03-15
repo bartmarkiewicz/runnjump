@@ -109,6 +109,18 @@ public class MusicManager extends AudioManager<Music> implements Disposable {
     }
 
     /**
+     * This method causes the currently playing music to loop.
+     * @param looping
+     */
+    public void setLooping(Boolean looping){
+        if(currentlyPlaying != null){
+            currentlyPlaying.setLooping(looping);
+        }
+    }
+
+
+
+    /**
      * this method mutes music.
      */
     public void mute(){
