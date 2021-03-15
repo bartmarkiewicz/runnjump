@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 /**
- * A class used to represent an enemy NPC and its assorted AI and the logic related to it. Unfinished as of week 11.
+ * A class used to represent an enemy NPC and its assorted AI and the logic related to it.
  */
 public abstract class Enemy extends MovingActor{
     protected ArrayList<Texture> enemyIdle, enemyMoving;

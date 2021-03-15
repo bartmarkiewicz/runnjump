@@ -196,6 +196,41 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     }
 
     /**
+     * This method parses the TMX map to create dynamic game objects based on the TMX map objects within the map and places the created objects in the location specified on the map.
+     * @param layer
+     * @param visualLayer
+     */
+    public void placeDynamicObjects(TiledMapTileLayer layer, TiledMapTileLayer visualLayer){
+        for(MapObject object: tileMap.getLayers().get("objects").getObjects()){ // gets the map objects from the object layer
+            float x, y; // object position
+            x = Float.parseFloat(object.getProperties().get("x").toString());
+            y = Float.parseFloat(object.getProperties().get("y").toString());
+
+
+            if(object.getName().equals("hedgehog")){
+                int blocks_to_move = Integer.parseInt(object.getProperties().get("blocks_to_move").toString());
+                int max_speed = Integer.parseInt(object.getProperties().get("max_speed_x").toString());
+
+                Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move,max_speed);
+                hedgehog.getSprite().setPosition(x,y);
+                dynamicObjects.add(hedgehog);
+            } else if (object.getName().equals("npc")){
+                String name = object.getProperties().get("name").toString();
+                String assetName = object.getProperties().get("assetName").toString();
+                NPC npc = new NPC(layer,visualLayer,name,assetName);
+                npc.getSprite().setPosition(x,y);
+                dynamicObjects.add(npc);
+            } else if (object.getName().equals("player")){
+                setSpawnPoint(x, y);
+                respawnPlayer();
+            }
+
+            System.out.println("x " + x + " y: " + y);
+        }
+    }
+
+
+    /**
      * this method is used for starting the chosen level after the level/game mode is chosen. It sets up the whole tiled map, the screen and input processors.
      */
     @Override
@@ -225,32 +260,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         tileMapWidth = mapProperties.get("width", Integer.class);
         //setSpawnPoint(5*32, 79*32);
         //respawnPlayer();
-        for(MapObject object: tileMap.getLayers().get("objects").getObjects()){ // gets the map objects from the object layer
-            float x, y; // object position
-            x = Float.parseFloat(object.getProperties().get("x").toString());
-            y = Float.parseFloat(object.getProperties().get("y").toString());
-
-
-            if(object.getName().equals("hedgehog")){
-                int blocks_to_move = Integer.parseInt(object.getProperties().get("blocks_to_move").toString());
-                int max_speed = Integer.parseInt(object.getProperties().get("max_speed_x").toString());
-
-                Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move,max_speed);
-                hedgehog.getSprite().setPosition(x,y);
-                dynamicObjects.add(hedgehog);
-            } else if (object.getName().equals("npc")){
-                String name = object.getProperties().get("name").toString();
-                String assetName = object.getProperties().get("assetName").toString();
-                NPC npc = new NPC(layer,visualLayer,name,assetName);
-                npc.getSprite().setPosition(x,y);
-                dynamicObjects.add(npc);
-            } else if (object.getName().equals("player")){
-                setSpawnPoint(x, y);
-                respawnPlayer();
-            }
-
-            System.out.println("x " + x + " y: " + y);
-        }
+        placeDynamicObjects(layer,visualLayer);
 
         tileGroups = new HashMap<>();
 
