@@ -12,8 +12,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Run N Jump";
 		config.forceExit = false;
-		config.height = 900;
-		config.width = 1600;
+		config.height = 600;
+		config.width = 900;
 		new LwjglApplication(new Runnjump(), config);
 
 	}

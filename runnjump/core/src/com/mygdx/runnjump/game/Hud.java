@@ -157,7 +157,7 @@ public class Hud implements Disposable {
         dialogueContainer.setFillParent(true);
         dialogueTable.setVisible(false);
         stackContainer.add(dialogueContainer);
-        dialogueTable.setDebug(true);
+        dialogueTable.setDebug(false);
     }
 
     private void createAndroidUI(Skin skin) {

@@ -154,9 +154,9 @@ public class Player extends MovingActor implements InputProcessor {
                 }
             });
         }
-        gravityPowerUps = 2;// put these to 0 on release todo
-        superSpeedPowerUps = 2;
-        ghostWalkPowerUps = 2;
+        gravityPowerUps = 22;// put these to 0 on release todo
+        superSpeedPowerUps = 22;
+        ghostWalkPowerUps = 22;
         ghostWalkPU = false;
         superSpeedPU = false;
         touchingNPC = false;
