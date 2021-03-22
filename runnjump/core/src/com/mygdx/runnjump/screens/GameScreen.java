@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.game.Bandit;
 import com.mygdx.runnjump.game.GameObject;
 import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
@@ -214,7 +215,14 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 Hedgehog hedgehog = new Hedgehog(layer, visualLayer, blocks_to_move,max_speed);
                 hedgehog.getSprite().setPosition(x,y);
                 dynamicObjects.add(hedgehog);
-            } else if (object.getName().equals("npc")){
+            } else if (object.getName().equals("bandit")) {
+                int max_speed = Integer.parseInt(object.getProperties().get("max_speed_x").toString());
+                Bandit bandit = new Bandit(layer,visualLayer,max_speed);
+                bandit.getSprite().setPosition(x,y);
+                dynamicObjects.add(bandit);
+
+
+            }else if (object.getName().equals("npc")){
                 String name = object.getProperties().get("name").toString();
                 String assetName = object.getProperties().get("assetName").toString();
 

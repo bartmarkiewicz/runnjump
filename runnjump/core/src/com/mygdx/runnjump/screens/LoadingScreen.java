@@ -49,6 +49,10 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.textureManager.addFrameAssetSet("hedgehog_moving", "hedgehog\\Walking_", 18);
         theGame.textureManager.addFrameAssetSet("hedgehog_idle", "hedgehog\\Idle_Blinking_", 12);
 
+        theGame.textureManager.addFrameAssetSet("bandit_moving", "bandit\\Running_", 12);
+        theGame.textureManager.addFrameAssetSet("bandit_idle", "bandit\\Idle Blinking_", 18);
+        theGame.textureManager.addFrameAssetSet("bandit_attacking", "bandit\\Slashing_", 12);
+
     }
 
     /**

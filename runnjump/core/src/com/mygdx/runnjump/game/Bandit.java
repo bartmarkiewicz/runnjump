@@ -1,0 +1,244 @@
+package com.mygdx.runnjump.game;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.mygdx.runnjump.screens.GameScreen;
+import com.mygdx.runnjump.util.TextureManager;
+
+import java.util.ArrayList;
+
+public class Bandit extends Enemy{
+    float attackingTime = 3;
+    boolean chasing;
+    boolean attacking;
+    boolean moving;
+    float detectionRadius;
+    ArrayList<Texture> enemyAttacking;
+    int attackingFrame;
+    /*This boolean measure how long a player has been above the bandit. If its a high enough number, the bandit will jump to reach the player.
+     */
+    private float aboveTime;
+    private float jumpTime;
+
+    /**
+     * This class represents a bandit which you can kill by jumping on top of.
+     * This enemy does not kill upon touching but it kills with its sword.
+     * @param collisionLayer
+     * @param visualLayer
+     * @param MAX_SPEED
+     */
+    public Bandit(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, int MAX_SPEED) {
+        super(collisionLayer, visualLayer);
+        getSprite().setSize(30*2,30*3);//2 by 3 tiles size
+        setLogicalSize(42,85); //little less than 2 tiles by 3 tiles
+        enemyIdle = TextureManager.getManager().getFrameSet("bandit_idle");
+        enemyMoving = TextureManager.getManager().getFrameSet("bandit_moving");
+        enemyAttacking = TextureManager.getManager().getFrameSet("bandit_attacking");
+        movingRight = true;
+        this.playerCollidable = true;
+        speedX = MAX_SPEED;
+        speedY = 150;
+        aboveTime = 0f;
+        jumpTime = 0;
+        this.attackingFrame = 0;
+        this.chasing = false;
+        this.moving = false;
+        this.attacking = false;
+        this.detectionRadius = 32*15; // can see 15 cells around itself.
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+
+        time += delta;
+        jumpTime += delta;
+        attackingTime += delta;
+
+        // saves previous position
+        float oldX = getSprite().getX(), oldY = getSprite().getY();
+
+        boolean collisionX = false, collisionY = false;
+        if(moving) {
+            getSprite().setX(getSprite().getX() + velocity.x * delta); // move on x
+        }
+        boolean playerClose = isPlayerClose();
+
+        if ((playerPosition.getX()) < getSprite().getX()+detectionRadius && playerPosition.getX() > getSprite().getX()-detectionRadius &&
+                ((playerPosition.getY()) < getSprite().getY()+detectionRadius && playerPosition.getY() > getSprite().getY()-detectionRadius)) {
+            moving = true;
+        } else {
+            moving = false;
+        }
+
+        if (playerPosition.getX() > getSprite().getX() && !movingRight && (!playerClose)) { //the enemy always faces the player
+            if(!movingRight){
+                movingRight = true;
+                getSprite().flip(true, false);
+            }
+        } else if (playerPosition.getX() < getSprite().getX() && movingRight && (!playerClose)){
+            movingRight = false;
+            getSprite().flip(true, false);
+        } else if ((Math.abs(playerPosition.getX()-getSprite().getX())) < 3){
+            moving = false;
+        }
+
+        if (movingRight && moving) {
+            velocity.x = speedX;
+        } else {
+            velocity.x = -speedX;
+        }
+
+
+
+        if (velocity.x < 0) {
+            collisionX = collidesWest();
+        } else if (velocity.x > 0) {
+            collisionX = collidesEast();
+        }
+
+        velocity.y -= gravity * delta;
+        if (collisionX) {
+            getSprite().setX(oldX);
+            velocity.x = 0;
+        } else {
+            if (movingRight) {
+                velocity.x = speedX;
+            }
+            if (!movingRight) {
+                velocity.x = -speedX;
+            }
+        }
+        //move on y
+        getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
+        if (velocity.y < 2.5f) {
+            collisionY = collidesSouth();
+        } else if (velocity.y > 2.5f) {
+            collisionY = collidesNorth();
+        }
+
+        if (collisionY) {
+            getSprite().setY(oldY);
+            velocity.y = 0;
+        }
+
+
+        if (!attacking && attackingTime > 3f){//needs 3 seconds to rest.
+            attack();
+        }
+
+        if(isPlayerAbove(delta) && aboveTime > 1f && !inAir()){
+            if(jumpTime > 3f) {
+                jump();
+                System.out.println("Player above detected, I SHOULD JUMP!!!");
+
+            }
+        }
+
+        determineFrame();
+
+    }
+
+    private void jump() {
+        velocity.y = speedY / 1.8f;
+        jumpTime = 0;
+    }
+
+    private boolean isPlayerAbove(float delta) {
+        if ((playerPosition.getX()) < getSprite().getX()+getSprite().getWidth()+(32*10) && playerPosition.getX() > getSprite().getX()-getSprite().getWidth()-(32*10) &&
+                (playerPosition.getY() > getSprite().getY()-getSprite().getHeight()+(32*7))) {
+            aboveTime += delta;
+            return true;
+        }
+        aboveTime = 0;
+        return false;
+    }
+
+    private void attack() {
+        double distanceAwayX = Math.abs(playerPosition.getX() - getSprite().getX());
+        double distanceAwayY = Math.abs(playerPosition.getY() - getSprite().getY());
+
+        if(distanceAwayX < 32*3 && distanceAwayY < 32*4){//if away less than 3 blocks
+            attacking = true;
+            attackingTime = 0;
+        }
+    }
+
+    /**
+     * This method checks if the player is nearby.
+     * @return
+     */
+    private boolean isPlayerClose() {
+        if ((playerPosition.getX()) < getSprite().getX()+getSprite().getWidth()+44 && playerPosition.getX() > getSprite().getX()-getSprite().getWidth()-44 &&
+                ((playerPosition.getY()) < getSprite().getY()+getSprite().getWidth()+44 && playerPosition.getY() > getSprite().getY()-getSprite().getHeight()-44)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void determineFrame() {
+        if (this.isIdle() && time > 0.2f && !attacking) {
+            this.setFrame(enemyIdle.get(lastIdleFrame));
+            if (lastIdleFrame == enemyIdle.size() - 1){
+                backWardsIdle=true;
+            }
+            if (lastIdleFrame==0){
+                backWardsIdle=false;
+            }
+            if (backWardsIdle){
+                lastIdleFrame--;
+            } else {
+                lastIdleFrame++;
+            }
+            time=0;
+        }else if (attacking && time > 0.07f){
+            getSprite().setSize(30*3,30*3);
+            this.setFrame(enemyAttacking.get(attackingFrame));
+            attackingFrame += 1;
+            if(attackingFrame == enemyAttacking.size()-1){// end attack after finishing attack animation
+                getSprite().setSize(30*2,30*3);
+                attackingFrame = 0;
+                attacking = false;
+            }
+            time = 0;
+        }else if (isRunning() &&  time > 0.1f){
+            this.setFrame(enemyMoving.get(lastMovingFrame));
+
+            if(lastMovingFrame == 0){
+                backWardsRunning = false;
+            }
+
+            if(lastMovingFrame == enemyMoving.size()-1){
+                lastMovingFrame = 0;
+            }
+            lastMovingFrame++;
+
+            time=0;
+        } else if (!inAir() && !isRunning()){
+            this.setFrame(enemyIdle.get(lastIdleFrame));
+        }
+    }
+
+    @Override
+    public void collidesObject(GameObject other, float delta) {
+        super.collidesObject(other, delta);
+        if (other instanceof Player) {
+            if ((getSprite().getY() + getSprite().getHeight() )-5 < other.getSprite().getY()) {
+                //checks if the player jumped on top of him.
+                die();
+                ((Player)other).gainScore(1);
+                ((Player)other).killedBandit();
+            }
+        }
+    }
+
+    @Override
+    protected boolean isRunning() {
+        return moving;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+}

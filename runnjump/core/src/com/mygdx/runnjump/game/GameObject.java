@@ -87,11 +87,9 @@ public abstract class GameObject {
         if ((playerPosition.getX() + width) > objXpos && playerPosition.getX() - width < objXpos) {
             if((playerPosition.getY() +height) > objYpos && playerPosition.getY()-height < objYpos) {
                 active = true;
-                System.out.println(getClass().toString() + " is active.");
                 return true;
             }
         }
-        System.out.println(getClass().toString() + " is not active.");
 
         return false;
     }

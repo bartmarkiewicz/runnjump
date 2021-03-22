@@ -474,6 +474,12 @@ public class Player extends MovingActor implements InputProcessor {
         super.collidesObject(other, delta);
         if(other instanceof Hedgehog){
             die();
+        } else if (other instanceof Bandit) {
+            Bandit bandit = (Bandit) other;
+            if (bandit.isAttacking() && bandit.getSprite().getY()-5 > getSprite().getY()){
+                //if the bandit is attacking, the player dies by colliding with the sword assuming the player is not jumping on top of its head
+                die();
+            }
         } else if (other instanceof NPC){
             touchingNPC = true;
             npcTouched = other;
@@ -723,5 +729,14 @@ public class Player extends MovingActor implements InputProcessor {
             return true;
         }
         return false;
+    }
+
+    public void gainScore(int i) {
+        score+=i;
+        hud.setScore(score);
+    }
+
+    public void killedBandit() {
+        ((GameScreen) theGame.getCurrentScreen()).createShortToast("You had killed a bandit!");
     }
 }
