@@ -78,10 +78,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      */
     MapProperties mapProperties;
     /**
-     * The Width.
+     * The Width of the camera.
      */
     float width, /**
-     * The Height.
+     * The Height of the camera.
      */
     height;//Gdx.graphics.getWidth();
     Toast.ToastFactory toastFactory;
@@ -382,7 +382,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     private void updateDynamicObjects(float delta){
         for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
             GameObject current = dynamicObjects.get(i);
-            if (!current.isDead()) {
+            if (!current.isDead() && current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height)) {
                 current.draw(mapRenderer.getBatch(), delta);
                 if (current.isPlayerCollidable()) {
                     if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {

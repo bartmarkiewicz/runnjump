@@ -23,14 +23,12 @@ public class Hedgehog extends Enemy{
         // Formula for how many blocks moved =
         // Blocks moved = (speedX/32)*TIME_TO_TURN
         // Time to turn = blocks moved/(speedX/32)
-
-
-
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+
         time += delta;
         // saves previous position
         float oldX = getSprite().getX(), oldY = getSprite().getY();
@@ -39,7 +37,7 @@ public class Hedgehog extends Enemy{
 
         getSprite().setX(getSprite().getX() + velocity.x * delta); // move on x
 
-        if (movingTime < TIME_TO_TURN){ //how much time in seconds passes until the hedgehog moves
+        if (movingTime < TIME_TO_TURN) { //how much time in seconds passes until the hedgehog moves
             movingTime += delta;
         } else {
             movingTime = 0;
@@ -47,28 +45,28 @@ public class Hedgehog extends Enemy{
             getSprite().flip(true, false);
         }
 
-        if (movingRight){
+        if (movingRight) {
             velocity.x = speedX;
         } else {
             velocity.x = -speedX;
         }
 
 
-        if(velocity.x < 0){
+        if (velocity.x < 0) {
             collisionX = collidesWest();
-        } else if (velocity.x > 0){
+        } else if (velocity.x > 0) {
             collisionX = collidesEast();
         }
 
         velocity.y -= gravity * delta;
-        if (collisionX){
+        if (collisionX) {
             getSprite().setX(oldX);
             velocity.x = 0;
         } else {
-            if (movingRight){
+            if (movingRight) {
                 velocity.x = speedX;
             }
-            if (!movingRight){
+            if (!movingRight) {
                 velocity.x = -speedX;
             }
         }
@@ -76,7 +74,7 @@ public class Hedgehog extends Enemy{
         getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
         if (velocity.y < 2.5f) {
             collisionY = collidesSouth();
-        } else if (velocity.y > 2.5f){
+        } else if (velocity.y > 2.5f) {
             collisionY = collidesNorth();
         }
 
@@ -86,8 +84,6 @@ public class Hedgehog extends Enemy{
         }
 
         determineFrame();
-
-
 
     }
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class NPC extends MovingActor{
     ArrayList<Texture> idle;
     private String npcName, assetName;
+
     public NPC(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, String name,  String assetName) {
         super(collisionLayer, visualLayer);
         idle = TextureManager.getManager().getFrameSet(assetName);
@@ -37,7 +38,7 @@ public class NPC extends MovingActor{
         getSprite().setY(getSprite().getY() + velocity.y * delta * 5f);
         if (velocity.y < 2.5f) {
             collisionY = collidesSouth();
-        } else if (velocity.y > 2.5f){
+        } else if (velocity.y > 2.5f) {
             collisionY = collidesNorth();
         }
 
@@ -47,7 +48,6 @@ public class NPC extends MovingActor{
         }
 
         determineFrame();
-
     }
 
     @Override
