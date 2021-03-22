@@ -201,7 +201,16 @@ public class Player extends MovingActor implements InputProcessor {
             velocity.x = 0;
             velocity.y = 0;
 
+        } else if(cellColLayer.getTile().getProperties().containsKey("checkpoint_flag")){
+            //player spawn point changed on the level.
+            collisionLayer.setCell(((int) x/collisionLayer.getTileWidth()), ((int) y/collisionLayer.getTileHeight()), new TiledMapTileLayer.Cell());
+
+            ((GameScreen) theGame.getCurrentScreen()).setSpawnPoint(x,y);
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("Checkpoint activated!");
+
+
         }
+
     }
 
 
