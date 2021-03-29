@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Bandit extends Enemy{
     float attackingTime = 3;
-    boolean chasing;
+    float turnTime = 0;
     boolean attacking;
     boolean moving;
     float detectionRadius;
@@ -41,7 +41,7 @@ public class Bandit extends Enemy{
         aboveTime = 0f;
         jumpTime = 0;
         this.attackingFrame = 0;
-        this.chasing = false;
+        this.turnTime = 0;
         this.moving = false;
         this.attacking = false;
         this.detectionRadius = 32*15; // can see 15 cells around itself.
@@ -54,31 +54,35 @@ public class Bandit extends Enemy{
         time += delta;
         jumpTime += delta;
         attackingTime += delta;
+        turnTime -= delta;
 
         // saves previous position
         float oldX = getSprite().getX(), oldY = getSprite().getY();
 
         boolean collisionX = false, collisionY = false;
-        if(moving) {
+        if(moving && !attacking) {
             getSprite().setX(getSprite().getX() + velocity.x * delta); // move on x
         }
-        boolean playerClose = isPlayerClose();
+        boolean playerClose = isPlayerClose(); // checks if player is very close
 
         if ((playerPosition.getX()) < getSprite().getX()+detectionRadius && playerPosition.getX() > getSprite().getX()-detectionRadius &&
-                ((playerPosition.getY()) < getSprite().getY()+detectionRadius && playerPosition.getY() > getSprite().getY()-detectionRadius)) {
+                ((playerPosition.getY()) < getSprite().getY()+detectionRadius && playerPosition.getY() > getSprite().getY()-detectionRadius)){
+            //if the player is close enough to the enemy ,he moves towards him.
             moving = true;
         } else {
             moving = false;
         }
 
-        if (playerPosition.getX() > getSprite().getX() && !movingRight && (!playerClose)) { //the enemy always faces the player
+        if (playerPosition.getX() > getSprite().getX() && !movingRight && (!playerClose) && turnTime < 0) { //the enemy always faces the player
             if(!movingRight){
                 movingRight = true;
+                turnTime = 0.5f;
                 getSprite().flip(true, false);
             }
-        } else if (playerPosition.getX() < getSprite().getX() && movingRight && (!playerClose)){
+        } else if (playerPosition.getX() < getSprite().getX() && movingRight && (!playerClose) && turnTime < 0){
             movingRight = false;
             getSprite().flip(true, false);
+            turnTime = 0.5f;
         } else if ((Math.abs(playerPosition.getX()-getSprite().getX())) < 3){
             moving = false;
         }
@@ -123,7 +127,7 @@ public class Bandit extends Enemy{
         }
 
 
-        if (!attacking && attackingTime > 3f){//needs 3 seconds to rest.
+        if (!attacking && attackingTime > 2f){//needs 2 seconds to rest between attacks.
             attack();
         }
 
@@ -158,7 +162,12 @@ public class Bandit extends Enemy{
         double distanceAwayX = Math.abs(playerPosition.getX() - getSprite().getX());
         double distanceAwayY = Math.abs(playerPosition.getY() - getSprite().getY());
 
-        if(distanceAwayX < 32*3 && distanceAwayY < 32*4){//if away less than 3 blocks
+        if(!movingRight && distanceAwayX < 28*2 && distanceAwayY < 32*4){//attack left
+            moving = false;
+            attacking = true;
+            attackingTime = 0;
+        } else if(movingRight && distanceAwayX < 32*3 && distanceAwayY < 32*4){//if away less than 3 blocks right
+            moving = false;
             attacking = true;
             attackingTime = 0;
         }
@@ -193,13 +202,17 @@ public class Bandit extends Enemy{
             }
             time=0;
         }else if (attacking && time > 0.07f){
-            getSprite().setSize(30*3,30*3);
+            getSprite().setSize(32*3,30*3);
             this.setFrame(enemyAttacking.get(attackingFrame));
             attackingFrame += 1;
+
             if(attackingFrame == enemyAttacking.size()-1){// end attack after finishing attack animation
-                getSprite().setSize(30*2,30*3);
+                //getSprite().setSize(30*2,30*3);
                 attackingFrame = 0;
                 attacking = false;
+                getSprite().setScale(1,1);
+                getSprite().setSize(30*2,30*3);
+
             }
             time = 0;
         }else if (isRunning() &&  time > 0.1f){

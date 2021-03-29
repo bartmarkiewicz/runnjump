@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="390" height="125" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="37">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="390" height="125" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="38">
  <tileset firstgid="1" source="jungleplatform.tsx"/>
  <tileset firstgid="1025" source="menubg.tsx"/>
  <tileset firstgid="1968" source="collectAndEnvJungle.tsx"/>
@@ -830,6 +830,13 @@
    <point/>
   </object>
   <object id="36" name="bandit" type="enemy" x="9108" y="1582">
+   <properties>
+    <property name="enemy" value=""/>
+    <property name="max_speed_x" type="int" value="150"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="37" name="bandit" type="enemy" x="660" y="1588">
    <properties>
     <property name="enemy" value=""/>
     <property name="max_speed_x" type="int" value="150"/>

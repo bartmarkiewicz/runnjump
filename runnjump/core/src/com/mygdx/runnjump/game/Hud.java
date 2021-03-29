@@ -117,7 +117,7 @@ public class Hud implements Disposable {
         stackContainer.add(container);
         stage.addActor(stackContainer);
         stage.getBatch().setColor(Color.WHITE);
-
+        stage.setDebugAll(true);
     }
 
     /**
@@ -253,18 +253,18 @@ public class Hud implements Disposable {
 
     public void progressDialogue(String dialogueAsset, Player player){
         String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
-        if (dialogue != null && dialogue.equals("END@END")){
+        if (dialogue != null && dialogue.equals("END@END")){ //checks if the dialogue indicates an END/checkpoint
             hideDialogue();
             showGui();
             player.setDialogueMode(false);
             dialogueStart = dialogueNum + 1;
             player.setDialogueContext(dialogueAsset, dialogueStart);
-        } else if(dialogue!=null && dialogue.equals("KILL@KILL")){
+        } else if(dialogue!=null && dialogue.equals("KILL@KILL")){ //kills/disappears the npc
             player.killNPC();
             hideDialogue();
             showGui();
             player.setDialogueMode(false);
-        } else if (dialogue!=null && getNPCname(dialogue).equals("CHECK")) {
+        } else if (dialogue!=null && getNPCname(dialogue).equals("CHECK")) { // checks condition
             if (player.conditionMet(getDialogue(dialogue))){
                 dialogueNum += 1;
                 progressDialogue(dialogueAsset, player); // if condition met, progress to the next dialogue.
@@ -274,11 +274,11 @@ public class Hud implements Disposable {
                 //player.setDialogueContext(dialogueAsset, dialogueStart+1);
                 player.setDialogueMode(false);
             }
-        } else if (dialogue!=null && getNPCname(dialogue).equals("CONDITION")){
+        } else if (dialogue!=null && getNPCname(dialogue).equals("CONDITION")){ //grants a condition for the purpose of CHECKing later
             player.grantCondition(getDialogue(dialogue), true);
             dialogueNum += 1;
             progressDialogue(dialogueAsset, player); //progress to the next dialogue
-        } else if (dialogue!=null && getNPCname(dialogue).equals("GIVE")){
+        } else if (dialogue!=null && getNPCname(dialogue).equals("GIVE")){ // give something to the player
             String[] gift = getDialogue(dialogue).split(" ");
             if(gift[0].equals("POWER_UP")){
                 // GRANT POWER UP todo

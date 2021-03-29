@@ -110,6 +110,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
      */
     private void loadMusic(){
         theGame.musicManager.addAsset("bg_1","music_calm_tree_of_life.wav");
+        theGame.musicManager.addAsset("bg_2","funky_chill.wav");
+
     }
 
     /**

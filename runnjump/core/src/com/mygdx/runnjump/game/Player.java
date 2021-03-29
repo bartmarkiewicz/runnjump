@@ -485,8 +485,9 @@ public class Player extends MovingActor implements InputProcessor {
             die();
         } else if (other instanceof Bandit) {
             Bandit bandit = (Bandit) other;
-            if (bandit.isAttacking() && bandit.getSprite().getY()-5 > getSprite().getY()){
+            if (bandit.isAttacking() && bandit.getSprite().getY()+50 > getSprite().getY()){
                 //if the bandit is attacking, the player dies by colliding with the sword assuming the player is not jumping on top of its head
+                System.out.println("Bandit sword kills player");
                 die();
             }
         } else if (other instanceof NPC){
