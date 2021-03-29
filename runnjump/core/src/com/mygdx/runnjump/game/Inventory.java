@@ -72,7 +72,8 @@ public class Inventory {
         powerUps = new HashMap<>();
         this.hud = hud;
         this.debug = debug;
-        createPowerUps();
+        //createPowerUps();
+        restart();
     }
 
     /**
