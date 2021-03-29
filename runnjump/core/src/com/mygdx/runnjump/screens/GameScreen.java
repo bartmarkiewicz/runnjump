@@ -330,11 +330,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
             mapRenderer.getBatch().end();
         } else if (gameOver) {
-            hud.gameOver(player.getScore());
+            hud.gameOver(player.getInventory().getScore());
         }
         if (player.isGameWon()) {
             timeSinceWin += delta;
-            hud.gameWon(player.getScore(), level);
+            hud.gameWon(player.getInventory().getScore(), level);
         }
 
         updatePopups(delta);

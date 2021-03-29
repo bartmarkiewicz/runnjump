@@ -31,16 +31,11 @@ public class Player extends MovingActor implements InputProcessor {
     protected boolean gravityPowerUp;
     protected boolean superSpeedPU;
     protected boolean ghostWalkPU;
-    protected int gravityPowerUps;
-    protected int superSpeedPowerUps;
-    protected int ghostWalkPowerUps;
 
     protected float gravityPowerUpTime;
     private float speedTime;
     private float ghostWalkPUTime;
 
-    protected int score, hearts;
-    protected final int STARTING_HEARTS = 3;
     protected boolean canJump;
     protected SoundManager soundManager;
     protected DialogueManager dialogueManager;
@@ -61,25 +56,8 @@ public class Player extends MovingActor implements InputProcessor {
     private TreeMap<String, Integer> dialogueContext;
     private TreeMap<String, Boolean> conditionsMet;
     private GameObject npcTouched;
+    Inventory playerInventory;
 
-
-    /**
-     * getter for lives left
-     *
-     * @return int int
-     */
-    public int getHearts(){
-        return hearts;
-    }
-
-    /**
-     * getter for score
-     *
-     * @return int int
-     */
-    public int getScore(){
-        return score;
-    }
 
     /**
      * The constructor initialises the player, and his initial values for score, lives remaining and gets its textures from the textureManager. It also sets up the platform-specific touch detection listeners for Android touchpad and jump buttons.
@@ -94,22 +72,17 @@ public class Player extends MovingActor implements InputProcessor {
         super(collisionLayer, visualLayer);
         getSprite().setSize(30*2,30*3);//2 by 3 tiles size
         setLogicalSize(42,85); //little less than 2 tiles by 3 tiles
-        this.score = 0;
-        this.hearts =STARTING_HEARTS;
         this.gravityPowerUpTime = 0;
         this.hud = hud;
         dialogueContext = new TreeMap<String, Integer>();
         conditionsMet = new TreeMap<>();
         this.theGame = theGame;
-        hud.setScore(score);
-        hud.setLives(hearts);
         this.soundManager = theGame.soundManager;
         this.dialogueManager = DialogueManager.getManager();
         playerIdle = theGame.textureManager.getFrameSet("player_idle");
         playerRunning = theGame.textureManager.getFrameSet("player_running");
         playerJump = theGame.textureManager.getFrameSet("player_jump");
         gameWon = false;
-        gravityPowerUp = false;
         dKeyHeld = false;
         aKeyHeld = false;
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -154,15 +127,17 @@ public class Player extends MovingActor implements InputProcessor {
                 }
             });
         }
-        gravityPowerUps = 22;// put these to 0 on release todo
-        superSpeedPowerUps = 22;
-        ghostWalkPowerUps = 22;
+
         ghostWalkPU = false;
         superSpeedPU = false;
         touchingNPC = false;
         speedTime = 0;
         ghostWalkPUTime = 0;
 
+        gravityPowerUp = false;
+
+
+        playerInventory = new Inventory(hud,true);
     }
 
     @Override
@@ -245,26 +220,24 @@ public class Player extends MovingActor implements InputProcessor {
 
         if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
             //gravity collected;
-            gravityPowerUps += 1;
+            playerInventory.gainPowerUp("gravity");
+
             ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up acquired!");
             //soundManager.playSound("coin_collect");
         }
 
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
-            score+=10;
+            playerInventory.addScore(10);
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("+10 score");
-            hud.setScore(score);
 
             soundManager.playRandom("coin_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("coin")){
-            score += 1;
-            hud.setScore(score);
+            playerInventory.addScore(1);
             soundManager.playRandom("coin_collect");
         }
         if (cellColLayer.getTile().getProperties().containsKey("heart")){
-            hearts += 1;
-            hud.setLives(hearts);
+            playerInventory.addLives(1);
             ((GameScreen) theGame.getCurrentScreen()).createLongToast("+1 lives");
 
             soundManager.play("heart_collect");
@@ -548,24 +521,31 @@ public class Player extends MovingActor implements InputProcessor {
                 break;
 
             case Input.Keys.NUM_1://power up 1 activated
-                if(gravityPowerUps > 0){
+                if(playerInventory.hasPowerUp("gravity")){
                     gravityPowerup();
                     ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up has been activated!");
-                    gravityPowerUps -= 1;
+                    playerInventory.usePowerUp("gravity");
                 }
                 break;
             case Input.Keys.NUM_2:
-                if(superSpeedPowerUps > 0){
+                if(playerInventory.hasPowerUp("speed")){
                     superSpeedPU();
                     ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super speed power-up has been activated!");
-                    superSpeedPowerUps -= 1;
+                    playerInventory.usePowerUp("speed");
                 }
                 break;
             case Input.Keys.NUM_3:
-                if(ghostWalkPowerUps > 0){
+                if(playerInventory.hasPowerUp("ghostWalk")){
                     ghostWalkPU();
                     ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost walk power-up has been activated!");
-                    ghostWalkPowerUps -= 1;
+                    playerInventory.usePowerUp("ghostWalk");
+                }
+                break;
+            case Input.Keys.NUM_4:
+                if(playerInventory.hasPowerUp("invincibility")){
+                    ghostWalkPU();
+                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Invincibility power-up has been activated!");
+                    playerInventory.usePowerUp("invincibility");
                 }
                 break;
         }
@@ -588,9 +568,8 @@ public class Player extends MovingActor implements InputProcessor {
     @Override
     protected void die(){
         if(alive) {
-            hearts--;
-            if (hearts >= 0) {
-                hud.setLives(hearts);
+            playerInventory.removeLife();
+            if (playerInventory.getLives() >= 0) {
                 SoundManager.getManager().playRandom("male_death");
             } else {
                 hud.setLives(0);
@@ -609,7 +588,7 @@ public class Player extends MovingActor implements InputProcessor {
     @Override
     public boolean respawn() {
         //returns true if the player can respawn ie has lives left
-        if (hearts >= 0) {
+        if (playerInventory.getLives() >= 0) {
             alive = true;
             return true;
         }
@@ -620,13 +599,10 @@ public class Player extends MovingActor implements InputProcessor {
      * This method is used for restarting the player character to its default state, is called when the level is restarted.
      */
     public void restart() {
-        hearts = STARTING_HEARTS;
-        hud.setLives(STARTING_HEARTS);
-        gravityPowerUps = 0;
+        playerInventory.restart();
         dialogueContext.clear();//clears the dialogues
         conditionsMet.clear();//clears met conditions
-        score = 0;
-        hud.setScore(0);
+
     }
 
     /**
@@ -723,14 +699,12 @@ public class Player extends MovingActor implements InputProcessor {
 
     public void getGift(String name, int amount){
         if(name.equals("SCORE")){
-            score+=amount;
+            playerInventory.addScore(amount);
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("+"+amount + " score");
-            hud.setScore(score);
             soundManager.playRandom("coin_collect");
         } else if(name.equals("HEARTS")){
-            hearts += amount;
+            playerInventory.addLives(amount);
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("+"+amount + " lives");
-            hud.setScore(hearts);
         }
     }
 
@@ -740,10 +714,12 @@ public class Player extends MovingActor implements InputProcessor {
         }
         return false;
     }
+    public Inventory getInventory(){
+        return playerInventory;
+    }
 
     public void gainScore(int i) {
-        score+=i;
-        hud.setScore(score);
+        playerInventory.addScore(i);
     }
 
     public void killedBandit() {
