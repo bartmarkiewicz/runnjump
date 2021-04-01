@@ -157,12 +157,15 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
-        player = new Player(theGame,hud,layer,visualLayer);
+
         player.setLayers(visualLayer,layer);
         player.restart();
         gameOver = false;
 
-        respawnPlayer();
+        //respawnPlayer();
+        dynamicObjects.clear();
+        placeObjects(layer, visualLayer);
+
         zoom = 0f;
         orthographicCamera.zoom += zoom;
 
