@@ -175,7 +175,9 @@ public abstract class MovingActor extends GameObject {
                 cell.getTile().getProperties().containsKey("gold_key") ||
                 cell.getTile().getProperties().containsKey("heart") ||
                 cell.getTile().getProperties().containsKey("star") ||
-                cell.getTile().getProperties().containsKey("gravity_powerup"));
+                cell.getTile().getProperties().containsKey("gravity_powerup") ||
+                cell.getTile().getProperties().containsKey("superspeed_powerup"));
+
     }
 
     /**

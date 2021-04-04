@@ -71,6 +71,11 @@ public class SoundManager extends AudioManager<Sound> implements Disposable {
         assetSet.put(name,sounds);
     }
 
+    @Override
+    public Object getAsset(String name) {
+        return assetMap.get(name);
+    }
+
     /**
      * adds and loads a single sound under the name specified.
      *

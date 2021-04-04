@@ -2,6 +2,7 @@ package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -33,13 +34,15 @@ import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.util.ColorDrawable;
 import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundHandler;
+import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 
 /**
  * This class represents the in-game UI the player sees while actually playing the level.
  */
-public class Hud implements Disposable {
+public class Hud extends ChangeListener implements Disposable {
     /**
      * The Stage.
      */
@@ -53,11 +56,14 @@ public class Hud implements Disposable {
     private Table messageTable;
     private Table bottomRightTable, bottomTable;
     Table dialogueTable;
+    ImageButton powerUpBt;
 
     int dialogueNum = 1;
     int dialogueStart = 1;
     Label dialogueLabel, npcLabel;
     private TextButton interactBt;
+
+    Queue<String> powerUps;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -72,6 +78,10 @@ public class Hud implements Disposable {
         gameoverFont = skin.get(Label.LabelStyle.class).font;
         Stack stackContainer = new Stack();
         Table container = new Table();
+        powerUps = new Queue<>();
+        powerUps.addFirst("speed_powerup");
+        powerUps.addFirst("gravity_powerup");
+
 
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
@@ -121,6 +131,9 @@ public class Hud implements Disposable {
         stage.addActor(stackContainer);
         stage.getBatch().setColor(Color.WHITE);
         stage.setDebugAll(true);
+
+
+
     }
 
     /**
@@ -182,18 +195,16 @@ public class Hud implements Disposable {
 
         Table powerUpUI = new Table();
 
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture("powerups\\gravity.png")));
+        Drawable drawable = new TextureRegionDrawable(new TextureRegion(TextureManager.getManager().getAsset(powerUps.first())));
 
-        ImageButton powerUpBt = new ImageButton(drawable);
-
-
+        powerUpBt = new ImageButton(drawable);
 
 
         TextButton nextBt = new TextButton("Next", skin);
 
         powerUpUI.add(powerUpBt).expand();
 
-
+        nextBt.addListener(this);
 
         bottomRightTable.bottom();
         bottomRightTable.add(powerUpBt).width(stage.getWidth()/5).height(stage.getHeight()/7).center().bottom().padRight(10).fill().expand();
@@ -383,4 +394,19 @@ public class Hud implements Disposable {
         bottomRightTable.setVisible(true);
     }
 
+
+    @Override
+    public void changed(ChangeEvent changeEvent, Actor actor) {
+        String nextPowerUp = powerUps.removeFirst();
+        Texture nextImage = TextureManager.getManager().getAsset(nextPowerUp);
+        Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
+        powerUps.addLast(nextPowerUp);
+        //powerUpBt.clear();
+        powerUpBt.getStyle().imageUp = drawable;
+        powerUpBt.getStyle().imageDown = drawable;
+
+        //powerUpBt.validate();
+
+
+    }
 }

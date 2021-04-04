@@ -1536,21 +1536,25 @@
  <tile id="304">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="305">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="306">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="307">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="308">
@@ -1696,21 +1700,25 @@
  <tile id="336">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="337">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="338">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="339">
   <properties>
    <property name="blocked" value=""/>
+   <property name="silver_key_blocker" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="340">

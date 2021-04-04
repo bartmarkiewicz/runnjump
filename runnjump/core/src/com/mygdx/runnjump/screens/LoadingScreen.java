@@ -45,6 +45,11 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     }
 
+    private void loadPowerUps(){
+        theGame.textureManager.addAsset("gravity_powerup", "powerups\\gravity");
+        theGame.textureManager.addAsset("speed_powerup", "powerups\\speed");
+    }
+
     private void loadEnemyAssets(){
         theGame.textureManager.addFrameAssetSet("hedgehog_moving", "hedgehog\\Walking_", 18);
         theGame.textureManager.addFrameAssetSet("hedgehog_idle", "hedgehog\\Idle_Blinking_", 12);
@@ -131,6 +136,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
                 loadTextAssets();
                 loadEnemyAssets();
                 loadNPCAssets();
+                loadPowerUps();
                 stillLoading.set(false);
             }
         }, 1);

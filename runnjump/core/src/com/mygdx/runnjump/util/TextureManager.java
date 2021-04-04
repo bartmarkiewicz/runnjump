@@ -11,8 +11,10 @@ import java.util.TreeMap;
 /**
  * This class is similar to the other managers, but is used for pre-loading textures and animation frames.
  */
-public class TextureManager extends Manager implements Disposable {
-    private TreeMap<String, ArrayList<Texture>> playerFrames;
+public class TextureManager extends Manager<Texture> implements Disposable {
+    private TreeMap<String, ArrayList<Texture>> frameSets;
+    private TreeMap<String, Texture> textureMap;
+
     /**
      * The Random.
      */
@@ -37,14 +39,18 @@ public class TextureManager extends Manager implements Disposable {
      * Instantiates a new TextureManager. Private so its only created once using the factory method.
      */
     private TextureManager() {
-        playerFrames = new TreeMap<>();
+        frameSets = new TreeMap<>();
+        textureMap = new TreeMap<>();
         random = new Random();
     }
 
     @Override
     public void addAsset(String name, String path) {
-        //todo
+        Texture texture = new Texture(Gdx.files.internal(path + ".png"));
+        textureMap.put(name, texture);
     }
+
+
 
     @Override
     public void addAssetSet(String name, String[] paths) {
@@ -53,6 +59,11 @@ public class TextureManager extends Manager implements Disposable {
             if
         }*/
         //todo or remove
+    }
+
+    @Override
+    public Texture getAsset(String name) {
+        return textureMap.get(name);
     }
 
     /**
@@ -71,7 +82,7 @@ public class TextureManager extends Manager implements Disposable {
                 textures.add(new Texture(Gdx.files.internal(path +"0"+ i + ".png")));
             }
         }
-        playerFrames.put(name, textures);
+        frameSets.put(name, textures);
     }
 
     /**
@@ -81,7 +92,7 @@ public class TextureManager extends Manager implements Disposable {
      * @return array list
      */
     public ArrayList<Texture> getFrameSet(String name){
-        return playerFrames.get(name);
+        return frameSets.get(name);
     }
 
     /**
@@ -89,7 +100,7 @@ public class TextureManager extends Manager implements Disposable {
      */
     @Override
     public void dispose() {
-        for (ArrayList<Texture> textureArray:playerFrames.values()) {
+        for (ArrayList<Texture> textureArray:frameSets.values()) {
             for(Texture texture: textureArray){
                 texture.dispose();
             }

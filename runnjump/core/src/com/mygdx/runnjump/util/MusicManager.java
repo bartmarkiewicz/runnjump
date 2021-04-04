@@ -67,6 +67,11 @@ public class MusicManager extends AudioManager<Music> implements Disposable {
         assetSet.put(name,music);
     }
 
+    @Override
+    public Object getAsset(String name) {
+        return assetMap.get(name);
+    }
+
     /**
      * this plays a previously loaded song specified by the name, assuming no song is being played at the moment.
      *

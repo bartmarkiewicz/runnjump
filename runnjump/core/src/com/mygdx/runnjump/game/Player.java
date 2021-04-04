@@ -226,6 +226,15 @@ public class Player extends MovingActor implements InputProcessor {
             //soundManager.playSound("coin_collect");
         }
 
+        if (cellColLayer.getTile().getProperties().containsKey("superspeed_powerup")){
+            //gravity collected;
+            playerInventory.gainPowerUp("speed");
+
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super-speed power-up acquired!");
+            //soundManager.playSound("coin_collect");
+        }
+
+
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
             playerInventory.addScore(10);
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("+10 score");

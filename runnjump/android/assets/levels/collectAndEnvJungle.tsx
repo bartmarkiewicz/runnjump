@@ -143,6 +143,26 @@
    <property name="heart" value=""/>
   </properties>
  </tile>
+ <tile id="206">
+  <properties>
+   <property name="superspeed_powerup" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="207">
+  <properties>
+   <property name="superspeed_powerup" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="218">
+  <properties>
+   <property name="superspeed_powerup" type="bool" value="false"/>
+  </properties>
+ </tile>
+ <tile id="219">
+  <properties>
+   <property name="superspeed_powerup" type="bool" value="false"/>
+  </properties>
+ </tile>
  <tile id="228">
   <properties>
    <property name="star" value=""/>

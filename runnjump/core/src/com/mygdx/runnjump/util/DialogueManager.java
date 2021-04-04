@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class DialogueManager extends Manager implements Disposable {
+public class DialogueManager extends Manager<ArrayList<String>> implements Disposable {
 
     static DialogueManager dialogueManager;
     String currentDialogue;
@@ -65,6 +65,11 @@ public class DialogueManager extends Manager implements Disposable {
     @Override
     public void addAssetSet(String name, String[] paths) {
         //todo or delete maybe
+    }
+
+    @Override
+    public ArrayList<String> getAsset(String name) {
+        return dialogueMap.get(name);
     }
 
     @Override
