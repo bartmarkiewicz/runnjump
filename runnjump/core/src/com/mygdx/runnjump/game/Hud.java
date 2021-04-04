@@ -13,12 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -46,7 +48,7 @@ public class Hud implements Disposable {
     private Label scoreL, livesL;
     private BitmapFont gameoverFont;
     private Touchpad movementJoystick;
-    private Button jumpBt;
+    private TextButton jumpBt;
     private Label feedbackLabel;
     private Table messageTable;
     private Table bottomRightTable, bottomTable;
@@ -55,6 +57,7 @@ public class Hud implements Disposable {
     int dialogueNum = 1;
     int dialogueStart = 1;
     Label dialogueLabel, npcLabel;
+    private TextButton interactBt;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -105,7 +108,7 @@ public class Hud implements Disposable {
         container.add(bottomTable).bottom().left().fill().expand();
         bottomRightTable = new Table();
         bottomRightTable.bottom().right();
-        container.add(bottomRightTable).bottom().right().fill().expand();
+        container.add(bottomRightTable).bottom().right();
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             createAndroidUI(skin);
         }
@@ -174,9 +177,30 @@ public class Hud implements Disposable {
         movementJoystick = new Touchpad(30, touchpadStyle);
         movementJoystick.setResetOnTouchUp(true);
         bottomTable.add(movementJoystick).width(stage.getWidth()/3).height(stage.getHeight()/3).left().bottom();
-        jumpBt = new Button(skin);
+        jumpBt = new TextButton("Jump",skin);
+        interactBt = new TextButton("Interact", skin);
 
-        bottomRightTable.add(jumpBt).width(stage.getWidth()/3).height(stage.getHeight()/5).right().bottom().pad(40);
+        Table powerUpUI = new Table();
+
+        Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture("powerups\\gravity.png")));
+
+        ImageButton powerUpBt = new ImageButton(drawable);
+
+
+
+
+        TextButton nextBt = new TextButton("Next", skin);
+
+        powerUpUI.add(powerUpBt).expand();
+
+
+
+        bottomRightTable.bottom();
+        bottomRightTable.add(powerUpBt).width(stage.getWidth()/5).height(stage.getHeight()/7).center().bottom().padRight(10).fill().expand();
+        bottomRightTable.add(interactBt).width(stage.getWidth()/4).height(stage.getHeight()/7).center().right().bottom().padRight(10).fill();
+        bottomRightTable.row().fill();
+        bottomRightTable.add(nextBt).width(stage.getWidth()/4).height(stage.getHeight()/8).right().bottom().padRight(10).padBottom(10).expandX();
+        bottomRightTable.add(jumpBt).width(stage.getWidth()/4).height(stage.getHeight()/5).right().bottom().padBottom(10).padRight(10).expandX();
 
     }
 
