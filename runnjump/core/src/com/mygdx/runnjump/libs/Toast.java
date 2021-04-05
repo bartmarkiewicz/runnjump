@@ -95,9 +95,11 @@ public class Toast {
             fontWidth = (int) layout.width;
             fontHeight = (int) layout.height;
         }
+        fontWidth += Gdx.graphics.getWidth()/15;
+        fontHeight += Gdx.graphics.getHeight()/15;
 
-        toastHeight = fontHeight + 2 * margin;
-        toastWidth = fontWidth + 2 * margin;
+        toastHeight = (fontHeight + 2 * margin);
+        toastWidth = (fontWidth + 2 * margin);
 
         positionX = (screenWidth / 2) - toastWidth / 2;
 

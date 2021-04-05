@@ -68,6 +68,8 @@ public class Hud extends ChangeListener implements Disposable {
     Queue<String> powerUps;
     boolean usedPowerUp;
     String usedPowerUpStr = "";
+    String selected;
+    private boolean setImage = false;
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -83,8 +85,8 @@ public class Hud extends ChangeListener implements Disposable {
         Stack stackContainer = new Stack();
         Table container = new Table();
         powerUps = new Queue<>();
-        powerUps.addFirst("speed_powerup");
-        powerUps.addFirst("gravity_powerup");
+        //populatePowerUpQueue();
+
 
         usedPowerUp = false;
 
@@ -145,20 +147,38 @@ public class Hud extends ChangeListener implements Disposable {
 
     }
 
-    public void updatePowerUpIndicator(HashMap<String, Integer> powerUps) {
+    public void updatePowerUpIndicator(HashMap<String, Integer> powerUpMap) {
         String powerUpIndicatorStr = "Inventory:\n";
         int found = 0;
-        if(powerUps.size() > 0) {
-            for (String powerup : powerUps.keySet()) {
-                if(powerUps.get(powerup) > 0) {
+        powerUps.clear();
+        if(powerUpMap.size() > 0) {
+            for (String powerup : powerUpMap.keySet()) {
+                if(powerUpMap.get(powerup) > 0) {
                     found += 1;
-                    powerUpIndicatorStr += powerup + ": " + powerUps.get(powerup) + "\n";
+                    powerUpIndicatorStr += powerup + ": " + powerUpMap.get(powerup) + "\n";
+                    powerUps.addLast(powerup + "_powerup");
                 }
             }
         }
+        if(!powerUps.isEmpty()){
+            selected = powerUps.removeFirst();
+            powerUps.addLast(selected);
+            setImage = true;
+            Texture nextImage = TextureManager.getManager().getAsset(selected);
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
+            powerUpBt.getStyle().imageUp = drawable;
+            powerUpBt.getStyle().imageDown = drawable;
+
+        } else {
+            setImage = false;
+            selected = "None";
+            powerUpBt.getStyle().imageUp = new ColorDrawable(0,0,0,1);
+            powerUpBt.getStyle().imageDown =  new ColorDrawable(0,0,0,1);
+        }
+
+
         if(found == 0){
             powerUpIndicatorStr = "Empty Inventory";
-
         }
         powerUpsLabel.setText(powerUpIndicatorStr);
     }
@@ -222,18 +242,22 @@ public class Hud extends ChangeListener implements Disposable {
 
         Table powerUpUI = new Table();
 
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(TextureManager.getManager().getAsset(powerUps.first())));
-
-        powerUpBt = new ImageButton(drawable);
+        if(!powerUps.isEmpty()) {
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(TextureManager.getManager().getAsset(powerUps.first())));
+            powerUpBt = new ImageButton(drawable);
+        } else {
+            powerUpBt = new ImageButton(new ColorDrawable(0,0,0,0));
+        }
 
         powerUpBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                String selected = powerUps.first();
-                String powerUp = selected.split("_")[0];
-                usedPowerUp = true;
-                usedPowerUpStr = powerUp;
-
+                if(!powerUps.isEmpty()) {
+                    String temp = powerUps.first();
+                    String powerUp = temp.split("_")[0];
+                    usedPowerUp = true;
+                    usedPowerUpStr = powerUp;
+                }
             }
         });
 
@@ -439,14 +463,19 @@ public class Hud extends ChangeListener implements Disposable {
      */
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
-        String nextPowerUp = powerUps.removeFirst();
-        Texture nextImage = TextureManager.getManager().getAsset(nextPowerUp);
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
-        powerUps.addLast(nextPowerUp);
-        powerUpBt.getStyle().imageUp = drawable;
-        powerUpBt.getStyle().imageDown = drawable;
-
-
-
+        if(!powerUps.isEmpty()) {
+            setImage = true;
+            selected = powerUps.removeFirst();
+            powerUps.addLast(selected);
+            selected = powerUps.first();
+            Texture nextImage = TextureManager.getManager().getAsset(selected);
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
+            powerUpBt.getStyle().imageUp = drawable;
+            powerUpBt.getStyle().imageDown = drawable;
+        } else {
+            setImage = false;
+            powerUpBt.getStyle().imageUp = new ColorDrawable(0,0,0,1);
+            powerUpBt.getStyle().imageDown =  new ColorDrawable(0,0,0,1);
+        }
     }
 }

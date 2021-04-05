@@ -55,14 +55,16 @@ public class Inventory {
             powerUps.put("gravity", 0);
             powerUps.put("speed", 0);
             powerUps.put("invincibility", 0);
-            powerUps.put("ghostWalk", 0);
+            powerUps.put("ghostwalk", 0);
+
         } else {
-            powerUps.put("gravity", 99);
-            powerUps.put("speed", 99);
-            powerUps.put("invincibility", 99);
-            powerUps.put("ghostWalk", 99);
-            hud.updatePowerUpIndicator(getPowerUps());
+            powerUps.put("gravity", 1);
+            powerUps.put("speed", 1);
+            powerUps.put("invincibility", 0);
+            powerUps.put("ghostwalk", 2);
         }
+        hud.updatePowerUpIndicator(getPowerUps());
+
     }
 
 
@@ -82,7 +84,13 @@ public class Inventory {
      * Gets the power ups currently posessed by the player.
      */
     public HashMap<String, Integer> getPowerUps(){
-        return powerUps;
+        HashMap<String,Integer> newMap = new HashMap<>();
+        for(String each : powerUps.keySet()){
+            if(powerUps.get(each) >= 0){
+                newMap.put(each, powerUps.get(each));
+            }
+        }
+        return newMap;
     }
 
     /**

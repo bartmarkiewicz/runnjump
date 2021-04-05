@@ -340,11 +340,12 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             hud.gameWon(player.getInventory().getScore(), level);
         }
 
-        updatePopups(delta);
 
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        updatePopups(delta);
+
     }
 
     private void updatePopups(float delta) {

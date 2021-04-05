@@ -138,6 +138,7 @@ public class Player extends MovingActor implements InputProcessor {
 
 
         playerInventory = new Inventory(hud,true);
+        hud.updatePowerUpIndicator(playerInventory.getPowerUps());
     }
 
     @Override
@@ -416,14 +417,39 @@ public class Player extends MovingActor implements InputProcessor {
 
         determineFrame();
 
+        checkPowerUps();
 
+    }
+
+    private void checkPowerUps() {
         if(hud.usedPowerUp){
             if (hud.usedPowerUpStr.equals("gravity") && playerInventory.hasPowerUp("gravity")){
-                    gravityPowerup();
-                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up has been activated!");
-                    playerInventory.usePowerUp("gravity");
-                    hud.usedPowerUp = false;
-                    hud.usedPowerUpStr = "";
+                gravityPowerup();
+                ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up has been activated!");
+                playerInventory.usePowerUp("gravity");
+                hud.usedPowerUp = false;
+                hud.usedPowerUpStr = "";
+            }
+            if (hud.usedPowerUpStr.equals("speed") && playerInventory.hasPowerUp("speed")){
+                gravityPowerup();
+                ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super-speed power-up has been activated!");
+                playerInventory.usePowerUp("speed");
+                hud.usedPowerUp = false;
+                hud.usedPowerUpStr = "";
+            }
+            if (hud.usedPowerUpStr.equals("invincibility") && playerInventory.hasPowerUp("invincibility")){
+                gravityPowerup();
+                ((GameScreen) theGame.getCurrentScreen()).createLongToast("Invincibility power-up has been activated!");
+                playerInventory.usePowerUp("invincibility");
+                hud.usedPowerUp = false;
+                hud.usedPowerUpStr = "";
+            }
+            if (hud.usedPowerUpStr.equals("ghostwalk") && playerInventory.hasPowerUp("ghostwalk")){
+                gravityPowerup();
+                ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost-walk power-up has been activated!");
+                playerInventory.usePowerUp("ghostwalk");
+                hud.usedPowerUp = false;
+                hud.usedPowerUpStr = "";
             }
         }
     }
