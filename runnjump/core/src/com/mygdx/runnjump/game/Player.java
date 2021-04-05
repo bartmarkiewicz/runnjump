@@ -416,6 +416,16 @@ public class Player extends MovingActor implements InputProcessor {
 
         determineFrame();
 
+
+        if(hud.usedPowerUp){
+            if (hud.usedPowerUpStr.equals("gravity") && playerInventory.hasPowerUp("gravity")){
+                    gravityPowerup();
+                    ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up has been activated!");
+                    playerInventory.usePowerUp("gravity");
+                    hud.usedPowerUp = false;
+                    hud.usedPowerUpStr = "";
+            }
+        }
     }
 
     @Override

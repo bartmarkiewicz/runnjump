@@ -2,6 +2,7 @@ package com.mygdx.runnjump.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * This class represents the player's inventory.
@@ -60,6 +61,7 @@ public class Inventory {
             powerUps.put("speed", 99);
             powerUps.put("invincibility", 99);
             powerUps.put("ghostWalk", 99);
+            hud.updatePowerUpIndicator(getPowerUps());
         }
     }
 
@@ -79,13 +81,8 @@ public class Inventory {
     /**
      * Gets the power ups currently posessed by the player.
      */
-    public void getPowerUps(){
-        ArrayList<String> powerUpsPosessed = new ArrayList<>();
-        for(String powerUp: powerUps.keySet()){
-            if(powerUps.get(powerUp) > 0){
-                powerUpsPosessed.add(powerUp);
-            }
-        }
+    public HashMap<String, Integer> getPowerUps(){
+        return powerUps;
     }
 
     /**
@@ -95,6 +92,7 @@ public class Inventory {
     public void gainPowerUp(String name){
         int previous = powerUps.get(name);
         powerUps.put(name, previous+1);
+        hud.updatePowerUpIndicator(getPowerUps());
     }
 
     /**
@@ -106,6 +104,8 @@ public class Inventory {
         if(previous > 0) {
             powerUps.put(name, previous - 1);
         }
+        hud.updatePowerUpIndicator(getPowerUps());
+
     }
 
     /**

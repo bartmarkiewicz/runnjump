@@ -38,6 +38,8 @@ import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * This class represents the in-game UI the player sees while actually playing the level.
@@ -48,7 +50,7 @@ public class Hud extends ChangeListener implements Disposable {
      */
     public Stage stage;
     private Viewport viewport;
-    private Label scoreL, livesL;
+    private Label scoreL, livesL, powerUpsLabel;
     private BitmapFont gameoverFont;
     private Touchpad movementJoystick;
     private TextButton jumpBt;
@@ -64,6 +66,8 @@ public class Hud extends ChangeListener implements Disposable {
     private TextButton interactBt;
 
     Queue<String> powerUps;
+    boolean usedPowerUp;
+    String usedPowerUpStr = "";
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -82,6 +86,7 @@ public class Hud extends ChangeListener implements Disposable {
         powerUps.addFirst("speed_powerup");
         powerUps.addFirst("gravity_powerup");
 
+        usedPowerUp = false;
 
         Table mainTable = new Table();
         mainTable.align(Align.topRight);
@@ -89,6 +94,7 @@ public class Hud extends ChangeListener implements Disposable {
         mainTable.pad(5);
         scoreL = new Label("Score: 0",skin);
         livesL = new Label("Lives: 0", skin);
+        powerUpsLabel = new Label("",skin);
         scoreL.setFontScale(1.25f);
         livesL.setFontScale(1.25f);
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -102,6 +108,9 @@ public class Hud extends ChangeListener implements Disposable {
         }
         mainTable.row();
         mainTable.add(livesL).left().top().fill().height(100/2f).align(Align.top);
+        mainTable.row();
+
+        mainTable.add(powerUpsLabel).left().top().fill();
         container.top();
         container.add(mainTable).top().expandX().fill().colspan(2);
         mainTable.top().right();
@@ -134,6 +143,24 @@ public class Hud extends ChangeListener implements Disposable {
 
 
 
+    }
+
+    public void updatePowerUpIndicator(HashMap<String, Integer> powerUps) {
+        String powerUpIndicatorStr = "Inventory:\n";
+        int found = 0;
+        if(powerUps.size() > 0) {
+            for (String powerup : powerUps.keySet()) {
+                if(powerUps.get(powerup) > 0) {
+                    found += 1;
+                    powerUpIndicatorStr += powerup + ": " + powerUps.get(powerup) + "\n";
+                }
+            }
+        }
+        if(found == 0){
+            powerUpIndicatorStr = "Empty Inventory";
+
+        }
+        powerUpsLabel.setText(powerUpIndicatorStr);
     }
 
     /**
@@ -199,6 +226,16 @@ public class Hud extends ChangeListener implements Disposable {
 
         powerUpBt = new ImageButton(drawable);
 
+        powerUpBt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                String selected = powerUps.first();
+                String powerUp = selected.split("_")[0];
+                usedPowerUp = true;
+                usedPowerUpStr = powerUp;
+
+            }
+        });
 
         TextButton nextBt = new TextButton("Next", skin);
 
@@ -395,17 +432,20 @@ public class Hud extends ChangeListener implements Disposable {
     }
 
 
+    /**
+     * Changes the selected power-up on Android.
+     * @param changeEvent
+     * @param actor
+     */
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         String nextPowerUp = powerUps.removeFirst();
         Texture nextImage = TextureManager.getManager().getAsset(nextPowerUp);
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
         powerUps.addLast(nextPowerUp);
-        //powerUpBt.clear();
         powerUpBt.getStyle().imageUp = drawable;
         powerUpBt.getStyle().imageDown = drawable;
 
-        //powerUpBt.validate();
 
 
     }
