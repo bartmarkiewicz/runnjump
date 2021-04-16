@@ -2,6 +2,8 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetLoaderParameters;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -103,6 +105,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
     ArrayList<GameObject> dynamicObjects;
+    private boolean loading = true;
 
     /**
      * Instantiates a new Game screen.
@@ -179,12 +182,15 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * This method is used for loading the level
      */
     public void loadLevel(){
+        TmxMapLoader loader = new TmxMapLoader();
+        TmxMapLoader.Parameters loadingParameters = new TmxMapLoader.Parameters();
         try {
-            tileMap = new TmxMapLoader().load("levels\\level" + level + ".tmx");
+            tileMap = loader.load("levels\\level" + level + ".tmx",loadingParameters);
         }catch (SerializationException e){
             //lvl not implemented so it will load lvl 1 by default
-            tileMap = new TmxMapLoader().load("levels\\level" + 1 + ".tmx");
+            tileMap = loader.load("levels\\level" + 1 + ".tmx",loadingParameters);
         }
+
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
         if (orthographicCamera == null) {
             orthographicCamera = new OrthographicCamera();

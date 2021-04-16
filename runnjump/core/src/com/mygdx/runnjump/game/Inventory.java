@@ -63,6 +63,7 @@ public class Inventory {
             powerUps.put("invincibility", 0);
             powerUps.put("ghostwalk", 2);
         }
+
         hud.updatePowerUpIndicator(getPowerUps());
 
     }

@@ -160,22 +160,23 @@ public class Hud extends ChangeListener implements Disposable {
                 }
             }
         }
-        if(!powerUps.isEmpty()){
-            selected = powerUps.removeFirst();
-            powerUps.addLast(selected);
-            setImage = true;
-            Texture nextImage = TextureManager.getManager().getAsset(selected);
-            Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
-            powerUpBt.getStyle().imageUp = drawable;
-            powerUpBt.getStyle().imageDown = drawable;
+        if(Gdx.app.getType() == Application.ApplicationType.Android) {
+            if (!powerUps.isEmpty()) {
+                selected = powerUps.removeFirst();
+                powerUps.addLast(selected);
+                setImage = true;
+                Texture nextImage = TextureManager.getManager().getAsset(selected);
+                Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
+                powerUpBt.getStyle().imageUp = drawable;
+                powerUpBt.getStyle().imageDown = drawable;
 
-        } else {
-            setImage = false;
-            selected = "None";
-            powerUpBt.getStyle().imageUp = new ColorDrawable(0,0,0,1);
-            powerUpBt.getStyle().imageDown =  new ColorDrawable(0,0,0,1);
+            } else {
+                setImage = false;
+                selected = "None";
+                powerUpBt.getStyle().imageUp = new ColorDrawable(0, 0, 0, 1);
+                powerUpBt.getStyle().imageDown = new ColorDrawable(0, 0, 0, 1);
+            }
         }
-
 
         if(found == 0){
             powerUpIndicatorStr = "Empty Inventory";
