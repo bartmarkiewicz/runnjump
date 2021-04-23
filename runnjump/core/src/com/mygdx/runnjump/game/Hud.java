@@ -479,4 +479,8 @@ public class Hud extends ChangeListener implements Disposable {
             powerUpBt.getStyle().imageDown =  new ColorDrawable(0,0,0,1);
         }
     }
+
+    public Button getInteractBt() {
+        return interactBt;
+    }
 }

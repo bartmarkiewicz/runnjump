@@ -431,6 +431,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(!gameOver){
+            player.dialogueManage();
+        }
+
         if (gameOver){
             //restart on pressing a button/tapping
             startGame();

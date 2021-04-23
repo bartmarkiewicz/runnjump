@@ -68,7 +68,7 @@ public class Player extends MovingActor implements InputProcessor {
      * @param collisionLayer the collision layer
      * @param visualLayer    the visual layer
      */
-    public Player(final Runnjump theGame, Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
+    public Player(final Runnjump theGame, final Hud hud, TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer){
         super(collisionLayer, visualLayer);
         getSprite().setSize(30*2,30*3);//2 by 3 tiles size
         setLogicalSize(42,85); //little less than 2 tiles by 3 tiles
@@ -87,6 +87,15 @@ public class Player extends MovingActor implements InputProcessor {
         aKeyHeld = false;
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Touchpad joystick = hud.getMovementJoystick();
+            Button interactBt = hud.getInteractBt();
+            final Player player = this;
+            interactBt.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    player.dialogueManage();
+                }
+            });
+
             joystick.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -126,6 +135,8 @@ public class Player extends MovingActor implements InputProcessor {
                     }
                 }
             });
+
+
         }
 
         ghostWalkPU = false;
@@ -516,6 +527,23 @@ public class Player extends MovingActor implements InputProcessor {
         }
     }
 
+
+    public void dialogueManage(){
+        if (dialogueMode) {
+            //Go to the next dialogue
+            hud.progressDialogue(npcAssetName, this);
+        } else if(touchingNPC) {
+            if (dialogueContext.containsKey(npcAssetName)) {
+                hud.showDialogue(npcAssetName, dialogueContext.get(npcAssetName));
+            } else {
+                hud.showDialogue(npcAssetName, 1);
+            }
+            dialogueMode = true;
+            dKeyHeld = false;
+            aKeyHeld = false;
+        }
+    }
+
     /**
      * This method allows for keyboard input for controlling the player character on windows desktop.
      * @param keycode
@@ -525,19 +553,7 @@ public class Player extends MovingActor implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch(keycode) {
             case Input.Keys.SPACE:
-                if (dialogueMode) {
-                    //Go to the next dialogue
-                    hud.progressDialogue(npcAssetName, this);
-                } else if(touchingNPC) {
-                    if (dialogueContext.containsKey(npcAssetName)) {
-                        hud.showDialogue(npcAssetName, dialogueContext.get(npcAssetName));
-                    } else {
-                        hud.showDialogue(npcAssetName, 1);
-                    }
-                    dialogueMode = true;
-                    dKeyHeld = false;
-                    aKeyHeld = false;
-                }
+                dialogueManage();
                 break;
             case Input.Keys.W:
                 if(canJump && !dialogueMode) {
