@@ -36,6 +36,8 @@ public class Player extends MovingActor implements InputProcessor {
     protected float gravityPowerUpTime;
     private float speedTime;
     private float ghostWalkPUTime;
+    private float invincibilityPUTime;
+    private float rockThrowingPUTime;
 
     protected boolean canJump;
     protected SoundManager soundManager;
@@ -152,7 +154,9 @@ public class Player extends MovingActor implements InputProcessor {
         touchingNPC = false;
         speedTime = 0;
         ghostWalkPUTime = 0;
-
+        rockThrowingPUTime = 0;
+        invincibilityPUTime = 0;
+        invincibilityPUTime = 0;
         gravityPowerUp = false;
 
         banditsKilled = 0;
@@ -438,6 +442,19 @@ public class Player extends MovingActor implements InputProcessor {
 
         checkPowerUps();
 
+
+        if(invincibilityPU) {
+            invincibilityPUTime -= delta;
+            if (invincibilityPUTime <= 0){
+                invincibilityPU = false;
+            }
+        }
+        if(rockThrowingPU){
+            rockThrowingPUTime -=delta;
+            if(rockThrowingPUTime <= 0){
+                rockThrowingPU = false;
+            }
+        }
     }
 
     private void checkPowerUps() {
@@ -656,10 +673,12 @@ public class Player extends MovingActor implements InputProcessor {
     }
 
     private void rocksPU(){
+        invincibilityPUTime = 8;
         rockThrowingPU = true;
     }
 
     private void invincibilityPU() {
+        invincibilityPUTime = 8;
         invincibilityPU = true;
     }
 
@@ -677,7 +696,7 @@ public class Player extends MovingActor implements InputProcessor {
      */
     @Override
     protected void die(){
-        if(alive) {
+        if(alive && !invincibilityPU) {
             playerInventory.removeLife();
             if (playerInventory.getLives() >= 0) {
                 SoundManager.getManager().playRandom("male_death");
