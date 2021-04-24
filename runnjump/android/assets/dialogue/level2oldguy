@@ -1,0 +1,36 @@
+Jack@Oh its you again Player!
+Jack@Its a welcome surprise.
+Player@Hey, what are you doing here?
+Jack@I followed a suspicious looking man here.
+Player@So you're a stalker?
+Jack@No no! You misunderstand.
+Jack@I saw him on a police wanted list.
+Jack@This guy is a bandit leader.
+Player@Maybe we should call the police and leave this place?
+Jack@He seemed to be in a hurry, I think they'll get away if we leave them be.
+Jack@You must help me get rid of them.
+Jack@You go in guns blazing and wipe out at least 5 bandits and I will wait here for the rest.
+Player@Aren't you too old to be fighting?
+Jack@I am actually a martial artist, and I'm pretty sure I could get rid of the ones that escape you.
+Jack@I'll ambush them. I should be fine, I'm more worried for you.
+Player@Why? I'm a pro.
+Jack@You don't look like much of a fighter, I'll give you a few tips.
+Jack@Firstly, don't fight them head on, instead jump on top of a bandit from surprise.
+Jack@Secondly, try to pick off stragglers and not get surrounded by many bandits at once.
+Jack@Thirdly, it will be easiest if you arm yourself with with a weapon, i'm sure you can find one in their lair.
+Jack@Lastly, I fought one of them before and they seem to use the same sort of primitive weaponry.
+Player@What do you mean?
+Jack@These guys are really into role-playing they armed themselves in medieval armour and wield swords. Despite having access to guns.
+Jack@Their swords are heavy so once a bandit swings at you, you should have a moment to tackle them while the bandit gathers energy for another swing.
+Player@I'll keep that in mind.
+CONDITION@QUEST1LVL2
+END@END
+Jack@Go go, I'll wait here for the stragglers, take out at least five bandits to flush them out!
+CHECK@QUEST1LVL2COMPLETED
+Jack@Great work, you took them down like a pro, I didn't think you'd have it in you.
+Player@If you didn't think I had it in me why did you tell me to do it?
+Jack@Figure of speech man, I'll give you something that should help you in your travels.
+GIVE@15 SCORE
+GIVE@15 SCORE
+END@END
+Jack@Thanks for the help again, now leave the rest to me.

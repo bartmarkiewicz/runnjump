@@ -235,7 +235,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 String name = object.getProperties().get("name").toString();
                 String assetName = object.getProperties().get("assetName").toString();
 
-                NPC npc = new NPC(layer,visualLayer,name,assetName);
+                NPC npc = new NPC(layer,visualLayer,name,assetName, level);
                 npc.getSprite().setPosition(x,y);
                 dynamicObjects.add(npc);
             } else if (object.getName().equals("player")){
@@ -431,16 +431,16 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(!gameOver){
-            player.dialogueManage();
-        }
-
         if (gameOver){
             //restart on pressing a button/tapping
             startGame();
         }
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
+        }
+        if(!gameOver && (player.dialogueMode || player.touchingNPC)){
+            player.dialogueManage();
+            return true;
         }
         return super.touchDown(screenX, screenY, pointer, button);
     }

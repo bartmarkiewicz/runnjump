@@ -25,7 +25,7 @@ import java.util.TreeMap;
  */
 public class Player extends MovingActor implements InputProcessor {
 
-    protected boolean touchingNPC;
+    public boolean touchingNPC;
     String npcName, npcAssetName;
 
     protected boolean gravityPowerUp;
@@ -52,7 +52,7 @@ public class Player extends MovingActor implements InputProcessor {
     private boolean dKeyHeld;
     private boolean aKeyHeld;
     Runnjump theGame;
-    private boolean dialogueMode = false;
+    public  boolean dialogueMode = false;
     private TreeMap<String, Integer> dialogueContext;
     private TreeMap<String, Boolean> conditionsMet;
     private GameObject npcTouched;

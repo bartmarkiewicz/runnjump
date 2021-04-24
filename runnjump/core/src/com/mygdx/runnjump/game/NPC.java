@@ -11,10 +11,10 @@ public class NPC extends MovingActor{
     ArrayList<Texture> idle;
     private String npcName, assetName;
 
-    public NPC(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, String name,  String assetName) {
+    public NPC(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, String name,  String assetName, int level) {
         super(collisionLayer, visualLayer);
         idle = TextureManager.getManager().getFrameSet(assetName);
-        this.assetName = assetName;
+        this.assetName = assetName + "Lvl" + level;
         this.npcName = name;
         this.alive = true;
         getSprite().setSize(28*2, 29*3); // 2 by 3 tile
@@ -82,6 +82,7 @@ public class NPC extends MovingActor{
     }
 
     public String getAssetName() {
+
         return assetName;
     }
 

@@ -40,6 +40,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     private void loadNPCAssets(){
         theGame.textureManager.addFrameAssetSet("oldguy", "oldguy\\Idle_",18);
+
         theGame.textureManager.addFrameAssetSet("damsel", "damsel\\Idle Blinking_", 24);
 
 
@@ -67,6 +68,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
      */
     private void loadTextAssets(){
         theGame.dialogueManager.addAsset("oldguy", "level1greeting");
+        theGame.dialogueManager.addAsset("oldguyLvl2", "level2oldguy");
+
         theGame.dialogueManager.addAsset("damsel", "level1damsel");
     }
 
