@@ -487,6 +487,14 @@ public class Player extends MovingActor implements InputProcessor {
                 hud.usedPowerUp = false;
                 hud.usedPowerUpStr = "";
             }
+
+            if (hud.usedPowerUpStr.equals("rocks") && playerInventory.hasPowerUp("rocks")){
+                gravityPowerup();
+                ((GameScreen) theGame.getCurrentScreen()).createLongToast("Rock throwing power-up has been activated!");
+                playerInventory.usePowerUp("rocks");
+                hud.usedPowerUp = false;
+                hud.usedPowerUpStr = "";
+            }
         }
     }
 
