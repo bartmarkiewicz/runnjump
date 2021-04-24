@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -81,6 +82,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
         //Runnjump.textureAtlasMap.put("player_running", playerRunning);
         loadPlayer();
+        TextureManager.getManager().addAsset("projectile", "projectile");
     }
 
     /**

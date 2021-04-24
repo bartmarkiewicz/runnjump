@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.DialogueManager;
+import com.mygdx.runnjump.util.Position;
 import com.mygdx.runnjump.util.SoundManager;
 
 import java.util.ArrayList;
@@ -57,6 +58,10 @@ public class Player extends MovingActor implements InputProcessor {
     private TreeMap<String, Boolean> conditionsMet;
     private GameObject npcTouched;
     Inventory playerInventory;
+    private boolean invincibilityPU;
+    private boolean rockThrowingPU;
+    Projectile rock;
+    private int banditsKilled;
 
 
     /**
@@ -141,13 +146,16 @@ public class Player extends MovingActor implements InputProcessor {
 
         ghostWalkPU = false;
         superSpeedPU = false;
+        invincibilityPU = false;
+        rockThrowingPU = false;
+
         touchingNPC = false;
         speedTime = 0;
         ghostWalkPUTime = 0;
 
         gravityPowerUp = false;
 
-
+        banditsKilled = 0;
         playerInventory = new Inventory(hud,true);
         hud.updatePowerUpIndicator(playerInventory.getPowerUps());
     }
@@ -524,6 +532,9 @@ public class Player extends MovingActor implements InputProcessor {
             npcTouched = other;
             npcName = ((NPC) other).getNpcName();
             npcAssetName = ((NPC) other).getAssetName();
+        } else if (other instanceof Projectile && !((Projectile) other).playerBullet){
+            die();
+            System.out.println("Bullet kills player!!");
         }
     }
 
@@ -596,22 +607,60 @@ public class Player extends MovingActor implements InputProcessor {
                 }
                 break;
             case Input.Keys.NUM_3:
-                if(playerInventory.hasPowerUp("ghostWalk")){
+                if(playerInventory.hasPowerUp("ghostwalk")){
                     ghostWalkPU();
                     ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost walk power-up has been activated!");
-                    playerInventory.usePowerUp("ghostWalk");
+                    playerInventory.usePowerUp("ghostwalk");
                 }
                 break;
             case Input.Keys.NUM_4:
                 if(playerInventory.hasPowerUp("invincibility")){
-                    ghostWalkPU();
+                    invincibilityPU();
                     ((GameScreen) theGame.getCurrentScreen()).createLongToast("Invincibility power-up has been activated!");
                     playerInventory.usePowerUp("invincibility");
+                }
+                break;
+            case Input.Keys.NUM_5:
+                if(!rockThrowingPU) {
+                    if (playerInventory.hasPowerUp("rocks")) {
+                        rocksPU();
+                        ((GameScreen) theGame.getCurrentScreen()).createLongToast("Rock-throwing power-up has been activated!");
+                        playerInventory.usePowerUp("rocks");
+                    }
+                } else {
+                    //throw rock
+                    throwRock();
                 }
                 break;
         }
         touchingNPC = false;
         return true;
+    }
+
+    public Projectile getProjectile(){
+        Projectile temp = rock;
+        rock = null;
+
+        return temp;
+    }
+
+    private void throwRock() {
+        rock = new Projectile(collisionLayer,visualLayer,new Position(sprite.getX(), sprite.getY()),true);
+        if(facingRight) {
+            rock.setDirection("right");
+        } else {
+            rock.setDirection("left");
+        }
+
+
+    }
+
+    private void rocksPU(){
+        rockThrowingPU = true;
+    }
+
+    private void invincibilityPU() {
+        invincibilityPU = true;
     }
 
     private void ghostWalkPU() {
@@ -663,7 +712,7 @@ public class Player extends MovingActor implements InputProcessor {
         playerInventory.restart();
         dialogueContext.clear();//clears the dialogues
         conditionsMet.clear();//clears met conditions
-
+        banditsKilled = 0;
     }
 
     /**
@@ -785,5 +834,7 @@ public class Player extends MovingActor implements InputProcessor {
 
     public void killedBandit() {
         ((GameScreen) theGame.getCurrentScreen()).createShortToast("You had killed a bandit!");
+        banditsKilled += 1;
     }
+
 }

@@ -208,7 +208,7 @@ public abstract class MovingActor extends GameObject {
      * @return
      */
     protected boolean isRunning() {
-        if ((velocity.x >0.25f || velocity.x < -0.25f)&&(velocity.y < 3f && velocity.y>-3f)){
+        if ((Math.abs(velocity.x)>0.3 || Math.abs(velocity.y) > 0.3)){
             return true;
         }
         return false;
@@ -226,7 +226,7 @@ public abstract class MovingActor extends GameObject {
      * checks if the player is currently idle
      * @return
      */
-    protected boolean isIdle() {
+    public boolean isIdle() {
         if (!isRunning()){
             return true;
         }

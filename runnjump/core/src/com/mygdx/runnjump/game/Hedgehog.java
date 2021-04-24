@@ -2,6 +2,7 @@ package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.TextureManager;
 
 public class Hedgehog extends Enemy{
@@ -127,6 +128,10 @@ public class Hedgehog extends Enemy{
         super.collidesObject(other, delta);
         if(other instanceof Player){
             //make noise?
+        }
+        if (other instanceof Projectile && ((Projectile) other).playerBullet){
+            die();
+            GameScreen.getPlayer().gainScore(1);
         }
     }
 }

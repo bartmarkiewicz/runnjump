@@ -25,6 +25,7 @@ import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.NPC;
 import com.mygdx.runnjump.game.Player;
+import com.mygdx.runnjump.game.Projectile;
 import com.mygdx.runnjump.libs.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.Iterator;
  * This is used to represent the screen with the actual game and its level. The constructor initialises the chosen level.
  */
 public class GameScreen extends ScreenBase implements InputProcessor {
+    static Player currentPlayer;
     /**
      * The Level.
      */
@@ -266,6 +268,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         hud = new Hud(new SpriteBatch(), theGame, skin);
         player = new Player(theGame,hud,layer,visualLayer);
+        currentPlayer = player;
         gameOver = false;
         dynamicObjects = new ArrayList<>();
         zoom = 0f;
@@ -398,6 +401,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      *
      */
     private void updateDynamicObjects(float delta){
+        Projectile rock = player.getProjectile();
+        if(rock !=null) {
+            dynamicObjects.add(rock);
+        }
         for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
             GameObject current = dynamicObjects.get(i);
             if (!current.isDead() && current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height)) {
@@ -409,6 +416,19 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                         current.collidesObject(player, delta);
                     }
                 }
+                if (current instanceof Projectile && !((Projectile) current).isIdle()) {
+                    for (int j = 0; j < dynamicObjects.size(); j++) { //loops through all dynamic game objects
+                        GameObject secondObj = dynamicObjects.get(j);
+                        if (Intersector.overlaps(secondObj.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
+                            System.out.println("Collision between " + secondObj.getClass() + " and " + current.getClass());
+                            secondObj.collidesObject(current, delta);
+                            current.collidesObject(secondObj, delta);
+                        }
+                    }
+                }
+            }
+            if(current.isDead() && !(current instanceof Player)){
+                dynamicObjects.remove(i);
             }
         }
     }
@@ -494,5 +514,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     public ArrayList<TiledMapTileLayer.Cell> getBlockedCells(String key) {
         return tileGroups.get(key);
+    }
+
+    public static Player getPlayer(){
+        return currentPlayer;
     }
 }
