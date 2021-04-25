@@ -1,5 +1,7 @@
 package com.mygdx.runnjump.game;
 
+import com.mygdx.runnjump.screens.GameScreen;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -13,6 +15,7 @@ public class Inventory {
     Hud hud;
     private int hearts = 0, score = 0;
     protected final int STARTING_HEARTS = 3;
+
 
     public int getLives(){
         return hearts;
@@ -114,6 +117,7 @@ public class Inventory {
         if(previous > 0) {
             powerUps.put(name, previous - 1);
         }
+        hud.changed(null, null);
         hud.updatePowerUpIndicator(getPowerUps());
 
     }

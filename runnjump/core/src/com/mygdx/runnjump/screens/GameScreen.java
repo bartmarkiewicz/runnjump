@@ -268,6 +268,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         hud = new Hud(new SpriteBatch(), theGame, skin);
         player = new Player(theGame,hud,layer,visualLayer);
+
         currentPlayer = player;
         gameOver = false;
         dynamicObjects = new ArrayList<>();

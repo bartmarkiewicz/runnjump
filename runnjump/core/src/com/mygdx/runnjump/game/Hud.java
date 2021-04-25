@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.ColorDrawable;
 import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.SoundHandler;
@@ -147,6 +148,7 @@ public class Hud extends ChangeListener implements Disposable {
 
     }
 
+
     public void updatePowerUpIndicator(HashMap<String, Integer> powerUpMap) {
         String powerUpIndicatorStr = "Inventory:\n";
         int found = 0;
@@ -243,21 +245,26 @@ public class Hud extends ChangeListener implements Disposable {
 
         Table powerUpUI = new Table();
 
+
+
         if(!powerUps.isEmpty()) {
             Drawable drawable = new TextureRegionDrawable(new TextureRegion(TextureManager.getManager().getAsset(powerUps.first())));
+            usedPowerUpStr = powerUps.first();
             powerUpBt = new ImageButton(drawable);
+            System.out.println("initial power up - " + usedPowerUpStr);
         } else {
             powerUpBt = new ImageButton(new ColorDrawable(0,0,0,0));
         }
+        updatePowerUpIndicator(new HashMap<String, Integer>());
 
         powerUpBt.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if(!powerUps.isEmpty()) {
-                    String temp = powerUps.first();
-                    String powerUp = temp.split("_")[0];
+                    //String temp = powerUps.first();
+                    //String powerUp = temp.split("_")[0];
                     usedPowerUp = true;
-                    usedPowerUpStr = powerUp;
+                    usedPowerUpStr = selected.split("_")[0];
                 }
             }
         });
@@ -473,6 +480,7 @@ public class Hud extends ChangeListener implements Disposable {
             Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
             powerUpBt.getStyle().imageUp = drawable;
             powerUpBt.getStyle().imageDown = drawable;
+            System.out.println("Selected power up - " + selected);
         } else {
             setImage = false;
             powerUpBt.getStyle().imageUp = new ColorDrawable(0,0,0,1);

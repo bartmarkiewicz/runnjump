@@ -52,6 +52,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.textureManager.addAsset("speed_powerup", "powerups\\speed");
         theGame.textureManager.addAsset("invincibility_powerup", "powerups\\invincibility");
         theGame.textureManager.addAsset("ghostwalk_powerup", "powerups\\ghostwalk");
+        theGame.textureManager.addAsset("rocks_powerup", "powerups\\projectile");
+
     }
 
     private void loadEnemyAssets(){
@@ -82,7 +84,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
         //Runnjump.textureAtlasMap.put("player_running", playerRunning);
         loadPlayer();
-        TextureManager.getManager().addAsset("projectile", "projectile");
+
     }
 
     /**

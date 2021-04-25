@@ -13,7 +13,7 @@ public class Projectile extends MovingActor {
     Position throwerPos;
     public Projectile(TiledMapTileLayer collisionLayer, TiledMapTileLayer visualLayer, Position throwerPos, boolean playerBullet) {
         super(collisionLayer, visualLayer);
-        this.sprite = new Sprite(TextureManager.getManager().getAsset("projectile"));
+        this.sprite = new Sprite(TextureManager.getManager().getAsset("rocks_powerup"));
         getSprite().setSize(30*1,30*1);//1 by 1 tiles size
         setLogicalSize(30,30);
         this.playerCollidable = true;
