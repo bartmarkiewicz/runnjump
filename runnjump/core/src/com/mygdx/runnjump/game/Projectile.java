@@ -29,10 +29,14 @@ public class Projectile extends MovingActor {
     public void setDirection(String direction){
         if(direction.equals("left")){
             this.velocity.x = -speedX;
+            this.velocity.y = speedY;
+
             this.sprite.setX(throwerPos.getX()-(sprite.getWidth()));
             this.sprite.setY(throwerPos.getY()+(sprite.getHeight()/2));
         } else if (direction.equals("right")){
             this.velocity.x = speedX;
+            this.velocity.y = speedY;
+
             this.sprite.setX(throwerPos.getX()+(sprite.getWidth()*2));
             this.sprite.setY(throwerPos.getY()+(sprite.getHeight()/2));
 

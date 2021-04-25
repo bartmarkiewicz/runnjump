@@ -154,9 +154,8 @@ public class Player extends MovingActor implements InputProcessor {
         touchingNPC = false;
         speedTime = 0;
         ghostWalkPUTime = 0;
-        rockThrowingPUTime = 0;
-        invincibilityPUTime = 0;
-        invincibilityPUTime = 0;
+        rockThrowingPUTime = 8;// rock throwing lasts for 8 seconds
+        invincibilityPUTime = 8;
         gravityPowerUp = false;
 
         banditsKilled = 0;
@@ -447,12 +446,14 @@ public class Player extends MovingActor implements InputProcessor {
             invincibilityPUTime -= delta;
             if (invincibilityPUTime <= 0){
                 invincibilityPU = false;
+                invincibilityPUTime = 8;
             }
         }
         if(rockThrowingPU){
             rockThrowingPUTime -=delta;
             if(rockThrowingPUTime <= 0){
                 rockThrowingPU = false;
+                rockThrowingPUTime = 8;
             }
         }
     }
@@ -552,7 +553,14 @@ public class Player extends MovingActor implements InputProcessor {
                 System.out.println("Bandit sword kills player");
                 die();
             }
-        } else if (other instanceof NPC){
+        }else if (other instanceof TurtleMan) {
+            TurtleMan turtle = (TurtleMan) other;
+            if (turtle.isAttacking() && turtle.getSprite().getY() + 50 > getSprite().getY()) {
+                //if the bandit is attacking, the player dies by colliding with the sword assuming the player is not jumping on top of its head
+                System.out.println("Turtleman kills player");
+                die();
+            }
+        }else if (other instanceof NPC){
             touchingNPC = true;
             npcTouched = other;
             npcName = ((NPC) other).getNpcName();
@@ -859,8 +867,8 @@ public class Player extends MovingActor implements InputProcessor {
         playerInventory.addScore(i);
     }
 
-    public void killedBandit() {
-        ((GameScreen) theGame.getCurrentScreen()).createShortToast("You had killed a bandit!");
+    public void killedBandit(String message) {
+        ((GameScreen) theGame.getCurrentScreen()).createShortToast(message);
         banditsKilled += 1;
     }
 

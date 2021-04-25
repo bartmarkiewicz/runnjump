@@ -26,6 +26,7 @@ import com.mygdx.runnjump.game.Hud;
 import com.mygdx.runnjump.game.NPC;
 import com.mygdx.runnjump.game.Player;
 import com.mygdx.runnjump.game.Projectile;
+import com.mygdx.runnjump.game.TurtleMan;
 import com.mygdx.runnjump.libs.Toast;
 
 import java.util.ArrayList;
@@ -228,9 +229,14 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 dynamicObjects.add(hedgehog);
             } else if (object.getName().equals("bandit")) {
                 int max_speed = Integer.parseInt(object.getProperties().get("max_speed_x").toString());
-                Bandit bandit = new Bandit(layer,visualLayer,max_speed);
-                bandit.getSprite().setPosition(x,y);
+                Bandit bandit = new Bandit(layer, visualLayer, max_speed);
+                bandit.getSprite().setPosition(x, y);
                 dynamicObjects.add(bandit);
+            }
+            else if (object.getName().equals("turtleman")){
+                TurtleMan turtleMan = new TurtleMan(layer,visualLayer);
+                turtleMan.getSprite().setPosition(x,y);
+                dynamicObjects.add(turtleMan);
 
 
             }else if (object.getName().equals("npc")){
@@ -408,6 +414,13 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
         for (int i = 0; i < dynamicObjects.size(); i++) { //loops through all dynamic game objects
             GameObject current = dynamicObjects.get(i);
+            if(current instanceof TurtleMan){
+                rock = ((TurtleMan) current).getProjectile();
+                if(rock != null) {
+                    dynamicObjects.add(rock);
+                }
+            }
+
             if (!current.isDead() && current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height)) {
                 current.draw(mapRenderer.getBatch(), delta);
                 if (current.isPlayerCollidable()) {

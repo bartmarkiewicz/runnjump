@@ -117,7 +117,6 @@ public class Inventory {
         if(previous > 0) {
             powerUps.put(name, previous - 1);
         }
-        hud.changed(null, null);
         hud.updatePowerUpIndicator(getPowerUps());
 
     }

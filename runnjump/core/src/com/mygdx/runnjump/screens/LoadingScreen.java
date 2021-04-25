@@ -64,6 +64,14 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.textureManager.addFrameAssetSet("bandit_idle", "bandit\\Idle Blinking_", 18);
         theGame.textureManager.addFrameAssetSet("bandit_attacking", "bandit\\Slashing_", 12);
 
+
+        theGame.textureManager.addFrameAssetSet("turtle_moving", "turtle\\Running_", 15);
+        theGame.textureManager.addFrameAssetSet("turtle_idle", "turtle\\Idle Blinking_", 18);
+        theGame.textureManager.addFrameAssetSet("turtle_throwing", "turtle\\Throwing_", 12);
+        theGame.textureManager.addFrameAssetSet("turtle_slashing", "turtle\\Slashing_", 12);
+
+
+
     }
 
     /**
