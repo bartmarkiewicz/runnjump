@@ -61,10 +61,10 @@ public class Inventory {
             powerUps.put("ghostwalk", 0);
             powerUps.put("rocks", 0);
         } else {
-            powerUps.put("gravity", 1);
-            powerUps.put("speed", 1);
-            powerUps.put("invincibility", 1);
-            powerUps.put("ghostwalk", 2);
+            powerUps.put("gravity", 55);
+            powerUps.put("speed", 55);
+            powerUps.put("invincibility", 55);
+            powerUps.put("ghostwalk", 55);
             powerUps.put("rocks", 55);
         }
 

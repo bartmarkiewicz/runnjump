@@ -100,6 +100,10 @@ public class Player extends MovingActor implements InputProcessor {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
                     player.dialogueManage();
+                    if(rockThrowingPU) {
+                        //throw rock
+                        throwRock();
+                    }
                 }
             });
 
@@ -354,16 +358,24 @@ public class Player extends MovingActor implements InputProcessor {
 
         if(ghostWalkPU && ghostWalkPUTime < 4) { // ghost walk disables left/right collisions
             ghostWalkPUTime += delta;
+            collisionX = false;
         } else { // maybe keep checking for collisions and have ghost walk active while inside a wall?
             if (velocity.x < 0) // going left
                 collisionX = collidesWest();
             else if (velocity.x > 0) // going right
                 collisionX = collidesEast();
-            if(!collidesEast() && !collidesWest()) {
+            if(ghostWalkPU && !collidesEast() && !collidesWest() && !collidesNorth() && !collidesSouth()) {
                 ghostWalkPU = false;
                 ghostWalkPUTime = 0;
+            } else {
+                //inside a wall but power-up should run out
+                if (ghostWalkPUTime > 4){
+                    ghostWalkPUTime -= 0.2;
+                }
             }
         }
+        System.out.println("Ghost walk - " + ghostWalkPU);
+
 
         if (gravityPowerUp && gravityPowerUpTime < 9) { //power up lasts 9 seconds
             gravityPowerUpTime += delta;
@@ -468,21 +480,21 @@ public class Player extends MovingActor implements InputProcessor {
                 hud.usedPowerUpStr = "";
             }
             if (hud.usedPowerUpStr.equals("speed") && playerInventory.hasPowerUp("speed")){
-                gravityPowerup();
+                superSpeedPU();
                 ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super-speed power-up has been activated!");
                 playerInventory.usePowerUp("speed");
                 hud.usedPowerUp = false;
                 hud.usedPowerUpStr = "";
             }
             if (hud.usedPowerUpStr.equals("invincibility") && playerInventory.hasPowerUp("invincibility")){
-                gravityPowerup();
+                invincibilityPU();
                 ((GameScreen) theGame.getCurrentScreen()).createLongToast("Invincibility power-up has been activated!");
                 playerInventory.usePowerUp("invincibility");
                 hud.usedPowerUp = false;
                 hud.usedPowerUpStr = "";
             }
             if (hud.usedPowerUpStr.equals("ghostwalk") && playerInventory.hasPowerUp("ghostwalk")){
-                gravityPowerup();
+                ghostWalkPU();
                 ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost-walk power-up has been activated!");
                 playerInventory.usePowerUp("ghostwalk");
                 hud.usedPowerUp = false;
@@ -490,7 +502,7 @@ public class Player extends MovingActor implements InputProcessor {
             }
 
             if (hud.usedPowerUpStr.equals("rocks") && playerInventory.hasPowerUp("rocks")){
-                gravityPowerup();
+                rocksPU();
                 ((GameScreen) theGame.getCurrentScreen()).createLongToast("Rock throwing power-up has been activated!");
                 playerInventory.usePowerUp("rocks");
                 hud.usedPowerUp = false;
@@ -700,6 +712,7 @@ public class Player extends MovingActor implements InputProcessor {
 
     private void ghostWalkPU() {
         ghostWalkPU = true;
+        collisionX = false;
     }
 
     private void superSpeedPU() {
