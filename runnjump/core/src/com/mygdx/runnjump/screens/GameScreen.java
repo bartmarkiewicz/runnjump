@@ -13,7 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
@@ -28,10 +30,12 @@ import com.mygdx.runnjump.game.Player;
 import com.mygdx.runnjump.game.Projectile;
 import com.mygdx.runnjump.game.TurtleMan;
 import com.mygdx.runnjump.libs.Toast;
+import com.mygdx.runnjump.util.TerrainGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 
 
 /**
@@ -108,7 +112,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
     ArrayList<GameObject> dynamicObjects;
-    private boolean loading = true;
+    private boolean survivalMode;
+    private float timeSinceGen = 0;
+    private TerrainGenerator terrainGen;
 
     /**
      * Instantiates a new Game screen.
@@ -120,6 +126,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         super(theGameO);
         currentScreenId = Runnjump.ScreenEn.GAME;
         this.level = Runnjump.getLevelSelected();
+        survivalMode = false;
     }
 
     /**
@@ -132,12 +139,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         currentScreenId = Runnjump.ScreenEn.GAME;
         this.level = -1; //-1 indicates SURVIVAL mode
         batch = new SpriteBatch();
+        survivalMode = true;
+
+
     }
 
 
     public void setSpawnPoint(float x, float y){
         spawnPointX = x;
         spawnPointY = y;
+        if(survivalMode) {
+            int mapLoadXpos = Math.round(x + width) + (15 * 32);//generates things up to 30 blocks away from player x position.
+            terrainGen.setLoadPos(mapLoadXpos);
+        }
+
     }
 
     /**
@@ -190,8 +205,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         try {
             tileMap = loader.load("levels\\level" + level + ".tmx",loadingParameters);
         }catch (SerializationException e){
-            //lvl not implemented so it will load lvl 1 by default
-            tileMap = loader.load("levels\\level" + 1 + ".tmx",loadingParameters);
+            //survival mode
+            tileMap = loader.load("levels\\level" + -1 + ".tmx",loadingParameters);
+            survivalMode = true;
         }
 
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, batch);
@@ -206,7 +222,41 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if (background == null) {
             background = new TextureRegion(new Texture("levels\\background.png"));
         }
+        TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
+        TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
+
+        if(!survivalMode) {
+            tileGroups = new HashMap<>();
+            ArrayList<TiledMapTileLayer.Cell> goldKeyBlockers = new ArrayList<>();
+            ArrayList<TiledMapTileLayer.Cell> silverKeyBlockers = new ArrayList<>();
+
+            for (int i = 0; i < visualLayer.getWidth(); i++) { // finds tiles of a specific type and puts them in a collection for quick access during runtime of the game.
+                for (int j = 0; j < visualLayer.getHeight(); j++) {
+                    TiledMapTileLayer.Cell cell = visualLayer.getCell((int) i, (int) j);
+
+                    if (cell != null && cell.getTile().getProperties().containsKey("gold_key_blocker")) {
+                        goldKeyBlockers.add(cell);
+                    }
+                    if (cell != null && cell.getTile().getProperties().containsKey("silver_key_blocker")) {
+                        silverKeyBlockers.add(cell);
+                    }
+
+                }
+            }
+
+            tileGroups.put("gold_key", goldKeyBlockers);
+            tileGroups.put("silver_key", silverKeyBlockers);
+        } else {
+            //survival mode
+            TiledMapTileSet tileSet = tileMap.getTileSets().getTileSet("jungleplatform");
+
+            terrainGen = new TerrainGenerator(visualLayer, layer,tileSet);
+
+        }
     }
+
+
+
 
     /**
      * This method parses the TMX map to create dynamic game objects based on the TMX map objects within the map and places the created objects in the location specified on the map.
@@ -290,20 +340,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         //respawnPlayer();
         placeObjects(layer,visualLayer);
 
-        tileGroups = new HashMap<>();
 
-        ArrayList<TiledMapTileLayer.Cell> goldKeyBlockers = new ArrayList<>();
-        for(int i = 0; i < visualLayer.getWidth();i++) { // finds tiles of a specific type and puts them in a collection for quick access during runtime of the game.
-            for (int j = 0; j < visualLayer.getHeight(); j++) {
-                TiledMapTileLayer.Cell cell =visualLayer.getCell((int)i, (int)j);
-
-                if (cell != null && cell.getTile().getProperties().containsKey("gold_key_blocker")){
-                    goldKeyBlockers.add(cell);
-                }
-            }
-        }
-
-        tileGroups.put("gold_key", goldKeyBlockers);
 
         toastFactory = new Toast.ToastFactory.Builder()
                 .font(new BitmapFont()).positionY(10).build();
@@ -331,6 +368,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
         delta = delta > 0.2f ? 0.2f: delta ;//0.2f is max delta time
         super.render(delta);
+        timeSinceGen += delta;
+        if(survivalMode && timeSinceGen > 0.4f){
+            terrainGen.generateTerrain(player.getSprite().getX(),width);
+            timeSinceGen = 0;
+        }
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

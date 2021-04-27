@@ -244,22 +244,43 @@ public class Player extends MovingActor implements InputProcessor {
 
         //removes collectible
         removeCollectibe((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight()); // gets rid of collectible cells
+        removeCollectibles(x, y);
 
         if (cellColLayer.getTile().getProperties().containsKey("gravity_powerup")){
-            //gravity collected;
             playerInventory.gainPowerUp("gravity");
 
             ((GameScreen) theGame.getCurrentScreen()).createLongToast("Gravity power-up acquired!");
-            //soundManager.playSound("coin_collect");
+            soundManager.play("heart_collect");
         }
 
         if (cellColLayer.getTile().getProperties().containsKey("superspeed_powerup")){
-            //gravity collected;
             playerInventory.gainPowerUp("speed");
 
             ((GameScreen) theGame.getCurrentScreen()).createLongToast("Super-speed power-up acquired!");
-            //soundManager.playSound("coin_collect");
+            soundManager.play("heart_collect");
         }
+
+        if (cellColLayer.getTile().getProperties().containsKey("invincibility_powerup")){
+            playerInventory.gainPowerUp("invincibility");
+
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Invincibility power-up acquired!");
+            soundManager.play("heart_collect");
+        }
+
+        if (cellColLayer.getTile().getProperties().containsKey("rocks_powerup")){
+            playerInventory.gainPowerUp("rocks");
+
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Rock-throwing power-up acquired!");
+            soundManager.play("heart_collect");
+        }
+
+        if (cellColLayer.getTile().getProperties().containsKey("ghostwalk_powerup")){
+            playerInventory.gainPowerUp("ghostwalk");
+
+            ((GameScreen) theGame.getCurrentScreen()).createLongToast("Ghost-walk power-up acquired!");
+            soundManager.play("heart_collect");
+        }
+
 
 
         if (cellColLayer.getTile().getProperties().containsKey("star")) {
@@ -285,11 +306,18 @@ public class Player extends MovingActor implements InputProcessor {
             soundManager.play("collect_item");
         }
 
-        removeCollectibles(x, y);
+        if (cellColLayer.getTile().getProperties().containsKey("silver_key")){
+            ((GameScreen) theGame.getCurrentScreen()).createShortToast("Silver key acquired!");
+            handleKey("silver_key");
+
+            soundManager.play("collect_item");
+        }
+
 
     }
 
     private void removeCollectibles(float x, float y) {
+
         if (isCellCollectible((int) x + 33, (int) y)) {
             removeCollectibe((int) (x + 33) / collisionLayer.getTileWidth(), (int) y / collisionLayer.getTileHeight()); //checks cell to the right
         }

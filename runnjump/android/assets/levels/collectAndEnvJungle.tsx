@@ -11,6 +11,16 @@
    <property name="gold_key" value=""/>
   </properties>
  </tile>
+ <tile id="2">
+  <properties>
+   <property name="silver_key" value=""/>
+  </properties>
+ </tile>
+ <tile id="3">
+  <properties>
+   <property name="silver_key" value=""/>
+  </properties>
+ </tile>
  <tile id="60">
   <properties>
    <property name="coin" value=""/>
@@ -113,14 +123,74 @@
    <property name="win_flag" value=""/>
   </properties>
  </tile>
+ <tile id="100">
+  <properties>
+   <property name="rocks_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="101">
+  <properties>
+   <property name="rocks_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="112">
+  <properties>
+   <property name="rocks_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="113">
+  <properties>
+   <property name="rocks_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="134">
+  <properties>
+   <property name="invincibility_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="135">
+  <properties>
+   <property name="invincibility_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="146">
+  <properties>
+   <property name="invincibility_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="147">
+  <properties>
+   <property name="invincibility_powerup" value=""/>
+  </properties>
+ </tile>
  <tile id="148">
   <properties>
    <property name="checkpoint_flag" value=""/>
   </properties>
  </tile>
+ <tile id="156">
+  <properties>
+   <property name="ghostwalk_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="157">
+  <properties>
+   <property name="ghostwalk_powerup" value=""/>
+  </properties>
+ </tile>
  <tile id="160">
   <properties>
    <property name="checkpoint_flag" value=""/>
+  </properties>
+ </tile>
+ <tile id="168">
+  <properties>
+   <property name="ghostwalk_powerup" value=""/>
+  </properties>
+ </tile>
+ <tile id="169">
+  <properties>
+   <property name="ghostwalk_powerup" value=""/>
   </properties>
  </tile>
  <tile id="180">

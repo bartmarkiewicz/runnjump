@@ -173,10 +173,14 @@ public abstract class MovingActor extends GameObject {
         TiledMapTileLayer.Cell cell =collisionLayer.getCell((int)x/collisionLayer.getTileWidth(), (int)y/collisionLayer.getTileHeight());
         return cell != null && cell.getTile()!=null && (cell.getTile().getProperties().containsKey("coin") ||
                 cell.getTile().getProperties().containsKey("gold_key") ||
+                cell.getTile().getProperties().containsKey("silver_key") ||
                 cell.getTile().getProperties().containsKey("heart") ||
                 cell.getTile().getProperties().containsKey("star") ||
                 cell.getTile().getProperties().containsKey("gravity_powerup") ||
-                cell.getTile().getProperties().containsKey("superspeed_powerup"));
+                cell.getTile().getProperties().containsKey("superspeed_powerup") ||
+                cell.getTile().getProperties().containsKey("rocks_powerup") ||
+                cell.getTile().getProperties().containsKey("invincibility_powerup") ||
+                cell.getTile().getProperties().containsKey("ghostwalk_powerup"));
 
     }
 
