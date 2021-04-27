@@ -176,7 +176,7 @@ public class Bandit extends Enemy{
     public void collidesObject(GameObject other, float delta) {
         super.collidesObject(other, delta);
         if (other instanceof Player) {
-            if ((getSprite().getY() + getSprite().getHeight() )-5 < other.getSprite().getY()) {
+            if (((getSprite().getY() + getSprite().getHeight()-10 ) < other.getSprite().getY()) && ((Player) other).velocity.y < 0) {
                 //checks if the player jumped on top of him.
                 die();
                 ((Player)other).gainScore(1);

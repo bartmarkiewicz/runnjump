@@ -836,14 +836,14 @@
    </properties>
    <point/>
   </object>
-  <object id="37" name="bandit" type="enemy" x="660" y="1588">
+  <object id="37" name="bandit" type="enemy" x="1080.67" y="1586.67">
    <properties>
     <property name="enemy" value=""/>
     <property name="max_speed_x" type="int" value="150"/>
    </properties>
    <point/>
   </object>
-  <object id="38" name="turtleman" type="enemy" x="1119" y="1580">
+  <object id="38" name="turtleman" type="enemy" x="595" y="1592">
    <properties>
     <property name="enemy" value=""/>
    </properties>
