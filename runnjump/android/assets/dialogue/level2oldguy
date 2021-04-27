@@ -22,15 +22,16 @@ Jack@Lastly, I fought one of them before and they seem to use the same sort of p
 Player@What do you mean?
 Jack@These guys are really into role-playing they armed themselves in medieval armour and wield swords. Despite having access to guns.
 Jack@Their swords are heavy so once a bandit swings at you, you should have a moment to tackle them while the bandit gathers energy for another swing.
+Jack@Some bandits are dressed like a turtle, must've had an early halloween party. These guys like to throw rocks, be careful.
 Player@I'll keep that in mind.
-CONDITION@QUEST1LVL2
+CONDITION@QUEST1LVL2ACQUIRED
 END@END
 Jack@Go go, I'll wait here for the stragglers, take out at least five bandits to flush them out!
-CHECK@QUEST1LVL2COMPLETED
+CHECK@QUEST1LVL2
 Jack@Great work, you took them down like a pro, I didn't think you'd have it in you.
 Player@If you didn't think I had it in me why did you tell me to do it?
 Jack@Figure of speech man, I'll give you something that should help you in your travels.
 GIVE@15 SCORE
-GIVE@15 SCORE
+GIVE@POWERUPSPEED 1
 END@END
 Jack@Thanks for the help again, now leave the rest to me.

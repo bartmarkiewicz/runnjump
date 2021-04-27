@@ -863,11 +863,33 @@ public class Player extends MovingActor implements InputProcessor {
         } else if(name.equals("HEARTS")){
             playerInventory.addLives(amount);
             ((GameScreen) theGame.getCurrentScreen()).createShortToast("+"+amount + " lives");
+        } else if(name.contains("POWERUP")){
+            if (name.contains("SPEED")){
+                for(int i = 0; i < amount; i++) {
+                    playerInventory.gainPowerUp("speed");
+                }
+            } else if (name.contains("GRAVITY")){
+                for(int i = 0; i < amount; i++) {
+                    playerInventory.gainPowerUp("gravity");
+                }
+            } else if (name.contains("GHOSTWALK")){
+                for(int i = 0; i < amount; i++) {
+                    playerInventory.gainPowerUp("ghostwalk");
+                }
+            } else if (name.contains("INVINCIBILITY")){
+                for(int i = 0; i < amount; i++) {
+                    playerInventory.gainPowerUp("invincibility");
+                }
+            } else if (name.contains("ROCKS")){
+                for(int i = 0; i < amount; i++) {
+                    playerInventory.gainPowerUp("rocks");
+                }
+            }
         }
     }
 
     public boolean conditionMet(String tag) {
-        if(conditionsMet.containsKey(tag)){
+        if(conditionsMet.containsKey(tag) && conditionsMet.get(tag)){
             return true;
         }
         return false;
@@ -883,6 +905,10 @@ public class Player extends MovingActor implements InputProcessor {
     public void killedBandit(String message) {
         ((GameScreen) theGame.getCurrentScreen()).createShortToast(message);
         banditsKilled += 1;
+        if(banditsKilled >= 5){
+            grantCondition("QUEST1LVL2",true);
+        }
+
     }
 
 }

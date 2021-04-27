@@ -384,7 +384,7 @@ public class Hud extends ChangeListener implements Disposable {
             progressDialogue(dialogueAsset, player); //progress to the next dialogue
         } else if (dialogue!=null && getNPCname(dialogue).equals("GIVE")){ // give something to the player
             String[] gift = getDialogue(dialogue).split(" ");
-            if(gift[0].equals("POWER_UP")){
+            if(gift[0].contains("POWERUP")){
                 // GRANT POWER UP todo
             } else {
                 player.getGift(gift[1], Integer.parseInt(gift[0]));
