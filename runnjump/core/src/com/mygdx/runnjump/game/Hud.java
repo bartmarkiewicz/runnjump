@@ -420,7 +420,12 @@ public class Hud extends ChangeListener implements Disposable {
     }
 
     public String getNPCname(String dialog){
-        return dialog.split("@")[0];
+        if(dialog.split("@")[0].equals("Player")){
+            Preferences prefs = Gdx.app.getPreferences("prefs");
+            return prefs.getString("playerName", "Player");
+        } else {
+            return dialog.split("@")[0];
+        }
     }
 
     public void showDialogue(String dialogueAsset, int context){
@@ -464,6 +469,11 @@ public class Hud extends ChangeListener implements Disposable {
 
     }
 
+    /**
+     * This method saves the inventory between the levels.
+     * @param score
+     * @param level
+     */
     public void saveCampaignData(int score, int level) {
         Preferences prefs = Gdx.app.getPreferences("prefs");
         prefs.putInteger("score", score);
@@ -471,7 +481,23 @@ public class Hud extends ChangeListener implements Disposable {
         for(String powerUp:  GameScreen.getPlayer().getInventory().powerUps.keySet()){
             prefs.putInteger(powerUp,  GameScreen.getPlayer().getInventory().powerUps.get(powerUp));
         }
+        if(level == 3){
+            saveHighScore(score);
+        }
+        prefs.flush();
+
         System.out.println(prefs.get());
+    }
+
+    /**
+     * This method saves the high score achieved for the campaign.
+     */
+    private void saveHighScore(int score) {
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        String playerName = prefs.getString("playerName", "player");
+        HighScores scores = new HighScores();
+        scores.addHighScore(playerName, getGamemode(), score);
+
     }
 
     /**

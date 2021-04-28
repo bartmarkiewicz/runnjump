@@ -1,12 +1,18 @@
 package com.mygdx.runnjump.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.util.ColorDrawable;
 
 /**
  * This class represents the main menu window.
@@ -18,6 +24,11 @@ public class MenuScreen extends ScreenBase {
     /**
      * this method initialises the GUI of the menu and sets up iuts input processors.
      */
+
+    Table nameInputTable;
+    TextField nameInputFD = new TextField("Name Here",skin);
+    String playerName;
+
     public void initGui(){
         currentScreenId = Runnjump.ScreenEn.MENU;
 
@@ -25,6 +36,7 @@ public class MenuScreen extends ScreenBase {
         TextButton survivalBt;
         TextButton highScoresBt;
         TextButton questionBt;
+        Stack stackContainer = new Stack();
         Table mainTable;
         Table leftTable;
         Table rightTable;
@@ -40,7 +52,6 @@ public class MenuScreen extends ScreenBase {
         topTable = new Table();
 
         mainTable.defaults().pad(10);
-        mainTable.setFillParent(true);
 
 
         leftTable.left().bottom();
@@ -101,18 +112,44 @@ public class MenuScreen extends ScreenBase {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 theGame.soundManager.playRandom("menu_button_click");
-
-                //todo help popup
+                //todo help window
             }
         });
 
 
 
-
-        stage.addActor(mainTable);
+        nameInputTable = new Table();
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        playerName = prefs.getString("playerName", null);
+        nameInputTable.setVisible(false);
+        nameInputTable.setBackground(new ColorDrawable(55,55,55,0.5f));
+        if(playerName == null){
+            nameInputTable.setVisible(true);
+            nameInputTable.add(nameInputFD).colspan(3).width(Gdx.graphics.getWidth()/3);
+            TextButton confirmBt = new TextButton("Confirm", skin);
+            confirmBt.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    setPlayerName();
+                    nameInputTable.setVisible(false);
+                }
+            });
+            nameInputTable.add(confirmBt).colspan(1);
+        }
+        stackContainer.add(mainTable);
+        stackContainer.add(nameInputTable);
+        stackContainer.setFillParent(true);
+        stage.addActor(stackContainer);
         stage.setDebugAll(false);
         stage.getBatch().setColor(Color.WHITE);
 
+    }
+
+    private void setPlayerName() {
+        playerName = nameInputFD.getText();
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        prefs.putString("playerName", playerName);
+        prefs.flush();
     }
 
     /**

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -66,6 +67,7 @@ public class Player extends MovingActor implements InputProcessor {
     private boolean rockThrowingPU;
     Projectile rock;
     private int banditsKilled;
+    private String playerName;
 
 
     /**
@@ -94,6 +96,10 @@ public class Player extends MovingActor implements InputProcessor {
         gameWon = false;
         dKeyHeld = false;
         aKeyHeld = false;
+
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        this.playerName = prefs.getString("playerName", "player");
+
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             Touchpad joystick = hud.getMovementJoystick();
             Button interactBt = hud.getInteractBt();
@@ -948,4 +954,7 @@ public class Player extends MovingActor implements InputProcessor {
 
     }
 
+    public String getPlayerName() {
+        return playerName;
+    }
 }

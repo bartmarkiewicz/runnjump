@@ -11,11 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.game.HighScores;
+
+import java.util.ArrayList;
 
 /**
  * This screen shows the high scores screen, the interface is finished but the functionality isn’t.
  */
 public class HighScoresScreen extends ScreenBase {
+
+
+    final Table scrollpaneTable = new Table();
 
 
     /**
@@ -39,16 +45,11 @@ public class HighScoresScreen extends ScreenBase {
 
         screenLabel.setColor(Color.BLACK);
         screenLabel.setFontScale(2F);
-        TextButton level1 = new TextButton("Level 1", skin);
-        TextButton level2 = new TextButton("Level 2", skin);
-        TextButton level3 = new TextButton("Level 3", skin);
+        TextButton campaign = new TextButton("Campaign", skin);
         TextButton survival = new TextButton("Survival", skin);
-        TextButton backBt = new TextButton("back", skin);
-        level1.getLabel().setFontScale(2f);
-        level2.getLabel().setFontScale(2f);
-        level3.getLabel().setFontScale(2f);
+        TextButton backBt = new TextButton("Back", skin);
+        campaign.getLabel().setFontScale(2f);
         survival.getLabel().setFontScale(2f);
-
         TextButton goToMyPos = new TextButton("Go to my position", skin);
 
         Table topTable = new Table();
@@ -59,19 +60,36 @@ public class HighScoresScreen extends ScreenBase {
 
 
         topTable.add(screenLabel).align(Align.center).uniform().colspan(3);
-        topTable.add(theGame.soundBt).width(100).height(100).right().top().colspan(1);
         topTable.row();
-        topTable.add(level1).fill().uniform().center();
-        topTable.add(level2).fill().uniform().center();
-        topTable.add(level3).fill().uniform().center();
+        topTable.add(campaign).fill().uniform().center();
         topTable.add(survival).fill().uniform().center();
-        Table scrollpaneTable = new Table();
+
+        scrollpaneTable.top().pad(30);
+        campaign.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                scrollpaneTable.clearChildren();
+                getHighScores("campaign");
+            }
+        });
+
+        survival.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                scrollpaneTable.clearChildren();
+                getHighScores("survival");
+            }
+        });
+
+        scrollpaneTable.setFillParent(true);
+
+
         ScrollPane highScoresWidget = new ScrollPane(scrollpaneTable,skin);
 
 
         mainTable.add(topTable).top().uniform().expand();
         mainTable.row();
-        mainTable.add(highScoresWidget).expand().fill();
+        mainTable.add(highScoresWidget).expand().fill().top();
         mainTable.row();
 
         Table bottomTable = new Table();
@@ -103,6 +121,26 @@ public class HighScoresScreen extends ScreenBase {
         });
 
 
+    }
+
+    private void getHighScores(String gameMode) {
+        HighScores highScores = new HighScores();
+        highScores.loadHighScores();
+        ArrayList<HighScores.HighScore> scores = highScores.getHighScores(gameMode);
+        int location = 1;
+        String headingLabel = String.format("%-14s %-25s %7s", "Ranking", "Name", "Score");
+        Label heading = new Label(headingLabel,skin);
+        scrollpaneTable.add(heading);
+        scrollpaneTable.row();
+        for (HighScores.HighScore score: scores) {
+            String scoreStr = "%-14s. %-25s %2s";
+            String labelStr = String.format(scoreStr,location,score.name,score.score);
+            Label scoreLabel = new Label(labelStr,skin);
+            scrollpaneTable.add(scoreLabel).expandX();
+            scrollpaneTable.row();
+            location++;
+        }
+        scrollpaneTable.add();
     }
 
     @Override

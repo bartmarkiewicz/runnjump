@@ -2,6 +2,7 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -325,6 +326,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
 
         hud = new Hud(new SpriteBatch(), theGame, skin, survivalMode);
+
         player = new Player(theGame,hud,layer,visualLayer);
 
         currentPlayer = player;
