@@ -402,7 +402,6 @@ public class Player extends MovingActor implements InputProcessor {
                 }
             }
         }
-        System.out.println("Ghost walk - " + ghostWalkPU);
 
 
         if (gravityPowerUp && gravityPowerUpTime < 9) { //power up lasts 9 seconds

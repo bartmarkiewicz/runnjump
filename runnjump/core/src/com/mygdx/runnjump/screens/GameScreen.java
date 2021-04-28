@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
 import com.mygdx.runnjump.game.Bandit;
+import com.mygdx.runnjump.game.Enemy;
 import com.mygdx.runnjump.game.GameObject;
 import com.mygdx.runnjump.game.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
@@ -111,10 +112,14 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     
     HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
-    ArrayList<GameObject> dynamicObjects;
+    static ArrayList<GameObject> dynamicObjects;
     private boolean survivalMode;
     private float timeSinceGen = 0;
     private TerrainGenerator terrainGen;
+
+    public static ArrayList<GameObject> getDynamicObjects(){
+        return dynamicObjects;
+    }
 
     /**
      * Instantiates a new Game screen.
@@ -249,9 +254,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         } else {
             //survival mode
             TiledMapTileSet tileSet = tileMap.getTileSets().getTileSet("jungleplatform");
-
-            terrainGen = new TerrainGenerator(visualLayer, layer,tileSet);
-
+            TiledMapTileSet tileSetCollectibles = tileMap.getTileSets().getTileSet(2);
+            terrainGen = new TerrainGenerator(visualLayer, layer,tileSet, tileSetCollectibles);
         }
     }
 
@@ -369,8 +373,12 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         delta = delta > 0.2f ? 0.2f: delta ;//0.2f is max delta time
         super.render(delta);
         timeSinceGen += delta;
-        if(survivalMode && timeSinceGen > 0.4f){
-            terrainGen.generateTerrain(player.getSprite().getX(),width);
+        if(survivalMode && timeSinceGen > 0.2f){
+            terrainGen.generateTerrain(player.getSprite().getX(),width, delta);
+            GameObject enemy = terrainGen.spawnEnemy();
+            if(enemy != null){
+                dynamicObjects.add(enemy);
+            }
             timeSinceGen = 0;
         }
 
@@ -463,7 +471,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 }
             }
 
-            if (!current.isDead() && current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height)) {
+            if (!current.isDead() &&  ( current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height))) {
                 current.draw(mapRenderer.getBatch(), delta);
                 if (current.isPlayerCollidable()) {
                     if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {

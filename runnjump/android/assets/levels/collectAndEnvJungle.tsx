@@ -21,7 +21,7 @@
    <property name="silver_key" value=""/>
   </properties>
  </tile>
- <tile id="60">
+ <tile id="60" type="coin">
   <properties>
    <property name="coin" value=""/>
   </properties>
@@ -34,7 +34,7 @@
    <frame tileid="110" duration="100"/>
   </animation>
  </tile>
- <tile id="61">
+ <tile id="61" type="coin">
   <properties>
    <property name="coin" value=""/>
   </properties>
@@ -47,7 +47,7 @@
    <frame tileid="111" duration="100"/>
   </animation>
  </tile>
- <tile id="72">
+ <tile id="72" type="coin">
   <properties>
    <property name="coin" value=""/>
   </properties>
@@ -60,7 +60,7 @@
    <frame tileid="122" duration="100"/>
   </animation>
  </tile>
- <tile id="73">
+ <tile id="73" type="coin">
   <properties>
    <property name="coin" value=""/>
   </properties>

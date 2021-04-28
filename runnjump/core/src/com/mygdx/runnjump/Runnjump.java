@@ -104,6 +104,10 @@ public class Runnjump extends Game {
 	}
 
 	public static int getLevelSelected(){
+		if(previousScreen == ScreenEn.MENU)
+		{
+			return -1;
+		}
 		return levelSelected;
 	}
 
