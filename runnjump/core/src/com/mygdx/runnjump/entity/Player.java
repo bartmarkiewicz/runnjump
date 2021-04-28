@@ -1,4 +1,4 @@
-package com.mygdx.runnjump.game;
+package com.mygdx.runnjump.entity;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.game.Hud;
+import com.mygdx.runnjump.game.Inventory;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.DialogueManager;
 import com.mygdx.runnjump.util.Position;
@@ -604,7 +606,7 @@ public class Player extends MovingActor implements InputProcessor {
             npcTouched = other;
             npcName = ((NPC) other).getNpcName();
             npcAssetName = ((NPC) other).getAssetName();
-        } else if (other instanceof Projectile && !((Projectile) other).playerBullet && (((Projectile) other).velocity.x > 5 || ((Projectile) other).velocity.y > 5)){
+        } else if (other instanceof Projectile && !((Projectile) other).playerBullet && (Math.abs(((Projectile) other).velocity.x) >5 || Math.abs(((Projectile) other).velocity.y)  > 5)){
             die();
             System.out.println("Bullet kills player!!");
         }
@@ -939,6 +941,10 @@ public class Player extends MovingActor implements InputProcessor {
         if(banditsKilled >= 5){
             grantCondition("QUEST1LVL2",true);
         }
+        if (banditsKilled >= 8){
+            grantCondition("QUEST1LVL3", true);
+        }
+
 
     }
 

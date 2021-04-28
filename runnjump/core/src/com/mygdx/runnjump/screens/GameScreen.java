@@ -2,8 +2,6 @@ package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.assets.AssetLoaderParameters;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -21,22 +18,20 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.SerializationException;
 import com.mygdx.runnjump.Runnjump;
-import com.mygdx.runnjump.game.Bandit;
-import com.mygdx.runnjump.game.Enemy;
-import com.mygdx.runnjump.game.GameObject;
-import com.mygdx.runnjump.game.Hedgehog;
+import com.mygdx.runnjump.entity.Bandit;
+import com.mygdx.runnjump.entity.GameObject;
+import com.mygdx.runnjump.entity.Hedgehog;
 import com.mygdx.runnjump.game.Hud;
-import com.mygdx.runnjump.game.NPC;
-import com.mygdx.runnjump.game.Player;
-import com.mygdx.runnjump.game.Projectile;
-import com.mygdx.runnjump.game.TurtleMan;
+import com.mygdx.runnjump.entity.NPC;
+import com.mygdx.runnjump.entity.Player;
+import com.mygdx.runnjump.entity.Projectile;
+import com.mygdx.runnjump.entity.TurtleMan;
 import com.mygdx.runnjump.libs.Toast;
 import com.mygdx.runnjump.util.TerrainGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
 
 /**

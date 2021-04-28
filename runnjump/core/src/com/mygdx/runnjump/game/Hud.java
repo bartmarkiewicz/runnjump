@@ -2,11 +2,8 @@ package com.mygdx.runnjump.game;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -32,16 +27,13 @@ import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.runnjump.Runnjump;
+import com.mygdx.runnjump.entity.Player;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.ColorDrawable;
 import com.mygdx.runnjump.util.DialogueManager;
-import com.mygdx.runnjump.util.SoundHandler;
 import com.mygdx.runnjump.util.TextureManager;
 
-import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 /**
  * This class represents the in-game UI the player sees while actually playing the level.
@@ -68,8 +60,8 @@ public class Hud extends ChangeListener implements Disposable {
     private TextButton interactBt;
 
     Queue<String> powerUps;
-    boolean usedPowerUp;
-    String usedPowerUpStr = "";
+    public boolean usedPowerUp;
+    public String usedPowerUpStr = "";
     String selected;
     private boolean setImage = false;
     boolean survival;

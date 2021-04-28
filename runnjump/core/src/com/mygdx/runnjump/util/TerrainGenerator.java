@@ -3,12 +3,11 @@ package com.mygdx.runnjump.util;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.mygdx.runnjump.game.Bandit;
-import com.mygdx.runnjump.game.Enemy;
-import com.mygdx.runnjump.game.GameObject;
-import com.mygdx.runnjump.game.Hedgehog;
-import com.mygdx.runnjump.game.TurtleMan;
-import com.mygdx.runnjump.screens.GameScreen;
+import com.mygdx.runnjump.entity.Bandit;
+import com.mygdx.runnjump.entity.Enemy;
+import com.mygdx.runnjump.entity.GameObject;
+import com.mygdx.runnjump.entity.Hedgehog;
+import com.mygdx.runnjump.entity.TurtleMan;
 
 import java.util.ArrayList;
 import java.util.HashMap;

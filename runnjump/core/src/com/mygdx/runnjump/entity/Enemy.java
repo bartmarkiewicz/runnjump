@@ -1,10 +1,7 @@
-package com.mygdx.runnjump.game;
+package com.mygdx.runnjump.entity;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.ArrayList;

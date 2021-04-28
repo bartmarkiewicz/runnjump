@@ -152,7 +152,7 @@ class com.mygdx.runnjump.screens.HighScoresScreen {
 + void hide()
 + void dispose()
 }
-class com.mygdx.runnjump.game.Enemy {
+class com.mygdx.runnjump.entity.Enemy {
 - Vector2 velocity
 - float speedX
 - float speedY
@@ -180,7 +180,7 @@ class com.mygdx.runnjump.util.MusicManager {
 + void stopAll()
 + void dispose()
 }
-class com.mygdx.runnjump.game.Player {
+class com.mygdx.runnjump.entity.Player {
 - Vector2 velocity
 - float speedX
 - float speedY
@@ -264,5 +264,5 @@ com.mygdx.runnjump.screens.ScreenBase <|-- com.mygdx.runnjump.screens.LoadingScr
 com.badlogic.gdx.Screen <|.. com.mygdx.runnjump.screens.HighScoresScreen
 com.mygdx.runnjump.screens.ScreenBase <|-- com.mygdx.runnjump.screens.HighScoresScreen
 com.badlogic.gdx.utils.Disposable <|.. com.mygdx.runnjump.util.MusicManager
-com.badlogic.gdx.InputProcessor <|.. com.mygdx.runnjump.game.Player
+com.badlogic.gdx.InputProcessor <|.. com.mygdx.runnjump.entity.Player
 @enduml

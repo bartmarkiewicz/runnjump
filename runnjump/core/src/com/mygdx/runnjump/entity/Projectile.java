@@ -1,9 +1,7 @@
-package com.mygdx.runnjump.game;
+package com.mygdx.runnjump.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.Position;
 import com.mygdx.runnjump.util.TextureManager;
 

@@ -1,4 +1,4 @@
-package com.mygdx.runnjump.game;
+package com.mygdx.runnjump.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

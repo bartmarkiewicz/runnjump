@@ -1,0 +1,18 @@
+Jezza@Hey its you again.
+Player@Hey, have you got more things for sale?
+Jezza@Nope, after the chaos in the bandit cave I lost all my wares.
+Jezza@But I know for a fact there is something inside this cave.
+Jezza@You need to get the silver and golden keys to unlock this double door and help me get there.
+Player@Hmm intriguing.
+Jezza@I'll let you keep half of the valuables we find inside if you do me a favour.
+Player@I'm listening.
+Jezza@Get rid of the bandits down in the canyon before they discover you took down the man here and I will pay you 20 score.
+CONDITION@QUEST1LVL3ACQUIRED
+END@END
+Jezza@Get rid of the bandits before they find me!
+CHECK@QUEST1LVL3
+Jezza@Good work, now find the keys, or use the thing I gave you!
+GIVE@20 SCORE
+GIVE@1 POWERUPGHOSTWALK
+END@END
+Jezza@What are you waiting for? Get in the cave and look for valuables!

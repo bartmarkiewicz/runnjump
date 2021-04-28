@@ -1,11 +1,8 @@
-package com.mygdx.runnjump.game;
+package com.mygdx.runnjump.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.TextureManager;
-
-import java.util.ArrayList;
 
 public class Bandit extends Enemy{
 
@@ -182,7 +179,7 @@ public class Bandit extends Enemy{
                 ((Player)other).gainScore(1);
                 ((Player)other).killedBandit("You had killed a bandit!");
             }
-        } else if (other instanceof Projectile && ((Projectile) other).playerBullet && (((Projectile) other).velocity.x > 5 || ((Projectile) other).velocity.y > 5)){
+        } else if (other instanceof Projectile && ((Projectile) other).playerBullet && (Math.abs(((Projectile) other).velocity.x)  > 5 || Math.abs(((Projectile) other).velocity.x)  > 5)){
             die();
             GameScreen.getPlayer().gainScore(1);
             GameScreen.getPlayer().killedBandit("You had killed a bandit!");
