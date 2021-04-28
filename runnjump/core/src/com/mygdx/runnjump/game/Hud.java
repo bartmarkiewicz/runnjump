@@ -71,6 +71,13 @@ public class Hud extends ChangeListener implements Disposable {
     String usedPowerUpStr = "";
     String selected;
     private boolean setImage = false;
+    boolean survival;
+    Shop shop;
+    public boolean shopOpen = false;
+
+    public void setGamemode(boolean gameMode){
+        survival = gameMode;
+    }
 
     /**
      * The constructor creates the layout and determines weather to render the android specific HUD or desktop, depending on which device is running the app.
@@ -79,7 +86,7 @@ public class Hud extends ChangeListener implements Disposable {
      * @param theGame the object representing the app itself
      * @param skin    the skin used for the buttons, labels and other ui elements
      */
-    public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin){
+    public Hud(SpriteBatch batch, final Runnjump theGame, Skin skin, boolean survival){
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport,batch);
         gameoverFont = skin.get(Label.LabelStyle.class).font;
@@ -87,7 +94,7 @@ public class Hud extends ChangeListener implements Disposable {
         Table container = new Table();
         powerUps = new Queue<>();
         //populatePowerUpQueue();
-
+        this.survival = survival;
 
         usedPowerUp = false;
 
@@ -98,6 +105,8 @@ public class Hud extends ChangeListener implements Disposable {
         scoreL = new Label("Score: 0",skin);
         livesL = new Label("Lives: 0", skin);
         powerUpsLabel = new Label("",skin);
+        powerUpsLabel.setHeight(500);
+        powerUpsLabel.setWidth(500);
         scoreL.setFontScale(1.25f);
         livesL.setFontScale(1.25f);
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -134,16 +143,15 @@ public class Hud extends ChangeListener implements Disposable {
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
             createAndroidUI(skin);
         }
+        stackContainer.add(container);
 
         createDialogueUI(stackContainer, skin);
 
         container.setFillParent(true);
         stackContainer.setFillParent(true);
-        stackContainer.add(container);
         stage.addActor(stackContainer);
         stage.getBatch().setColor(Color.WHITE);
-        stage.setDebugAll(true);
-
+        stage.setDebugAll(false);
 
 
     }
@@ -223,6 +231,11 @@ public class Hud extends ChangeListener implements Disposable {
         dialogueContainer.setFillParent(true);
         dialogueTable.setVisible(false);
         stackContainer.add(dialogueContainer);
+        this.shop = new Shop(skin);
+        shop.setVisible(false);
+        shop.pad(200);
+        stackContainer.invalidate();
+        stackContainer.add(shop);
         dialogueTable.setDebug(false);
     }
 
@@ -357,19 +370,19 @@ public class Hud extends ChangeListener implements Disposable {
 
     public void progressDialogue(String dialogueAsset, Player player){
         String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
-        if (dialogue != null && dialogue.equals("END@END")){ //checks if the dialogue indicates an END/checkpoint
+        if (dialogue != null && dialogue.equals("END@END")) { //checks if the dialogue indicates an END/checkpoint
             hideDialogue();
             showGui();
             player.setDialogueMode(false);
             dialogueStart = dialogueNum + 1;
             player.setDialogueContext(dialogueAsset, dialogueStart);
-        } else if(dialogue!=null && dialogue.equals("KILL@KILL")){ //kills/disappears the npc
+        } else if (dialogue != null && dialogue.equals("KILL@KILL")) { //kills/disappears the npc
             player.killNPC();
             hideDialogue();
             showGui();
             player.setDialogueMode(false);
-        } else if (dialogue!=null && getNPCname(dialogue).equals("CHECK")) { // checks condition
-            if (player.conditionMet(getDialogue(dialogue))){
+        } else if (dialogue != null && getNPCname(dialogue).equals("CHECK")) { // checks condition
+            if (player.conditionMet(getDialogue(dialogue))) {
                 dialogueNum += 1;
                 progressDialogue(dialogueAsset, player); // if condition met, progress to the next dialogue.
             } else {
@@ -378,20 +391,26 @@ public class Hud extends ChangeListener implements Disposable {
                 //player.setDialogueContext(dialogueAsset, dialogueStart+1);
                 player.setDialogueMode(false);
             }
-        } else if (dialogue!=null && getNPCname(dialogue).equals("CONDITION")){ //grants a condition for the purpose of CHECKing later
+        } else if (dialogue != null && getNPCname(dialogue).equals("CONDITION")) { //grants a condition for the purpose of CHECKing later
             player.grantCondition(getDialogue(dialogue), true);
             dialogueNum += 1;
             progressDialogue(dialogueAsset, player); //progress to the next dialogue
-        } else if (dialogue!=null && getNPCname(dialogue).equals("GIVE")){ // give something to the player
-            String[] gift = getDialogue(dialogue).split(" ");
-            if(gift[0].contains("POWERUP")){
-                // GRANT POWER UP todo
-            } else {
-                player.getGift(gift[1], Integer.parseInt(gift[0]));
-            }
+
+        } else if (dialogue != null && getNPCname(dialogue).equals("SHOP")) { // Shows the shop window
+            shop.setPlayer(player);
+            shop.showShop();
+            shopOpen = true;
             dialogueNum += 1;
             progressDialogue(dialogueAsset, player);
-        } else if(dialogue != null) {
+            hideDialogue();
+            player.setDialogueMode(false);
+            dialogueNum = dialogueStart;
+        } else if (dialogue != null && getNPCname(dialogue).equals("GIVE")) { // give something to the player
+            String[] gift = getDialogue(dialogue).split(" ");
+            player.getGift(gift[1], Integer.parseInt(gift[0]));
+            dialogueNum += 1;
+            progressDialogue(dialogueAsset, player);
+        } else if (dialogue != null) {
             dialogueLabel.setText(getDialogue(dialogue));
             npcLabel.setText(getNPCname(dialogue));
             npcLabel.invalidate();
@@ -490,5 +509,9 @@ public class Hud extends ChangeListener implements Disposable {
 
     public Button getInteractBt() {
         return interactBt;
+    }
+
+    public boolean isSurvival() {
+        return survival;
     }
 }

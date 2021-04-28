@@ -15,6 +15,7 @@ public class Inventory {
     Hud hud;
     private int hearts = 0, score = 0;
     protected final int STARTING_HEARTS = 3;
+    private boolean survival;
 
 
     public int getLives(){
@@ -25,14 +26,21 @@ public class Inventory {
         return score;
     }
 
+    /**
+     * Restarts the inventory
+     */
     public void restart(){
         this.hearts = STARTING_HEARTS;
-        score = 0;
+        score = 15;
         hud.setScore(score);
         hud.setLives(hearts);
         createPowerUps();
     }
 
+    /**
+     * Adds the specified amount of score to the player
+     * @param amount
+     */
     public void addScore(int amount){
         score = score + amount;
         hud.setScore(score);
@@ -54,13 +62,22 @@ public class Inventory {
      * Populates the hash map of power ups.
      */
     public void createPowerUps(){
-        if(debug == false) {
+
+        if(debug == false && !survival) {
             powerUps.put("gravity", 0);
             powerUps.put("speed", 0);
             powerUps.put("invincibility", 0);
             powerUps.put("ghostwalk", 0);
             powerUps.put("rocks", 0);
-        } else {
+        }  else if(survival){
+            powerUps.put("gravity", 3);
+            powerUps.put("speed", 3);
+            powerUps.put("invincibility", 3);
+            powerUps.put("ghostwalk", 3);
+            powerUps.put("rocks", 3);
+        }
+
+        if(debug) {
             powerUps.put("gravity", 55);
             powerUps.put("speed", 55);
             powerUps.put("invincibility", 55);
@@ -77,11 +94,12 @@ public class Inventory {
      * Creates the power up inventory.
      * @param debug
      */
-    public Inventory(Hud hud, boolean debug) {
+    public Inventory(Hud hud, boolean debug, boolean survival) {
         powerUps = new HashMap<>();
         this.hud = hud;
         this.debug = debug;
         //createPowerUps();
+        this.survival = survival;
         restart();
     }
 
@@ -132,5 +150,10 @@ public class Inventory {
         } else {
             return false;
         }
+    }
+
+    public void loseScore(int i) {
+        this.score -= i;
+        hud.setScore(score);
     }
 }

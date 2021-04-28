@@ -82,6 +82,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
         theGame.dialogueManager.addAsset("oldguyLvl2", "level2oldguy");
 
         theGame.dialogueManager.addAsset("damsel", "level1damsel");
+        theGame.dialogueManager.addAsset("damselLvl2", "level2woman");
+
     }
 
     /**

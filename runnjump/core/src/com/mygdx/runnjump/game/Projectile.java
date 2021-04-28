@@ -7,6 +7,9 @@ import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.Position;
 import com.mygdx.runnjump.util.TextureManager;
 
+/**
+ * This class represents a thrown projectile.
+ */
 public class Projectile extends MovingActor {
     boolean playerBullet;
     float timeToLive;
@@ -26,6 +29,10 @@ public class Projectile extends MovingActor {
         this.playerCollidable = !playerBullet;
     }
 
+    /**
+     * Sets the left/right direction of the thrown projectile.
+     * @param direction
+     */
     public void setDirection(String direction){
         if(direction.equals("left")){
             this.velocity.x = -speedX;

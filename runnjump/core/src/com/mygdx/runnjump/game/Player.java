@@ -163,7 +163,7 @@ public class Player extends MovingActor implements InputProcessor {
         gravityPowerUp = false;
 
         banditsKilled = 0;
-        playerInventory = new Inventory(hud,true);
+        playerInventory = new Inventory(hud,false, hud.isSurvival());
         hud.updatePowerUpIndicator(playerInventory.getPowerUps());
     }
 
@@ -356,7 +356,7 @@ public class Player extends MovingActor implements InputProcessor {
      * Handles unlocking of doors via key
      * @param key
      */
-    private void handleKey(String key) {
+    public void handleKey(String key) {
         ArrayList<TiledMapTileLayer.Cell> blockedCells = ((GameScreen)theGame.getCurrentScreen()).getBlockedCells(key);
         for(TiledMapTileLayer.Cell cell: blockedCells){
             cell.getTile().getProperties().remove("blocked");
@@ -927,6 +927,10 @@ public class Player extends MovingActor implements InputProcessor {
 
     public void gainScore(int i) {
         playerInventory.addScore(i);
+    }
+
+    public void loseScore(int i){
+        playerInventory.loseScore(i);
     }
 
     public void killedBandit(String message) {

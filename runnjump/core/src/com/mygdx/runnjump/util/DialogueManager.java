@@ -50,6 +50,11 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
         dialogueMap.put(name, textScreens);
     }
 
+    @Override
+    public void addAssetSet(String name, String[] paths) {
+        //dummy
+    }
+
     public String getDialogue(String name, int screenNum){
         if((screenNum)>dialogueMap.get(name).size()){
             return null;
@@ -57,15 +62,6 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
         return dialogueMap.get(name).get(screenNum-1);
     }
 
-    /**
-     * Similar to addAsset(String name, String path) but instead takes in assets from multiple files.
-     * @param name name of the conversation/dialogue to be stored
-     * @param paths paths to the files containing the dialogue
-     */
-    @Override
-    public void addAssetSet(String name, String[] paths) {
-        //todo or delete maybe
-    }
 
     @Override
     public ArrayList<String> getAsset(String name) {

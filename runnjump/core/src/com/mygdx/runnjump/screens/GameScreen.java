@@ -326,7 +326,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("collisionLayer");
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
 
-        hud = new Hud(new SpriteBatch(), theGame, skin);
+        hud = new Hud(new SpriteBatch(), theGame, skin, survivalMode);
         player = new Player(theGame,hud,layer,visualLayer);
 
         currentPlayer = player;
@@ -522,11 +522,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
         }
-        if(!gameOver && (player.dialogueMode || player.touchingNPC)){
+        if(!gameOver && !hud.shopOpen && (player.dialogueMode || player.touchingNPC)){
             player.dialogueManage();
             return true;
         }
-        return super.touchDown(screenX, screenY, pointer, button);
+        return false;
     }
 
     /**
