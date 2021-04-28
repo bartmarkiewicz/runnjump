@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -75,8 +76,8 @@ public class Hud extends ChangeListener implements Disposable {
     Shop shop;
     public boolean shopOpen = false;
 
-    public void setGamemode(boolean gameMode){
-        survival = gameMode;
+    public boolean getGamemode(){
+        return survival;
     }
 
     /**
@@ -464,6 +465,21 @@ public class Hud extends ChangeListener implements Disposable {
             gameoverFont.draw(stage.getBatch(), "Press any key to \nreturn to the main menu!", (Gdx.graphics.getWidth() / 2)-250, Gdx.graphics.getHeight() / 2f-100);
         }
         stage.getBatch().end();
+
+
+
+
+
+    }
+
+    public void saveCampaignData(int score, int level) {
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        prefs.putInteger("score", score);
+        prefs.putInteger("lives", GameScreen.getPlayer().getInventory().getLives());
+        for(String powerUp:  GameScreen.getPlayer().getInventory().powerUps.keySet()){
+            prefs.putInteger(powerUp,  GameScreen.getPlayer().getInventory().powerUps.get(powerUp));
+        }
+        System.out.println(prefs.get());
     }
 
     /**
@@ -511,7 +527,4 @@ public class Hud extends ChangeListener implements Disposable {
         return interactBt;
     }
 
-    public boolean isSurvival() {
-        return survival;
-    }
 }

@@ -163,7 +163,7 @@ public class Player extends MovingActor implements InputProcessor {
         gravityPowerUp = false;
 
         banditsKilled = 0;
-        playerInventory = new Inventory(hud,false, hud.isSurvival());
+        playerInventory = new Inventory(hud,true, hud.getGamemode());
         hud.updatePowerUpIndicator(playerInventory.getPowerUps());
     }
 
@@ -783,8 +783,8 @@ public class Player extends MovingActor implements InputProcessor {
     /**
      * This method is used for restarting the player character to its default state, is called when the level is restarted.
      */
-    public void restart() {
-        playerInventory.restart();
+    public void restart(boolean survival) {
+        playerInventory.restart(survival);
         dialogueContext.clear();//clears the dialogues
         conditionsMet.clear();//clears met conditions
         banditsKilled = 0;

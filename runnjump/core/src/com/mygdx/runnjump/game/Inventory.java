@@ -1,5 +1,7 @@
 package com.mygdx.runnjump.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.mygdx.runnjump.screens.GameScreen;
 
 import java.util.ArrayList;
@@ -29,12 +31,14 @@ public class Inventory {
     /**
      * Restarts the inventory
      */
-    public void restart(){
+    public void restart(boolean survival){
         this.hearts = STARTING_HEARTS;
-        score = 15;
+        score = 0;
         hud.setScore(score);
         hud.setLives(hearts);
+        this.survival = survival;
         createPowerUps();
+
     }
 
     /**
@@ -62,31 +66,44 @@ public class Inventory {
      * Populates the hash map of power ups.
      */
     public void createPowerUps(){
-
-        if(debug == false && !survival) {
-            powerUps.put("gravity", 0);
-            powerUps.put("speed", 0);
-            powerUps.put("invincibility", 0);
-            powerUps.put("ghostwalk", 0);
-            powerUps.put("rocks", 0);
-        }  else if(survival){
-            powerUps.put("gravity", 3);
-            powerUps.put("speed", 3);
-            powerUps.put("invincibility", 3);
-            powerUps.put("ghostwalk", 3);
-            powerUps.put("rocks", 3);
-        }
-
         if(debug) {
             powerUps.put("gravity", 55);
             powerUps.put("speed", 55);
             powerUps.put("invincibility", 55);
             powerUps.put("ghostwalk", 55);
             powerUps.put("rocks", 55);
+        } else if(survival){
+            powerUps.put("gravity", 3);
+            powerUps.put("speed", 3);
+            powerUps.put("invincibility", 3);
+            powerUps.put("ghostwalk", 3);
+            powerUps.put("rocks", 3);
+        } else {
+            powerUps.put("gravity", 0);
+            powerUps.put("speed", 0);
+            powerUps.put("invincibility", 0);
+            powerUps.put("ghostwalk", 0);
+            powerUps.put("rocks", 0);
         }
+
+        if(!survival){
+            loadGameData();
+        }
+
+
 
         hud.updatePowerUpIndicator(getPowerUps());
 
+    }
+
+    private void loadGameData() {
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        this.score = prefs.getInteger("score", score);
+        this.hearts = prefs.getInteger("lives", getLives());
+        for(String powerUp:  powerUps.keySet()){
+            int powerUpCount = prefs.getInteger(powerUp, powerUps.get(powerUp));
+            powerUps.put(powerUp,powerUpCount);
+        }
     }
 
 
@@ -100,7 +117,7 @@ public class Inventory {
         this.debug = debug;
         //createPowerUps();
         this.survival = survival;
-        restart();
+        restart(survival);
     }
 
     /**

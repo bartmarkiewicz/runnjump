@@ -112,14 +112,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     
     HashMap<String, ArrayList<TiledMapTileLayer.Cell>> tileGroups;
 
-    static ArrayList<GameObject> dynamicObjects;
+    ArrayList<GameObject> dynamicObjects;
     private boolean survivalMode;
     private float timeSinceGen = 0;
     private TerrainGenerator terrainGen;
-
-    public static ArrayList<GameObject> getDynamicObjects(){
-        return dynamicObjects;
-    }
 
     /**
      * Instantiates a new Game screen.
@@ -185,7 +181,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         TiledMapTileLayer visualLayer = (TiledMapTileLayer) tileMap.getLayers().get("secondLayer");
 
         player.setLayers(visualLayer,layer);
-        player.restart();
+        player.restart(survivalMode);
         gameOver = false;
 
         //respawnPlayer();
@@ -209,6 +205,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         TmxMapLoader.Parameters loadingParameters = new TmxMapLoader.Parameters();
         try {
             tileMap = loader.load("levels\\level" + level + ".tmx",loadingParameters);
+            if(level == -1){
+                survivalMode = true;
+            } else {
+                survivalMode = false;
+            }
         }catch (SerializationException e){
             //survival mode
             tileMap = loader.load("levels\\level" + -1 + ".tmx",loadingParameters);
@@ -251,6 +252,8 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
             tileGroups.put("gold_key", goldKeyBlockers);
             tileGroups.put("silver_key", silverKeyBlockers);
+            //loadGameData();
+
         } else {
             //survival mode
             TiledMapTileSet tileSet = tileMap.getTileSets().getTileSet("jungleplatform");
@@ -520,7 +523,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
             startGame();
         }
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
+            hud.saveCampaignData(player.getInventory().getScore(),level);
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
+
         }
         if(!gameOver && !hud.shopOpen && (player.dialogueMode || player.touchingNPC)){
             player.dialogueManage();
@@ -543,6 +548,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
 
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){//waits 3 seconds to allow the user to read the screen before pressing keys
+            hud.saveCampaignData(player.getInventory().getScore(),level);
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
         }
         return false;
