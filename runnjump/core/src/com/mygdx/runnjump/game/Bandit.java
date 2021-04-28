@@ -182,7 +182,7 @@ public class Bandit extends Enemy{
                 ((Player)other).gainScore(1);
                 ((Player)other).killedBandit("You had killed a bandit!");
             }
-        } else if (other instanceof Projectile && ((Projectile) other).playerBullet){
+        } else if (other instanceof Projectile && ((Projectile) other).playerBullet && (((Projectile) other).velocity.x > 5 || ((Projectile) other).velocity.y > 5)){
             die();
             GameScreen.getPlayer().gainScore(1);
             GameScreen.getPlayer().killedBandit("You had killed a bandit!");

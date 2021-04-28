@@ -129,7 +129,7 @@ public class Hedgehog extends Enemy{
         if(other instanceof Player){
             //make noise?
         }
-        if (other instanceof Projectile && ((Projectile) other).playerBullet){
+        if (other instanceof Projectile && ((Projectile) other).playerBullet  && (((Projectile) other).velocity.x > 5 || ((Projectile) other).velocity.y > 5)){
             die();
             GameScreen.getPlayer().gainScore(1);
         }

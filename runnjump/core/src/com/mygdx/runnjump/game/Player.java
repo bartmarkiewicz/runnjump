@@ -604,7 +604,7 @@ public class Player extends MovingActor implements InputProcessor {
             npcTouched = other;
             npcName = ((NPC) other).getNpcName();
             npcAssetName = ((NPC) other).getAssetName();
-        } else if (other instanceof Projectile && !((Projectile) other).playerBullet){
+        } else if (other instanceof Projectile && !((Projectile) other).playerBullet && (((Projectile) other).velocity.x > 5 || ((Projectile) other).velocity.y > 5)){
             die();
             System.out.println("Bullet kills player!!");
         }
