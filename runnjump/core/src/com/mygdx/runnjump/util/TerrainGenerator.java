@@ -30,6 +30,7 @@ public class TerrainGenerator {
     float time = 0;
     public int genCount = 0;
 
+    public float difficultyModifier = 1;
 
     public TerrainGenerator(TiledMapTileLayer visualLayer, TiledMapTileLayer collisionLayer, TiledMapTileSet tileSet, TiledMapTileSet collectibleSet) {
         this.collisionLayer = collisionLayer;
@@ -90,7 +91,7 @@ public class TerrainGenerator {
      * Spawns an enemy NPC of a random type.
      */
     public GameObject spawnEnemy() {
-        if(random.nextFloat() < 0.1){
+        if(random.nextFloat() < (0.1+difficultyModifier-1f)){
             int x = Math.round((width/2)/32 + mapLoadXpos/32);
             int y = findFloorY(x)+1;
             Enemy enemy;

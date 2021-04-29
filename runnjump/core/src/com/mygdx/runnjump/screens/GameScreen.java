@@ -424,8 +424,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if(enemy != null){
             dynamicObjects.add(enemy);
         }
-        if (terrainGen.genCount > 5){
+        if (terrainGen.genCount > 5 || (terrainGen.difficultyModifier > 1.1f && terrainGen.genCount > 4) || (terrainGen.difficultyModifier > 1.2f && terrainGen.genCount > 3)){
             terrainGen.genCount = 0;
+            terrainGen.difficultyModifier += 0.01;
             player.gainScore(1);
         }
         timeSinceGen = 0;

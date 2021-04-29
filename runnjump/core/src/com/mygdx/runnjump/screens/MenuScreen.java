@@ -117,7 +117,7 @@ public class MenuScreen extends ScreenBase {
                 //todo help window
             }
         });
-
+        questionBt.setVisible(false);
 
 
         nameInputTable = new Table();
