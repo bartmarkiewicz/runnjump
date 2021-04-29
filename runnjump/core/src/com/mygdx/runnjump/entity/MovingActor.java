@@ -12,7 +12,7 @@ public abstract class MovingActor extends GameObject {
     //movement velocity
     protected float time = 0f;
     protected Vector2 velocity = new Vector2();
-    protected float speedX = 500;
+    protected float speedX = 350;
     protected float speedY = 250;
     protected float gravity = 140f;
     protected TiledMapTileLayer collisionLayer;

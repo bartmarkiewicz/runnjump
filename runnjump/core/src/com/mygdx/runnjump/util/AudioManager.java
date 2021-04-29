@@ -36,10 +36,5 @@ public abstract class AudioManager<T> extends Manager {
         random = new Random();
     }
 
-    abstract void play(String name);
-    abstract void playRandom(String name);
-    abstract void stop();
-
-
     abstract void mute();
 }

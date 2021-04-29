@@ -68,7 +68,7 @@ public class MusicManager extends AudioManager<Music> implements Disposable {
     }
 
     @Override
-    public Object getAsset(String name) {
+    public Music getAsset(String name) {
         return assetMap.get(name);
     }
 

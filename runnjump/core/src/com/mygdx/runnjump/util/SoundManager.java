@@ -13,9 +13,6 @@ public class SoundManager extends AudioManager<Sound> implements Disposable {
     /**
      * This is the sole instance of the music manager singleton class
      */
-    protected static MusicManager musicManager;
-    //This class should be a singleton
-    //Pass reference of this class to every screen.
 
     private float volume;
 
@@ -72,7 +69,7 @@ public class SoundManager extends AudioManager<Sound> implements Disposable {
     }
 
     @Override
-    public Object getAsset(String name) {
+    public Sound getAsset(String name) {
         return assetMap.get(name);
     }
 
@@ -107,10 +104,7 @@ public class SoundManager extends AudioManager<Sound> implements Disposable {
         sounds[random.nextInt(sounds.length)].play(volume);
     }
 
-    @Override
-    void stop() {
-        //dummy method
-    }
+
 
     /**
      * disposes of all the sound assets and prevents memory leaks

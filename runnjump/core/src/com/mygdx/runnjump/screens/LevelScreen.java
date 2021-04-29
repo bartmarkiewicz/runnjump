@@ -1,6 +1,7 @@
 package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -116,6 +117,24 @@ public class LevelScreen extends ScreenBase {
         });
 
 
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+        boolean lvl1Completed = prefs.getBoolean("level1Completed", false);
+        boolean lvl2Completed = prefs.getBoolean("level2Completed", false);
+        boolean lvl3Completed = prefs.getBoolean("level3Completed", false);
+
+        if(lvl3Completed || lvl2Completed){
+            levelOne.setVisible(true);
+            levelTwo.setVisible(true);
+            levelThree.setVisible(true);
+        } else if(lvl1Completed){
+            levelOne.setVisible(true);
+            levelTwo.setVisible(true);
+            levelThree.setVisible(false);
+        } else {
+            levelOne.setVisible(true);
+            levelTwo.setVisible(false);
+            levelThree.setVisible(false);
+        }
 
         TextButton backbt = new TextButton("Back", skin);
         backbt.addListener(new ChangeListener() {
@@ -201,13 +220,4 @@ public class LevelScreen extends ScreenBase {
     public void hide() {
 
     }
-
-    /**
-     * prevent memory leaks by disposing all game elements with are disposable.
-     */
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
 }

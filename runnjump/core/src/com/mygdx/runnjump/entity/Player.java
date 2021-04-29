@@ -97,6 +97,7 @@ public class Player extends MovingActor implements InputProcessor {
         dKeyHeld = false;
         aKeyHeld = false;
 
+
         Preferences prefs = Gdx.app.getPreferences("prefs");
         this.playerName = prefs.getString("playerName", "player");
 

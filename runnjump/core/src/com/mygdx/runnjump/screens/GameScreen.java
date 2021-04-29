@@ -548,6 +548,22 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
             hud.saveCampaignData(player.getInventory().getScore(),level);
+
+            Preferences prefs = Gdx.app.getPreferences("prefs");
+
+            if(level == 3) {
+                prefs.putBoolean("level1Completed", true);
+                prefs.putBoolean("level2Completed", true);
+                prefs.putBoolean("level3Completed", true);
+            } else if(level == 2){
+                prefs.putBoolean("level1Completed", true);
+                prefs.putBoolean("level2Completed", true);
+            } else if(level == 1){
+                prefs.putBoolean("level1Completed", true);
+            }
+
+            prefs.flush();
+
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
 
         }
@@ -576,6 +592,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){//waits 3 seconds to allow the user to read the screen before pressing keys
             hud.saveCampaignData(player.getInventory().getScore(),level);
+            Preferences prefs = Gdx.app.getPreferences("prefs");
+
+            if(level == 3) {
+                prefs.putBoolean("level1Completed", true);
+                prefs.putBoolean("level2Completed", true);
+                prefs.putBoolean("level3Completed", true);
+            } else if(level == 2){
+                prefs.putBoolean("level1Completed", true);
+                prefs.putBoolean("level2Completed", true);
+            } else if(level == 1){
+                prefs.putBoolean("level1Completed", true);
+            }
+
+            prefs.flush();
             theGame.changeScreen(Runnjump.ScreenEn.MENU);
         }
         return false;

@@ -54,11 +54,7 @@ public class TextureManager extends Manager<Texture> implements Disposable {
 
     @Override
     public void addAssetSet(String name, String[] paths) {
-        /*ArrayList<Texture> textures = new ArrayList<>();
-        for(int i = 0; i < paths.length; i++){
-            if
-        }*/
-        //todo or remove
+        //dummy
     }
 
     @Override
