@@ -1,5 +1,6 @@
 package com.mygdx.runnjump.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
@@ -51,17 +52,37 @@ public class HighScores {
     }
 
     private void saveHighScores() {
-        FileHandle file = Gdx.files.local("highscores.csv");
-        String fileStr = file.readString();
+        String fileStr = "";
+        FileHandle file = null;
+        Preferences prefs = Gdx.app.getPreferences("prefs");
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            fileStr = prefs.getString("highscoreData", "");
+        } else {
+            file = Gdx.files.local("highscores.csv");
+            fileStr = file.readString();
+        }
+
+        String outputStr = fileStr;
         for(String player: highScores.keySet()){
             for(int i = 0; i < highScores.get(player).size(); i++) {
                 if(fileStr.contains(player + "," + highScores.get(player).get(i).gameMode + "," + highScores.get(player).get(i).score+"\n")){
                     continue;
                 }else {
-                    file.writeString(player + "," + highScores.get(player).get(i).gameMode + "," + highScores.get(player).get(i).score + "\n", true);
+                    if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                        outputStr += player + "," + highScores.get(player).get(i).gameMode + "," + highScores.get(player).get(i).score + "\n";
+                    } else {
+                        file.writeString(player + "," + highScores.get(player).get(i).gameMode + "," + highScores.get(player).get(i).score + "\n", true);
+                    }
                 }
             }
         }
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            prefs.putString("highscoreData", outputStr);
+            prefs.flush();
+        }
+
+
        // System.out.println(Gdx.files.getLocalStoragePath());
 
         //System.out.println(file.readString());
@@ -89,10 +110,19 @@ public class HighScores {
     /**
      * Loads the highscores from a CSV file.
      */
-    public void loadHighScores(){
-        FileHandle file = Gdx.files.local("highscores.csv");
-        String fileStr = file.readString();
+    public void loadHighScores() {
+        String fileStr = "";
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            Preferences prefs = Gdx.app.getPreferences("prefs");
+            fileStr = prefs.getString("highscoreData", "");
+        } else {
+            FileHandle file = Gdx.files.local("highscores.csv");
+            fileStr = file.readString();
+        }
         String[] records = fileStr.split("\n");
+        if(fileStr.equals("")){
+            return;
+        }
         for(String record: records){
             String[] parts = record.split(",");
             boolean foundScore = false;

@@ -471,7 +471,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 }
             }
 
-            if (!current.isDead() &&  ( current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height))) {
+            if (!current.isDead() &&  (current.isActive(player.getSprite().getX(), player.getSprite().getY(),width,height))) {
                 current.draw(mapRenderer.getBatch(), delta);
                 if (current.isPlayerCollidable()) {
                     if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
