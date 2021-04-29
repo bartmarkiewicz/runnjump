@@ -171,7 +171,7 @@ public class Player extends MovingActor implements InputProcessor {
         gravityPowerUp = false;
 
         banditsKilled = 0;
-        playerInventory = new Inventory(hud,true, hud.getGamemode());
+        playerInventory = new Inventory(hud,false, hud.getGamemode());
         hud.updatePowerUpIndicator(playerInventory.getPowerUps());
     }
 
