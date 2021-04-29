@@ -4,6 +4,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.runnjump.screens.GameScreen;
 import com.mygdx.runnjump.util.TextureManager;
 
+
+/**
+ * This class represents a hedgehog enemy which simply patrols from one point to another.
+ * It kills upon touching the player, can be killed only with a projectile.
+ */
 public class Hedgehog extends Enemy{
     float movingTime = 0;
     private final double TIME_TO_TURN;

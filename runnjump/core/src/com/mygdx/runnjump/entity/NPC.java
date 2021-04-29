@@ -6,6 +6,10 @@ import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.ArrayList;
 
+
+/**
+ * NPC class used to represent a friendly NPC the player can talk to or trade with.
+ */
 public class NPC extends MovingActor{
     ArrayList<Texture> idle;
     private String npcName, assetName;
@@ -80,11 +84,20 @@ public class NPC extends MovingActor{
         }
     }
 
+
+    /**
+     * Gets the name of the assets used for the NPC
+     * @return
+     */
     public String getAssetName() {
 
         return assetName;
     }
 
+    /**
+     * Retrieves the name of the NPC
+     * @return
+     */
     public String getNpcName() {
         return npcName;
     }
@@ -92,7 +105,6 @@ public class NPC extends MovingActor{
     @Override
     public void collidesObject(GameObject other, float delta) {
         super.collidesObject(other, delta);
-        // hmm
     }
 
     @Override

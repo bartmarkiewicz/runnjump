@@ -150,6 +150,10 @@ public class Hud extends ChangeListener implements Disposable {
     }
 
 
+    /**
+     * This method updates the inventory display.
+     * @param powerUpMap
+     */
     public void updatePowerUpIndicator(HashMap<String, Integer> powerUpMap) {
         String powerUpIndicatorStr = "Inventory:\n";
         int found = 0;
@@ -232,6 +236,10 @@ public class Hud extends ChangeListener implements Disposable {
         dialogueTable.setDebug(false);
     }
 
+    /**
+     * This method creates the Android specific UI.
+     * @param skin
+     */
     private void createAndroidUI(Skin skin) {
         Skin touchpadSkin = new Skin();
         touchpadSkin.add("touchBg", new Texture("skin\\touchbg.png"));
@@ -356,14 +364,24 @@ public class Hud extends ChangeListener implements Disposable {
         stage.getBatch().end();
     }
 
+    /**
+     * This method hides the dialogue window.
+     */
     public void hideDialogue(){
         dialogueTable.setVisible(false);
     }
 
 
+    /**
+     * This progresses the dialogue window to the next dialogue. While also checking for any
+     * dialogue flags - to determine what should happen. Each flag means something else.
+     * @param dialogueAsset - the text asset
+     * @param player
+     */
     public void progressDialogue(String dialogueAsset, Player player){
         String dialogue = DialogueManager.getManager().getDialogue(dialogueAsset,dialogueNum);
-        if (dialogue != null && dialogue.equals("END@END")) { //checks if the dialogue indicates an END/checkpoint
+        if (dialogue != null && dialogue.equals("END@END")) {
+            //checks if the dialogue indicates an END/checkpoint
             hideDialogue();
             showGui();
             player.setDialogueMode(false);
@@ -377,19 +395,22 @@ public class Hud extends ChangeListener implements Disposable {
         } else if (dialogue != null && getNPCname(dialogue).equals("CHECK")) { // checks condition
             if (player.conditionMet(getDialogue(dialogue))) {
                 dialogueNum += 1;
-                progressDialogue(dialogueAsset, player); // if condition met, progress to the next dialogue.
-            } else {
+                progressDialogue(dialogueAsset, player);
+                // if condition met, progress to the next dialogue.
+            } else {//if condition not met, close dialogue window
                 hideDialogue();
                 showGui();
                 //player.setDialogueContext(dialogueAsset, dialogueStart+1);
                 player.setDialogueMode(false);
             }
-        } else if (dialogue != null && getNPCname(dialogue).equals("CONDITION")) { //grants a condition for the purpose of CHECKing later
+        } else if (dialogue != null && getNPCname(dialogue).equals("CONDITION")) {
+            //grants a condition for the purpose of CHECKing later
             player.grantCondition(getDialogue(dialogue), true);
             dialogueNum += 1;
             progressDialogue(dialogueAsset, player); //progress to the next dialogue
 
-        } else if (dialogue != null && getNPCname(dialogue).equals("SHOP")) { // Shows the shop window
+        } else if (dialogue != null && getNPCname(dialogue).equals("SHOP")) {
+            // Shows the shop window
             shop.setPlayer(player);
             shop.showShop();
             shopOpen = true;
@@ -398,7 +419,8 @@ public class Hud extends ChangeListener implements Disposable {
             hideDialogue();
             player.setDialogueMode(false);
             dialogueNum = dialogueStart;
-        } else if (dialogue != null && getNPCname(dialogue).equals("GIVE")) { // give something to the player
+        } else if (dialogue != null && getNPCname(dialogue).equals("GIVE")) {
+            // gives something to the player
             String[] gift = getDialogue(dialogue).split(" ");
             player.getGift(gift[1], Integer.parseInt(gift[0]));
             dialogueNum += 1;
@@ -415,10 +437,22 @@ public class Hud extends ChangeListener implements Disposable {
             player.setDialogueMode(false);
         }
     }
+
+    /**
+     * Returns the NPC speech text.
+     * @param dialog
+     * @return
+     */
     public String getDialogue(String dialog){
         return dialog.split("@")[1];
     }
 
+    /**
+     * Retrieves the NPC name from the file and sets the player name to whatever the player's
+     * name is.
+     * @param dialog
+     * @return
+     */
     public String getNPCname(String dialog){
         if(dialog.split("@")[0].equals("Player")){
             Preferences prefs = Gdx.app.getPreferences("prefs");
@@ -428,6 +462,11 @@ public class Hud extends ChangeListener implements Disposable {
         }
     }
 
+    /**
+     * Shows the dialogue window.
+     * @param dialogueAsset
+     * @param context
+     */
     public void showDialogue(String dialogueAsset, int context){
         //Hide gui.
         //Show dialogue window.
@@ -541,6 +580,10 @@ public class Hud extends ChangeListener implements Disposable {
         }
     }
 
+    /**
+     * Returns the interact button.
+     * @return
+     */
     public Button getInteractBt() {
         return interactBt;
     }

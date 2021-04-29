@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+
+/**
+ * This class is used to generate the procedural terrain for the survival mode.
+ */
 public class TerrainGenerator {
     TiledMapTileLayer visualLayer, collisionLayer;
     TiledMapTileSet tileSet, collectibleTileSet;
@@ -82,7 +86,7 @@ public class TerrainGenerator {
     }
 
     /**
-     * Spawns an enemy NPC
+     * Spawns an enemy NPC of a random type.
      */
     public GameObject spawnEnemy() {
         if(random.nextFloat() < 0.1){
@@ -97,6 +101,7 @@ public class TerrainGenerator {
                 enemy = new Hedgehog(collisionLayer,visualLayer,2+random.nextInt(15), 150);
             }
             enemy.getSprite().setPosition(x*32,y*32);
+            mapLoadXpos+=64;
             return enemy;
         } else {
             return null;
@@ -111,8 +116,6 @@ public class TerrainGenerator {
         int y = findFloorY(x);
 
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-
-
 
         int id = 60;
         TiledMapTile tile = collectibleTileSet.getTile(id);
@@ -169,7 +172,7 @@ public class TerrainGenerator {
     }
 
     /**
-     * Finds the floor, either on a platform or the actual floor.
+     * Finds the floor, either on a platform or the actual ground level.
      * @param x
      * @return
      */
@@ -199,9 +202,7 @@ public class TerrainGenerator {
 
         TiledMapTileLayer.Cell cell;// = visualLayer.getCell(x, y);
         cell = new TiledMapTileLayer.Cell();
-        //cell.setTile(tiles.get("dirt"));
-        //visualLayer.setCell(x, y, cell);
-        //collisionLayer.setCell(x, y, cell);
+
         boolean changedTile = false;
         for(int i = x; i<(x+length); i++){
             for(int j = y; j < (y + depth); j++){
@@ -260,19 +261,13 @@ public class TerrainGenerator {
             generatePlatform(platformLength, platformDepth);
         }
 
-        //
-
-
         mapLoadXpos = mapLoadXpos + CHUNK_SIZE;//moves to the next chunk
-
-
-
 
     }
 
     /**
      *
-    Generates the ceiling and boundaries of the world. Alongside the layer of spikes.
+     * Generates the ceiling and boundaries of the world. Alongside the layer of spikes.
      */
     private void generateWorld(float delta) {
         time += delta;

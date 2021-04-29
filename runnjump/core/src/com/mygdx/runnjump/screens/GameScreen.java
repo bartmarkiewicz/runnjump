@@ -141,7 +141,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     }
 
-
+    /**
+     * Sets the player spawn point to the coordinates specified.
+     * @param x
+     * @param y
+     */
     public void setSpawnPoint(float x, float y){
         spawnPointX = x;
         spawnPointY = y;
@@ -248,7 +252,6 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
             tileGroups.put("gold_key", goldKeyBlockers);
             tileGroups.put("silver_key", silverKeyBlockers);
-            //loadGameData();
 
         } else {
             //survival mode
@@ -414,6 +417,10 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     }
 
+    /**
+     * This method updates the toast pop-ups
+     * @param delta
+     */
     private void updatePopups(float delta) {
         Iterator<Toast> iter = toasts.iterator();
         while (iter.hasNext()) {
@@ -426,6 +433,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
     }
 
+    /**
+     * This method updates the camera, ensuring it stays within the bounds of the level.
+     */
     private void updateCamera() {
         float cameraPosToSetX;
         float cameraPosToSetY;
@@ -579,10 +589,20 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
     }
 
+    /**
+     * Retrieves the tiles which are locked by a certain key.
+     * So these tiles can be unblocked upon acquiring of that key.
+     * @param key
+     * @return
+     */
     public ArrayList<TiledMapTileLayer.Cell> getBlockedCells(String key) {
         return tileGroups.get(key);
     }
 
+    /**
+     * Retrieves the player reference.
+     * @return
+     */
     public static Player getPlayer(){
         return currentPlayer;
     }

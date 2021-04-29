@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 
 /**
- * This class allows me to create simple color backgrounds based on the RGBA value provided.
+ * This class allows me to create simple color transparent backgrounds based
+ * on the RGBA value provided.
  */
 public class ColorDrawable extends BaseDrawable {
 

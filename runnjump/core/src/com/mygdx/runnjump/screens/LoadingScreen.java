@@ -39,6 +39,9 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Loads the sprites for the NPCs.
+     */
     private void loadNPCAssets(){
         theGame.textureManager.addFrameAssetSet("oldguy", "oldguy\\Idle_",18);
 
@@ -47,6 +50,9 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Loads the power-up icons.
+     */
     private void loadPowerUps(){
         theGame.textureManager.addAsset("gravity_powerup", "powerups\\gravity");
         theGame.textureManager.addAsset("speed_powerup", "powerups\\speed");
@@ -56,6 +62,9 @@ public class LoadingScreen extends ScreenBase implements Screen {
 
     }
 
+    /**
+     * Loads enemy sprites.
+     */
     private void loadEnemyAssets(){
         theGame.textureManager.addFrameAssetSet("hedgehog_moving", "hedgehog\\Walking_", 18);
         theGame.textureManager.addFrameAssetSet("hedgehog_idle", "hedgehog\\Idle_Blinking_", 12);
@@ -75,7 +84,7 @@ public class LoadingScreen extends ScreenBase implements Screen {
     }
 
     /**
-     *
+     *Loads dialogue assets from files.
      */
     private void loadTextAssets(){
         theGame.dialogueManager.addAsset("oldguy", "level1greeting");
@@ -140,7 +149,8 @@ public class LoadingScreen extends ScreenBase implements Screen {
     }
 
     /**
-     * This ensures everything is loaded.
+     * This ensures everything is loaded. It uses an atomic boolean to show
+     * when everything has finished loading
      */
     @Override
     public void show() {

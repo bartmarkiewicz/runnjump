@@ -8,6 +8,11 @@ import com.mygdx.runnjump.util.TextureManager;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents the throwing ranged enemy type.
+ * The turtle man is a bandit which can slash like a normal bandit but in addition
+ * can throw rocks at the player from a distance.
+ */
 public class TurtleMan extends Enemy {
     ArrayList<Texture> rangedAttacking;
     boolean throwing;
@@ -39,6 +44,9 @@ public class TurtleMan extends Enemy {
         throwCount = 0;
     }
 
+    /**
+     * Melee attack.
+     */
     @Override
     protected void attack() {
         super.attack();
@@ -47,6 +55,10 @@ public class TurtleMan extends Enemy {
         }
     }
 
+    /**
+     * Updates the turtle man.
+     * @param delta
+     */
     @Override
     protected void update(float delta) {
         super.update(delta);
@@ -172,6 +184,9 @@ public class TurtleMan extends Enemy {
     }
 
 
+    /**
+     * This method makes the turtle man throw a rock projectile at the player.
+     */
     private void rangedAttack() {
         throwing = true;
         throwCooldown = 4;
@@ -191,6 +206,9 @@ public class TurtleMan extends Enemy {
         }
     }
 
+    /**
+     * Animates the turtle man based on what he's doing.
+     */
     @Override
     void determineFrame() {
         if (this.isIdle() && time > 0.2f && !(attacking || throwing)) {
@@ -253,6 +271,11 @@ public class TurtleMan extends Enemy {
     }
 
 
+    /**
+     * Handles the collisions of the turtle man with bullets or player.
+     * @param other
+     * @param delta
+     */
     @Override
     public void collidesObject(GameObject other, float delta) {
         super.collidesObject(other, delta);

@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**
+ * This class is used to save, load and get highscores.
+ */
 public class HighScores {
     public HashMap<String, ArrayList<HighScore>> highScores; //HashMap<PLAYERNAME, scores>()
 
@@ -20,6 +23,12 @@ public class HighScores {
     }
 
 
+    /**
+     * Adds a high score to the highscore HashMap and saves it to preferences(android) or CSV file on Windows
+     * @param name
+     * @param survival
+     * @param score
+     */
     public void addHighScore(String name, boolean survival, int score){
         HashMap<String, Integer> playerScores = new HashMap<>();
         String gameMode;
@@ -51,6 +60,10 @@ public class HighScores {
 
     }
 
+    /**
+     * Saves the highscores from the HashMap onto a csv file (windows) or a preferences file
+     * on Android.
+     */
     private void saveHighScores() {
         String fileStr = "";
         FileHandle file = null;
@@ -89,7 +102,7 @@ public class HighScores {
     }
 
     /**
-     * Gets the scores for a particular gamemode.
+     * Gets the scores for a particular gamemode.(in descending order - like a leaderboard)
      * @param gamemode
      * @return
      */
@@ -108,7 +121,7 @@ public class HighScores {
     }
 
     /**
-     * Loads the highscores from a CSV file.
+     * Loads the highscores from a CSV file or preferences.
      */
     public void loadHighScores() {
         String fileStr = "";
@@ -158,8 +171,11 @@ public class HighScores {
         }
 
 
-
-
+        /**
+         * Comparator to allow the sorting of highscores by their score.
+         * @param other
+         * @return
+         */
         @Override
         public int compareTo(HighScore other) {
             if(other.gameMode.equals(this.gameMode) && other.score < this.score){

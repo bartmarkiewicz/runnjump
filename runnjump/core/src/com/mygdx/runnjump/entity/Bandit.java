@@ -8,7 +8,8 @@ public class Bandit extends Enemy{
 
     /**
      * This class represents a bandit which you can kill by jumping on top of.
-     * This enemy does not kill upon touching but it kills with its sword.
+     * This enemy does not kill upon touching but it kills with its sword slash animation.
+     * He chases the player when he sees him, jumps when needed.
      * @param collisionLayer
      * @param visualLayer
      * @param MAX_SPEED

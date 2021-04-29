@@ -26,7 +26,6 @@ public class HighScoresScreen extends ScreenBase {
 
     /**
      * Instantiates a new High scores screen.
-     *
      * @param theGameO the the game o
      */
     public HighScoresScreen(Runnjump theGameO) {
@@ -35,12 +34,13 @@ public class HighScoresScreen extends ScreenBase {
     }
 
 
+    /**
+     * Creates the highscores UI.
+     */
     @Override
     public void show() {
         super.show();
 
-        //2 elems at top table,1st level High scores label, music
-        //then 4 buttons next row
         Label screenLabel = new Label("High Scores", skin);
 
         screenLabel.setColor(Color.BLACK);
@@ -101,11 +101,6 @@ public class HighScoresScreen extends ScreenBase {
 
         mainTable.add(bottomTable).bottom().uniform().expand().fillX();//.top().uniform().fill().colspan(4);
 
-        //topTable.pad(0,0,0,10);
-        //mainTable.setDebug(true);
-
-        //bottomTable.setDebug(true);
-
 
         stage.addActor(mainTable);
         stage.setDebugAll(false);
@@ -123,6 +118,10 @@ public class HighScoresScreen extends ScreenBase {
 
     }
 
+    /**
+     * Button handler for the survival/campaign high score display buttons.
+     * @param gameMode
+     */
     private void getHighScores(String gameMode) {
         HighScores highScores = new HighScores();
         highScores.loadHighScores();

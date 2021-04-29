@@ -10,7 +10,7 @@ import com.mygdx.runnjump.entity.Player;
 import com.mygdx.runnjump.util.ColorDrawable;
 
 /**
- * This class represents a shop.
+ * This class represents an NPC shop.
  */
 public class Shop extends Table {
     public Player player;
@@ -96,6 +96,11 @@ public class Shop extends Table {
 
     }
 
+    /**
+     * This method handles the buying of an item from the store.
+     * @param name
+     * @param price
+     */
     private void buy(String name, String price) {
         if(player.getInventory().getScore() >= Integer.parseInt(price)){
             if (name.equals("Lower Gravity")){

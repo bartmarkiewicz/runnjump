@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
+
+/**
+ * Parent object of all moving GameObjects.
+ */
 public abstract class MovingActor extends GameObject {
     //movement velocity
     protected float time = 0f;
@@ -19,6 +23,10 @@ public abstract class MovingActor extends GameObject {
     protected int lastIdleFrame;
     protected int lastMovingFrame;
 
+    /**
+     * Retrieves the X position of the object.
+     * @return
+     */
     protected float getX(){
         return getSprite().getX()+10f;//shifts the logical location of the sprite 10 pixels to the right
     }
@@ -134,6 +142,10 @@ public abstract class MovingActor extends GameObject {
 
     protected abstract void handleCollectible(float x, float y);
 
+    /**
+     * Updates the actor.
+     * @param delta
+     */
     protected void update(float delta){
         time += delta;
 

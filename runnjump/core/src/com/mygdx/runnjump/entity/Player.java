@@ -224,6 +224,9 @@ public class Player extends MovingActor implements InputProcessor {
     }
 
 
+    /**
+     * Activates a gravity power up.
+     */
     protected void gravityPowerup(){
         gravityPowerUp = true;
     }
@@ -324,6 +327,11 @@ public class Player extends MovingActor implements InputProcessor {
 
     }
 
+    /**
+     * Removes collected collectibles from the tile map.
+     * @param x
+     * @param y
+     */
     private void removeCollectibles(float x, float y) {
 
         if (isCellCollectible((int) x + 33, (int) y)) {
@@ -505,6 +513,9 @@ public class Player extends MovingActor implements InputProcessor {
         }
     }
 
+    /**
+     * Checks which powerups were used and activates them.
+     */
     private void checkPowerUps() {
         if(hud.usedPowerUp){
             if (hud.usedPowerUpStr.equals("gravity") && playerInventory.hasPowerUp("gravity")){
@@ -588,6 +599,11 @@ public class Player extends MovingActor implements InputProcessor {
         }
     }
 
+    /**
+     * Handles the player collision with another object.
+     * @param other
+     * @param delta
+     */
     @Override
     public void collidesObject(GameObject other, float delta){
         super.collidesObject(other, delta);
@@ -619,6 +635,9 @@ public class Player extends MovingActor implements InputProcessor {
     }
 
 
+    /**
+     * Manages the dialogue system, determining if it should be progressed or opened.
+     */
     public void dialogueManage(){
         if (dialogueMode) {
             //Go to the next dialogue

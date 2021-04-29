@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * This manager is used for storing/pre-loading all the text-based assets of the game.
+ */
 public class DialogueManager extends Manager<ArrayList<String>> implements Disposable {
 
     static DialogueManager dialogueManager;
@@ -37,7 +40,6 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
 
     /**
      * This method parses the dialogue files, they should have each 'dialogue screen' on one line.
-     * The character limit for each screen is (todo figure out char limit)
      * @param name name of the conversation/dialogue to be stored
      * @param path path to the file containing the dialogue
      */
@@ -55,6 +57,12 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
         //dummy
     }
 
+    /**
+     * Gets the dialogue based on its name and its number.
+     * @param name
+     * @param screenNum
+     * @return
+     */
     public String getDialogue(String name, int screenNum){
         if((screenNum)>dialogueMap.get(name).size()){
             return null;
@@ -63,6 +71,11 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
     }
 
 
+    /**
+     * Gets the dialogue array based on the name.
+     * @param name
+     * @return
+     */
     @Override
     public ArrayList<String> getAsset(String name) {
         return dialogueMap.get(name);
@@ -70,6 +83,5 @@ public class DialogueManager extends Manager<ArrayList<String>> implements Dispo
 
     @Override
     public void dispose() {
-
     }
 }

@@ -19,11 +19,18 @@ public class Inventory {
     protected final int STARTING_HEARTS = 3;
     private boolean survival;
 
-
+    /**
+     * Gets the current number of lives
+     * @return
+     */
     public int getLives(){
         return hearts;
     }
 
+    /**
+     * Gets score
+     * @return
+     */
     public int getScore(){
         return score;
     }
@@ -32,7 +39,11 @@ public class Inventory {
      * Restarts the inventory
      */
     public void restart(boolean survival){
-        this.hearts = STARTING_HEARTS;
+        if(survival){
+            this.hearts = 0;
+        }else {
+            this.hearts = STARTING_HEARTS;
+        }
         score = 0;
         hud.setScore(score);
         hud.setLives(hearts);
@@ -50,12 +61,19 @@ public class Inventory {
         hud.setScore(score);
     }
 
+    /**
+     * Adds an amount of lives.
+     * @param amount
+     */
     public void addLives(int amount){
         hearts = hearts + amount;
         hud.setLives(hearts);
 
     }
 
+    /**
+     * Removes a life
+     */
     public void removeLife(){
         hearts = hearts -1;
         hud.setLives(hearts);
@@ -96,6 +114,9 @@ public class Inventory {
 
     }
 
+    /**
+     * Loads game data from the previously played campaign level
+     */
     private void loadGameData() {
         Preferences prefs = Gdx.app.getPreferences("prefs");
         this.score = prefs.getInteger("score", score);
@@ -169,6 +190,10 @@ public class Inventory {
         }
     }
 
+    /**
+     * Removes i score points
+     * @param i
+     */
     public void loseScore(int i) {
         this.score -= i;
         hud.setScore(score);

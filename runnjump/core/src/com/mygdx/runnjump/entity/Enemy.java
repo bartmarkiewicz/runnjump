@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * A class used to represent an enemy NPC and its assorted AI and the logic related to it.
+ * Enemy types extend this class to implement their own specific behaviour.
  */
 public abstract class Enemy extends MovingActor{
     protected ArrayList<Texture> enemyIdle, enemyMoving;
@@ -57,6 +58,11 @@ public abstract class Enemy extends MovingActor{
         return false;
     }
 
+    /**
+     * Checks if the player is above.
+     * @param delta
+     * @return
+     */
     protected boolean isPlayerAbove(float delta) {
         if ((playerPosition.getX()) < getSprite().getX()+getSprite().getWidth()+(32*10) && playerPosition.getX() > getSprite().getX()-getSprite().getWidth()-(32*10) &&
                 (playerPosition.getY() > getSprite().getY()-getSprite().getHeight()+(32*7))) {
@@ -67,6 +73,9 @@ public abstract class Enemy extends MovingActor{
         return false;
     }
 
+    /**
+     * Does a melee attack if the player is in range.
+     */
     protected void attack() {
         double distanceAwayX = Math.abs(playerPosition.getX() - getSprite().getX());
         double distanceAwayY = Math.abs(playerPosition.getY() - getSprite().getY());
@@ -99,6 +108,10 @@ public abstract class Enemy extends MovingActor{
         return moving;
     }
 
+    /**
+     * Checks if the enemy is currently melee attacking (in the middle of animation)
+     * @return
+     */
     public boolean isAttacking() {
         if(attacking && attackingFrame > 2){//The enemy only kills the player if the sword is in swing
             return true;
@@ -107,6 +120,9 @@ public abstract class Enemy extends MovingActor{
         }
     }
 
+    /**
+     * Makes the enemy jump.
+     */
     protected void jump() {
         velocity.y = speedY / 1.8f;
         jumpTime = 0;

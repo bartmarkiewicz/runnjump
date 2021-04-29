@@ -18,17 +18,19 @@ import com.mygdx.runnjump.util.ColorDrawable;
  * This class represents the main menu window.
  */
 public class MenuScreen extends ScreenBase {
-    //private ImageButton soundBt;
 
 
-    /**
-     * this method initialises the GUI of the menu and sets up iuts input processors.
-     */
+
 
     Table nameInputTable;
     TextField nameInputFD = new TextField("Name Here",skin);
     String playerName;
 
+    /**
+     * this method initialises the GUI of the menu and sets up its input processors.
+     * It also prompts the player for input for their name if its the first time
+     * running the game on their device.
+     */
     public void initGui(){
         currentScreenId = Runnjump.ScreenEn.MENU;
 
@@ -145,6 +147,10 @@ public class MenuScreen extends ScreenBase {
 
     }
 
+    /**
+     * Sets the player name based on the name specified upon running the game for the first
+     * time on the device.
+     */
     private void setPlayerName() {
         playerName = nameInputFD.getText();
         Preferences prefs = Gdx.app.getPreferences("prefs");
@@ -154,14 +160,11 @@ public class MenuScreen extends ScreenBase {
 
     /**
      * Instantiates a new Menu screen.
-     *
      * @param theGame the the game
      */
     public MenuScreen(final Runnjump theGame) {
         super(theGame);
-        //initGui();
 
-        //initGui();
     }
 
     /**

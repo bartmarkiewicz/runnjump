@@ -5,6 +5,10 @@ import com.badlogic.gdx.audio.Music;
 import java.util.Random;
 import java.util.TreeMap;
 
+/**
+ * Base class for the Audio managers.
+ * @param <T>
+ */
 public abstract class AudioManager<T> extends Manager {
 
     /**

@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.runnjump.util.Position;
 
+
+/**
+ * Parent object of all dynamic entities - NPCs, enemies, the player, projectiles etc
+ */
 public abstract class GameObject {
     protected float sizeX;
     protected float sizeY;
@@ -14,13 +18,23 @@ public abstract class GameObject {
     Position playerPosition;
     private boolean active;
 
+    /**
+     * Checks for a collision between this object and another object.
+     * @param other
+     * @param delta
+     */
     public void collidesObject(GameObject other, float delta){
         //dummy
     }
 
+    /**
+     * Checks if this object can collide with the player or not.
+     * @return
+     */
     public boolean isPlayerCollidable() {
         return playerCollidable;
     }
+
 
     public GameObject() {
         this.sprite = new Sprite(new Texture("player\\Idle_000.png"));
