@@ -1,6 +1,7 @@
 package com.mygdx.runnjump.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -50,7 +51,7 @@ public class HighScoresScreen extends ScreenBase {
         TextButton backBt = new TextButton("Back", skin);
         campaign.getLabel().setFontScale(2f);
         survival.getLabel().setFontScale(2f);
-        TextButton goToMyPos = new TextButton("Go to my position", skin);
+        TextButton clearSaveData = new TextButton("Clear Save Data", skin);
 
         Table topTable = new Table();
 
@@ -94,13 +95,23 @@ public class HighScoresScreen extends ScreenBase {
 
         Table bottomTable = new Table();
         bottomTable.add().colspan(1).expandX();
-        bottomTable.add(goToMyPos).center().align(Align.center).uniform().colspan(2).expandX().height(120);
+        bottomTable.add(clearSaveData).center().align(Align.center).uniform().colspan(2).expandX().height(120);
         bottomTable.add().colspan(1).expandX();
         bottomTable.row();
         bottomTable.add(backBt).width(180).height(120).left().align(Align.left).colspan(1).uniform().fill();
 
         mainTable.add(bottomTable).bottom().uniform().expand().fillX();//.top().uniform().fill().colspan(4);
 
+
+
+        clearSaveData.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                Preferences prefs = Gdx.app.getPreferences("prefs");
+                prefs.clear();
+                prefs.flush();
+            }
+        });
 
         stage.addActor(mainTable);
         stage.setDebugAll(false);
