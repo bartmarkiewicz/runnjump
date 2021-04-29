@@ -375,14 +375,11 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         }
         delta = delta > 0.2f ? 0.2f: delta ;//0.2f is max delta time
         super.render(delta);
+
         timeSinceGen += delta;
-        if(survivalMode && timeSinceGen > 0.2f){
-            terrainGen.generateTerrain(player.getSprite().getX(),width, delta);
-            GameObject enemy = terrainGen.spawnEnemy();
-            if(enemy != null){
-                dynamicObjects.add(enemy);
-            }
-            timeSinceGen = 0;
+
+        if(survivalMode  && timeSinceGen > 0.2f){
+            generation(delta);
         }
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -415,6 +412,23 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         hud.stage.draw();
         updatePopups(delta);
 
+    }
+
+    /**
+     * Generates terrain, hazards and enemies for survival mode.
+     * @param delta
+     */
+    private void generation(float delta) {
+        terrainGen.generateTerrain(player.getSprite().getX(),width, delta);
+        GameObject enemy = terrainGen.spawnEnemy();
+        if(enemy != null){
+            dynamicObjects.add(enemy);
+        }
+        if (terrainGen.genCount > 5){
+            terrainGen.genCount = 0;
+            player.gainScore(1);
+        }
+        timeSinceGen = 0;
     }
 
     /**
@@ -527,6 +541,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (gameOver){
             //restart on pressing a button/tapping
+            if(survivalMode){
+                hud.saveHighScore(player.getInventory().getScore());
+            }
             startGame();
         }
         if (player.isGameWon() && timeSinceWin - player.getTimeWon() > 3){
@@ -551,6 +568,9 @@ public class GameScreen extends ScreenBase implements InputProcessor {
         if (gameOver){
             //restart on pressing a button/tapping
             startGame();
+            if(survivalMode){
+                hud.saveHighScore(player.getInventory().getScore());
+            }
             return true;
         }
 

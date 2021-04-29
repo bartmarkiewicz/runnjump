@@ -28,6 +28,7 @@ public class TerrainGenerator {
     final int CHUNK_SIZE;
     ArrayList<TiledMapTile> box4x4Construct, spikes;
     float time = 0;
+    public int genCount = 0;
 
 
     public TerrainGenerator(TiledMapTileLayer visualLayer, TiledMapTileLayer collisionLayer, TiledMapTileSet tileSet, TiledMapTileSet collectibleSet) {
@@ -101,7 +102,7 @@ public class TerrainGenerator {
                 enemy = new Hedgehog(collisionLayer,visualLayer,2+random.nextInt(15), 150);
             }
             enemy.getSprite().setPosition(x*32,y*32);
-            mapLoadXpos+=64;
+            mapLoadXpos+=96;
             return enemy;
         } else {
             return null;
@@ -299,6 +300,8 @@ public class TerrainGenerator {
 
         if (time > 0.1){
             generateSpikes();
+            genCount += 1;
+
         }
 
 

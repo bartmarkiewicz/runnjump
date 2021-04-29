@@ -67,6 +67,8 @@ public class Hud extends ChangeListener implements Disposable {
     boolean survival;
     Shop shop;
     public boolean shopOpen = false;
+    HighScores scores;
+
 
     public boolean getGamemode(){
         return survival;
@@ -84,9 +86,9 @@ public class Hud extends ChangeListener implements Disposable {
         stage = new Stage(viewport,batch);
         gameoverFont = skin.get(Label.LabelStyle.class).font;
         Stack stackContainer = new Stack();
+        scores = new HighScores();
         Table container = new Table();
         powerUps = new Queue<>();
-        //populatePowerUpQueue();
         this.survival = survival;
 
         usedPowerUp = false;
@@ -531,10 +533,9 @@ public class Hud extends ChangeListener implements Disposable {
     /**
      * This method saves the high score achieved for the campaign.
      */
-    private void saveHighScore(int score) {
+    public void saveHighScore(int score) {
         Preferences prefs = Gdx.app.getPreferences("prefs");
         String playerName = prefs.getString("playerName", "player");
-        HighScores scores = new HighScores();
         scores.addHighScore(playerName, getGamemode(), score);
 
     }
