@@ -377,7 +377,7 @@ public class GameScreen extends ScreenBase implements InputProcessor {
 
         timeSinceGen += delta;
 
-        if(survivalMode  && timeSinceGen > 0.2f){
+        if(survivalMode  && timeSinceGen > 0.4f){
             generation(delta);
         }
 
@@ -418,17 +418,19 @@ public class GameScreen extends ScreenBase implements InputProcessor {
      * @param delta
      */
     private void generation(float delta) {
-        terrainGen.generateTerrain(player.getSprite().getX(),width, delta);
-        GameObject enemy = terrainGen.spawnEnemy();
-        if(enemy != null){
-            dynamicObjects.add(enemy);
+        if(terrainGen.mapLoadXpos - player.getSprite().getX() < 6400) {//this ensures only 200 blocks around the player are generated
+            terrainGen.generateTerrain(player.getSprite().getX(), width, delta);
+            GameObject enemy = terrainGen.spawnEnemy();
+            if (enemy != null) {
+                dynamicObjects.add(enemy);
+            }
+            if (terrainGen.genCount > 5 || (terrainGen.difficultyModifier > 1.1f && terrainGen.genCount > 4) || (terrainGen.difficultyModifier > 1.2f && terrainGen.genCount > 3)) {
+                terrainGen.genCount = 0;
+                terrainGen.difficultyModifier += 0.01;
+                player.gainScore(1);
+            }
+            timeSinceGen = 0;
         }
-        if (terrainGen.genCount > 5 || (terrainGen.difficultyModifier > 1.1f && terrainGen.genCount > 4) || (terrainGen.difficultyModifier > 1.2f && terrainGen.genCount > 3)){
-            terrainGen.genCount = 0;
-            terrainGen.difficultyModifier += 0.01;
-            player.gainScore(1);
-        }
-        timeSinceGen = 0;
     }
 
     /**

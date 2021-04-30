@@ -20,7 +20,7 @@ import java.util.Random;
 public class TerrainGenerator {
     TiledMapTileLayer visualLayer, collisionLayer;
     TiledMapTileSet tileSet, collectibleTileSet;
-    int mapLoadXpos;
+    public int mapLoadXpos;
     float width, playerPosX;
     int spikeLoc;
     Random random = new Random();
