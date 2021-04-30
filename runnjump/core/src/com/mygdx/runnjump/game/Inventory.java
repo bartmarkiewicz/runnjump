@@ -137,7 +137,7 @@ public class Inventory {
     public Inventory(Hud hud, boolean debug, boolean survival) {
         powerUps = new HashMap<>();
         this.hud = hud;
-        this.debug = true;//debug;
+        this.debug = debug;
         //createPowerUps();
         this.survival = survival;
         restart(survival);
