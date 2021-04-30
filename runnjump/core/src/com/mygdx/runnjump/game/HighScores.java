@@ -19,7 +19,6 @@ public class HighScores {
     public HighScores() {
         highScores = new HashMap<>();
         loadHighScores();
-        System.out.println(highScores);
     }
 
 
@@ -96,9 +95,6 @@ public class HighScores {
         }
 
 
-       // System.out.println(Gdx.files.getLocalStoragePath());
-
-        //System.out.println(file.readString());
     }
 
     /**
@@ -149,7 +145,7 @@ public class HighScores {
                 if(!foundScore) {
                     highScores.get(parts[0]).add(new HighScore(parts[0], parts[1], Integer.parseInt(parts[2])));
                 }
-            } else {
+            } else if(parts.length == 3) {
                 ArrayList<HighScore> scores = new ArrayList<>();
                 scores.add(new HighScore(parts[0], parts[1], Integer.parseInt(parts[2])));
                 highScores.put(parts[0],scores);

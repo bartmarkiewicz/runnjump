@@ -267,7 +267,6 @@ public class Hud extends ChangeListener implements Disposable {
             Drawable drawable = new TextureRegionDrawable(new TextureRegion(TextureManager.getManager().getAsset(powerUps.first())));
             usedPowerUpStr = powerUps.first();
             powerUpBt = new ImageButton(drawable);
-            System.out.println("initial power up - " + usedPowerUpStr);
         } else {
             powerUpBt = new ImageButton(new ColorDrawable(0,0,0,0));
         }
@@ -494,7 +493,7 @@ public class Hud extends ChangeListener implements Disposable {
     public void gameWon(int score, int level) {
         stage.getBatch().begin();
 
-        gameoverFont.draw(stage.getBatch(),"You win! You had completed level" + level, Gdx.graphics.getWidth()/3-150,Gdx.graphics.getHeight()/2+100);
+        gameoverFont.draw(stage.getBatch(),"You win! You had completed level " + level, Gdx.graphics.getWidth()/3-150,Gdx.graphics.getHeight()/2+100);
         gameoverFont.draw(stage.getBatch(),"You had acquired "+score +" score points!", (Gdx.graphics.getWidth()/3)-150,(Gdx.graphics.getHeight()/2)+50);
 
         if(Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -527,7 +526,6 @@ public class Hud extends ChangeListener implements Disposable {
         }
         prefs.flush();
 
-        System.out.println(prefs.get());
     }
 
     /**
@@ -573,7 +571,6 @@ public class Hud extends ChangeListener implements Disposable {
             Drawable drawable = new TextureRegionDrawable(new TextureRegion(nextImage));
             powerUpBt.getStyle().imageUp = drawable;
             powerUpBt.getStyle().imageDown = drawable;
-            System.out.println("Selected power up - " + selected);
         } else {
             setImage = false;
             powerUpBt.getStyle().imageUp = new ColorDrawable(0,0,0,1);

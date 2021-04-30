@@ -87,10 +87,10 @@ public class LoadingScreen extends ScreenBase implements Screen {
      *Loads dialogue assets from files.
      */
     private void loadTextAssets(){
-        theGame.dialogueManager.addAsset("oldguy", "level1greeting");
+        theGame.dialogueManager.addAsset("oldguyLvl1", "level1greeting");
         theGame.dialogueManager.addAsset("oldguyLvl2", "level2oldguy");
 
-        theGame.dialogueManager.addAsset("damsel", "level1damsel");
+        theGame.dialogueManager.addAsset("damselLvl1", "level1damsel");
         theGame.dialogueManager.addAsset("damselLvl2", "level2woman");
         theGame.dialogueManager.addAsset("damselLvl3", "level3woman");
 

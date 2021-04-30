@@ -307,7 +307,6 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 respawnPlayer();
             }
 
-            System.out.println("x " + x + " y: " + y);
         }
     }
 
@@ -500,7 +499,6 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                 current.draw(mapRenderer.getBatch(), delta);
                 if (current.isPlayerCollidable()) {
                     if (Intersector.overlaps(player.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
-                        System.out.println("Collision between player and " + current.getClass());
                         player.collidesObject(current, delta);
                         current.collidesObject(player, delta);
                     }
@@ -509,7 +507,6 @@ public class GameScreen extends ScreenBase implements InputProcessor {
                     for (int j = 0; j < dynamicObjects.size(); j++) { //loops through all dynamic game objects
                         GameObject secondObj = dynamicObjects.get(j);
                         if (Intersector.overlaps(secondObj.getSprite().getBoundingRectangle(), current.getSprite().getBoundingRectangle())) {
-                            System.out.println("Collision between " + secondObj.getClass() + " and " + current.getClass());
                             secondObj.collidesObject(current, delta);
                             current.collidesObject(secondObj, delta);
                         }

@@ -614,14 +614,12 @@ public class Player extends MovingActor implements InputProcessor {
             Bandit bandit = (Bandit) other;
             if (bandit.isAttacking() && bandit.getSprite().getY()+50 > getSprite().getY()){
                 //if the bandit is attacking, the player dies by colliding with the sword assuming the player is not jumping on top of its head
-                System.out.println("Bandit sword kills player");
                 die();
             }
         }else if (other instanceof TurtleMan) {
             TurtleMan turtle = (TurtleMan) other;
             if (turtle.isAttacking() && turtle.getSprite().getY() + 50 > getSprite().getY()) {
                 //if the bandit is attacking, the player dies by colliding with the sword assuming the player is not jumping on top of its head
-                System.out.println("Turtleman kills player");
                 die();
             }
         }else if (other instanceof NPC){
@@ -631,7 +629,6 @@ public class Player extends MovingActor implements InputProcessor {
             npcAssetName = ((NPC) other).getAssetName();
         } else if (other instanceof Projectile && !((Projectile) other).playerBullet && (Math.abs(((Projectile) other).velocity.x) >5 || Math.abs(((Projectile) other).velocity.y)  > 5)){
             die();
-            System.out.println("Bullet kills player!!");
         }
     }
 
@@ -756,7 +753,7 @@ public class Player extends MovingActor implements InputProcessor {
     }
 
     private void rocksPU(){
-        invincibilityPUTime = 8;
+        rockThrowingPUTime = 8;
         rockThrowingPU = true;
     }
 
