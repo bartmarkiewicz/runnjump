@@ -125,6 +125,8 @@ public class Inventory {
             int powerUpCount = prefs.getInteger(powerUp, powerUps.get(powerUp));
             powerUps.put(powerUp,powerUpCount);
         }
+        hud.setScore(score);
+        hud.setLives(hearts);
     }
 
 
